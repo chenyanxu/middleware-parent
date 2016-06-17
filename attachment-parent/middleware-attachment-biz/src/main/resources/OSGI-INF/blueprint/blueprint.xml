@@ -1,0 +1,15 @@
+<blueprint xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0
+           http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+    <reference id="shiroService" interface="com.kalix.framework.core.api.security.IShiroService"/>
+    <reference id="attachmentBeanDao" interface="com.kalix.middleware.attachment.api.dao.IAttachmentBeanDao"/>
+
+    <bean id="attachmentBeanServiceImpl" class="com.kalix.middlewaren.attachment.biz.AttachmentBeanServiceImpl">
+        <property name="dao" ref="attachmentBeanDao"/>
+        <property name="shiroService" ref="shiroService"/>
+    </bean>
+
+    <service id="attachementBeanService" interface="com.kalix.middleware.attachment.api.biz.IAttachmentBeanService"
+             ref="attachmentBeanServiceImpl"/>
+</blueprint>

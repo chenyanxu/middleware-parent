@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xsi:schemaLocation="
+       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+
+    <reference id="attachmentBeanService" interface="com.kalix.middleware.attachment.api.biz.IAttachmentBeanService"/>
+    <camelContext id="attachmentCamel" xmlns="http://camel.apache.org/schema/blueprint">
+        <restConfiguration component="servlet" bindingMode="json">
+            <dataFormatProperty key="prettyPrint" value="true"/>
+        </restConfiguration>
+
+        <rest path="/attachments" consumes="application/json" produces="application/json">
+            <get id="route-getAllAttachment" outType="com.kalix.framework.core.api.persistence.JsonData">
+                <description>Find all attachments</description>
+                <to uri="bean:attachmentBeanService?method=getAllEntityByQuery(${header.page},${header.limit},${header.jsonStr})"/>
+            </get>
+            <!-- this is a rest POST to add a attachment-->
+            <post id="route-addAttachment" type="com.kalix.middleware.attachment.entities.AttachmentBean"
+                  outType="com.kalix.framework.core.api.biz.JsonStatus">
+                <description>Create a attachment</description>
+                <to uri="bean:attachmentBeanService?method=saveEntity"/>
+            </post>
+        </rest>
+        <rest path="/attachments/{id}" consumes="application/json" produces="application/json">
+            <get id="route-getAttachment" outType="com.kalix.middleware.attachment.entities.AttachmentBean">
+                <description>Find News by id</description>
+                <to uri="bean:attachmentBeanService?method=getEntity(${header.id})"/>
+            </get>
+            <put id="route-updateAttachment" type="com.kalix.middleware.attachment.entities.AttachmentBean"
+                 outType="com.kalix.framework.core.api.biz.JsonStatus">
+                <description>Updates a News</description>
+                <to uri="bean:attachmentBeanService?method=updateEntity"/>
+            </put>
+            <delete id="route-removeAttachment"
+                    outType="com.kalix.framework.core.api.biz.JsonStatus">
+                <description>Create a attachment</description>
+                <to uri="bean:attachmentBeanService?method=deleteEntity(${header.id})"/>
+            </delete>
+        </rest>
+    </camelContext>
+</blueprint>

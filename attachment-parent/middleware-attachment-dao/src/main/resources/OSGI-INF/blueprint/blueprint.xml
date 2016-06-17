@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- default-activation="lazy" -->
+<blueprint xmlns:jpa="http://aries.apache.org/xmlns/jpa/v2.0.0"
+           xmlns:tx="http://aries.apache.org/xmlns/transactions/v1.2.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" default-activation="eager"
+           xsi:schemaLocation="http://aries.apache.org/xmlns/transactions/v1.2.0 ">
+    <jpa:enable/>
+
+    <bean id="attachmentBeanDaoImpl" class="com.kalix.middleware.attachment.dao.AttachmentBeanDaoImpl">
+        <tx:transaction method="*" value="Required"/>
+    </bean>
+
+    <service id="attachmentBeanDao" interface="com.kalix.middleware.attachment.api.dao.IAttachmentBeanDao"
+             ref="attachmentBeanDaoImpl">
+    </service>
+</blueprint>
+

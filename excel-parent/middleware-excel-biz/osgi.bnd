@@ -1,0 +1,13 @@
+#-----------------------------------------------------------------
+# Use this file to add customized Bnd instructions for the bundle
+#-----------------------------------------------------------------
+Bundle-Activator: ${bundle.namespace}.internal.InitActivator
+Bundle-Category: Kalix Middleware Excel
+Embed-Dependency:*; artifactId=!middleware-excel-api|framework-core-util|middleware-couchdb-api|framework-core-api|framework-poms-dm
+Import-Package: com.kalix.framework.core.util,\
+                com.kalix.middleware.couchdb.api.biz,\
+                com.kalix.middleware.excel.api.biz,\
+                org.lightcouch,\
+                org.osgi.framework,\
+                org.osgi.service.blueprint,\
+                org.apache.commons.codec.binary

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.kalix.middleware</groupId>
+        <artifactId>middleware-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.kalix.middleware.couchdb</groupId>
+    <artifactId>couchdb-parent</artifactId>
+    <name>Kalix Middleware CouchDB Parent</name>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>middleware-couchdb-api</module>
+        <module>middleware-couchdb-biz</module>
+        <module>middleware-couchdb-rest</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.kalix.middleware.couchdb</groupId>
+                <artifactId>middleware-couchdb-api</artifactId>
+                <version>${globle.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

@@ -1,0 +1,3 @@
+Bundle-Activator: ${bundle.namespace}.internal.InitActivator
+Import-Package:com.kalix.framework.core.api.biz,*
+Bundle-Category: Kalix Middleware Couchdb

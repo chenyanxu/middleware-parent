@@ -1,0 +1,8 @@
+#-----------------------------------------------------------------
+# Use this file to add customized Bnd instructions for the bundle
+#-----------------------------------------------------------------
+Bundle-Activator: ${bundle.namespace}.internal.InitActivator
+Import-Package: com.kalix.middleware.attachment.entities,\
+                com.kalix.framework.core.api.persistence,\
+                com.kalix.framework.core.api.biz,*
+Bundle-Category: Rexen Kalix Attachment
