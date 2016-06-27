@@ -13,7 +13,7 @@
         </restConfiguration>
         <rest path="/couchdb" consumes="application/json" produces="application/json">
             <delete id="route-removeCouchdb"
-                    outType="com.kalix.framework.core.api.biz.JsonStatus">
+                    outType="com.kalix.framework.core.api.persistence.JsonStatus">
                 <description>Create a attachment</description>
                 <to uri="bean:couchdbServiceForDelete?method=deleteAttach(${header.id},${header.rev})"/>
             </delete>

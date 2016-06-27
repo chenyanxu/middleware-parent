@@ -1,0 +1,68 @@
+<blueprint xmlns:jpa="http://aries.apache.org/xmlns/jpa/v2.0.0"
+           xmlns:tx="http://aries.apache.org/xmlns/transactions/v1.2.0"
+           default-activation="eager"
+           xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <jpa:enable/>
+    <tx:enable-annotations/>
+    <service interface="com.kalix.middleware.workflow.api.biz.IWorkflowService" ref="workFlowServiceImpl">
+    </service>
+
+    <bean id="workFlowServiceImpl" class="com.kalix.middleware.workflow.biz.WorkflowServiceImpl">
+        <property name="processEngine" ref="processEngine"/>
+    </bean>
+
+    <service interface="com.kalix.middleware.workflow.api.biz.IWorkflowCommon" ref="workflowCommonImpl">
+    </service>
+
+    <bean id="workflowCommonImpl" class="com.kalix.middleware.workflow.biz.WorkflowCommonImpl">
+        <property name="formService" ref="formService"/>
+        <property name="repositoryService" ref="repositoryService"/>
+        <property name="taskService" ref="taskService"/>
+    </bean>
+
+
+    <reference id="repositoryService" interface="org.activiti.engine.RepositoryService"/>
+    <reference id="taskService" interface="org.activiti.engine.TaskService"/>
+    <reference id="historyService" interface="org.activiti.engine.HistoryService"/>
+    <reference id="runtimeService" interface="org.activiti.engine.RuntimeService"/>
+    <reference id="processEngine" interface="org.activiti.engine.ProcessEngine"/>
+    <reference id="formService" interface="org.activiti.engine.FormService"/>
+    <reference id="userLoginService" interface="com.kalix.framework.core.api.security.IUserLoginService"/>
+    <reference id="roleBeanService" interface="com.kalix.admin.core.api.biz.IRoleBeanService"/>
+
+    <!-- 注册process服务-->
+    <bean class="com.kalix.middleware.workflow.biz.ProcessServiceImpl" id="processServiceImpl">
+        <property name="repositoryService" ref="repositoryService"/>
+        <property name="historyService" ref="historyService"/>
+        <property name="taskService" ref="taskService"/>
+        <property name="runtimeService" ref="runtimeService"/>
+        <property name="userLoginService" ref="userLoginService"/>
+    </bean>
+
+    <service interface="com.kalix.middleware.workflow.api.biz.IProcessService" ref="processServiceImpl"/>
+
+    <!-- 注册task服务-->
+    <bean id="taskServiceImpl" class="com.kalix.middleware.workflow.biz.TaskServiceImpl">
+        <property name="taskService" ref="taskService"/>
+        <property name="userLoginService" ref="userLoginService"/>
+        <property name="runtimeService" ref="runtimeService"/>
+        <property name="roleBeanService" ref="roleBeanService"/>
+    </bean>
+
+    <service interface="com.kalix.middleware.workflow.api.biz.ITaskService" ref="taskServiceImpl"/>
+
+    <!-- image-->
+    <service interface="javax.servlet.Servlet" ref="bpmnImageServlet">
+        <service-properties>
+            <entry key="alias" value="/image/*"/>
+        </service-properties>
+    </service>
+    <bean id="bpmnImageServlet" class="com.kalix.middleware.workflow.biz.BpmnImageServlet">
+        <tx:transaction method="*" value="Required"/>
+        <property name="historyService" ref="historyService"/>
+        <property name="repositoryService" ref="repositoryService"/>
+        <property name="runtimeService" ref="runtimeService"/>
+        <property name="taskService" ref="taskService"/>
+        <property name="processEngine" ref="processEngine"/>
+    </bean>
+</blueprint>

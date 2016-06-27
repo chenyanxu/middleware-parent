@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>middleware-parent</artifactId>
+        <groupId>com.kalix.middleware</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.kalix.middleware.workflow</groupId>
+    <artifactId>workflow-parent</artifactId>
+    <name>Kalix Middleware Workflow Parent</name>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>middleware-workflow-api</module>
+        <module>middleware-workflow-engine</module>
+        <module>middleware-workflow-biz</module>
+        <module>middleware-workflow-rest</module>
+        <module>middleware-workflow-extjs</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.kalix.middleware.workflow</groupId>
+                <artifactId>middleware-workflow-api</artifactId>
+                <version>${globle.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kalix.middleware.workflow</groupId>
+                <artifactId>middleware-workflow-engine</artifactId>
+                <version>${globle.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.kalix.admin.core</groupId>
+                <artifactId>admin-core-api</artifactId>
+                <version>${globle.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

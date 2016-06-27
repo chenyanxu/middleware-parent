@@ -18,7 +18,7 @@
             </get>
             <!-- this is a rest POST to add a attachment-->
             <post id="route-addAttachment" type="com.kalix.middleware.attachment.entities.AttachmentBean"
-                  outType="com.kalix.framework.core.api.biz.JsonStatus">
+                  outType="com.kalix.framework.core.api.persistence.JsonStatus">
                 <description>Create a attachment</description>
                 <to uri="bean:attachmentBeanService?method=saveEntity"/>
             </post>
@@ -29,12 +29,12 @@
                 <to uri="bean:attachmentBeanService?method=getEntity(${header.id})"/>
             </get>
             <put id="route-updateAttachment" type="com.kalix.middleware.attachment.entities.AttachmentBean"
-                 outType="com.kalix.framework.core.api.biz.JsonStatus">
+                 outType="com.kalix.framework.core.api.persistence.JsonStatus">
                 <description>Updates a News</description>
                 <to uri="bean:attachmentBeanService?method=updateEntity"/>
             </put>
             <delete id="route-removeAttachment"
-                    outType="com.kalix.framework.core.api.biz.JsonStatus">
+                    outType="com.kalix.framework.core.api.persistence.JsonStatus">
                 <description>Create a attachment</description>
                 <to uri="bean:attachmentBeanService?method=deleteEntity(${header.id})"/>
             </delete>

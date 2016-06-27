@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+
+    <reference id="processService" interface="com.kalix.middleware.workflow.api.biz.IProcessService"/>
+    <reference id="taskService" interface="com.kalix.middleware.workflow.api.biz.ITaskService"/>
+    <reference id="commonService" interface="com.kalix.middleware.workflow.api.biz.IWorkflowCommon"/>
+    <reference id="workflowService" interface="com.kalix.middleware.workflow.api.biz.IWorkflowService"/>
+
+    <camelContext id="workflowCamel" xmlns="http://camel.apache.org/schema/blueprint">
+
+        <!-- configure rest to use the camel-servlet component, and use json binding mode -->
+        <!-- and tell to output json in pretty print mode -->
+        <!-- setup context path and port number that Apache Tomcat will deploy this application with,
+             as we use the servlet component, then we need to aid Camel to tell it these details so Camel
+             knows the url to the REST services.
+             Notice: This is optional, but needed if the RestRegistry should enlist accurate information.
+             You can access the RestRegistry from JMX at runtime -->
+        <restConfiguration component="servlet" bindingMode="json">
+            <dataFormatProperty key="prettyPrint" value="true"/>
+        </restConfiguration>
+
+        <!-- defines the rest services using the context-path /user -->
+        <rest path="/workflow" consumes="application/json;charset=utf-8" produces="application/json;charset=utf-8">
+            <description>Extjs System rest service</description>
+
+            <!-- this is a rest GET to view an user by the given id -->
+            <get id="route-getAllProcess" outType="com.kalix.framework.core.api.persistence.JsonData">
+                <description>Find All Process</description>
+                <to uri="bean:processService?method=getProcessDefinition(${header.page},${header.limit},${header.jsonStr})"/>
+            </get>
+
+            <get id="route-getHistoryProcess" uri="/historys" outType="com.kalix.framework.core.api.persistence.JsonData">
+                <description>Find All History Process</description>
+                <to uri="bean:processService?method=getProcessHistory(${header.page},${header.limit},${header.jsonStr})"/>
+            </get>
+
+            <get id="route-getMyHistoryProcess" uri="/myHistory" outType="com.kalix.framework.core.api.persistence.JsonData">
+                <description>Find All My Start History Process</description>
+                <to uri="bean:processService?method=getMyProcessHistory(${header.page},${header.limit},${header.jsonStr})"/>
+            </get>
+
+            <get id="route-activateProcessDefinition" uri="/activate" outType="com.kalix.framework.core.api.persistence.JsonData">
+                <description>Activate Process Definition</description>
+                <to uri="bean:processService?method=activateProcessDefinition(${header.key})"/>
+            </get>
+
+            <get id="route-suspendProcessDefinition" uri="/suspend" outType="com.kalix.framework.core.api.persistence.JsonData">
+                <description>Suspend Process Definition</description>
+                <to uri="bean:processService?method=suspendProcessDefinition(${header.key})"/>
+            </get>
+
+            <!-- this is a rest GET to view an user by the given id -->
+            <get id="route-getAllTask" uri="/tasks" outType="com.kalix.framework.core.api.persistence.JsonData">
+                <description>Find All Task</description>
+                <to uri="bean:taskService?method=getTasks(${header.page},${header.limit},${header.jsonStr})"/>
+            </get>
+
+            <!-- this is a rest GET to delegate an user by the given id -->
+            <get id="route-delegateTask" uri="/tasks/delegate" outType="com.kalix.framework.core.api.persistence.JsonStatus">
+                <description>Delegate All Task</description>
+                <to uri="bean:taskService?method=delegateTask(${header.taskIds},${header.userId})"/>
+            </get>
+
+            <!-- this is a rest GET to view an user by the given id -->
+            <get id="route-getHistoricActivity" uri="/activities" outType="com.kalix.framework.core.api.persistence.JsonData">
+                <description>Find All Historic Activity</description>
+                <to uri="bean:processService?method=getHistoricActivity(${header.historyProcessId})"/>
+            </get>
+            <!-- form and bizData rest service-->
+            <get id="route-form" uri="/form" outType="com.kalix.middleware.workflow.api.model.FormDTO">
+                <description>Find Form</description>
+                <to uri="bean:commonService?method=getForm(${header.taskId})"/>
+            </get>
+
+            <get id="route-bizData" uri="/bizDataForm" outType="com.kalix.middleware.workflow.api.model.FormDTO">
+                <description>Find BizData</description>
+                <to uri="bean:commonService?method=getBizDataForm(${header.processDefinitionId})"/>
+            </get>
+            <post id="route-deploy" uri="/deploy" type="com.kalix.middleware.workflow.api.model.JsonXml"
+                  outType="com.kalix.framework.core.api.persistence.JsonStatus">
+                <description>Deploy Process Definition</description>
+                <to uri="bean:workflowService?method=deploy"/>
+            </post>
+        </rest>
+    </camelContext>
+</blueprint>

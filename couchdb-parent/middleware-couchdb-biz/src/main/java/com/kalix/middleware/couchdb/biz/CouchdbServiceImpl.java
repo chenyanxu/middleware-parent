@@ -1,6 +1,6 @@
 package com.kalix.middleware.couchdb.biz;
 
-import com.kalix.framework.core.api.biz.JsonStatus;
+import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.util.ConfigUtil;
 import com.kalix.middleware.couchdb.api.biz.ICouchdbService;
 import org.lightcouch.Attachment;

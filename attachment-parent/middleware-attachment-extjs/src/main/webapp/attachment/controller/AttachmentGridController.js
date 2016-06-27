@@ -3,7 +3,7 @@
  */
 Ext.define('kalix.attachment.controller.AttachmentGridController', {
     extend: 'kalix.controller.BaseGridController',
-    requires: ['kalix.core.Notify'],
+    requires: ['kalix.Notify'],
     alias: 'controller.attachmentGridController',
     onChange: function (target, event, domValue) {
         var form = target.findParentByType('form');
@@ -39,7 +39,7 @@ Ext.define('kalix.attachment.controller.AttachmentGridController', {
                                 var res = Ext.JSON.decode(batch.operations[0].getResponse().responseText);
 
                                 if (batch.operations[0].success) {
-                                    kalix.core.Notify.success(res.msg, CONFIG.ALTER_TITLE_SUCCESS);
+                                    kalix.Notify.success(res.msg, CONFIG.ALTER_TITLE_SUCCESS);
                                 }
                                 else {
                                     Ext.Msg.alert(CONFIG.ALTER_TITLE_FAILURE, res.msg);
@@ -97,7 +97,7 @@ Ext.define('kalix.attachment.controller.AttachmentGridController', {
                             var res = Ext.JSON.decode(batch.operations[0].getResponse().responseText);
 
                             if (batch.operations[0].success) {
-                                kalix.core.Notify.success(res.msg, CONFIG.ALTER_TITLE_SUCCESS);
+                                kalix.Notify.success(res.msg, CONFIG.ALTER_TITLE_SUCCESS);
                             }
                             else {
                                 Ext.Msg.alert(CONFIG.ALTER_TITLE_FAILURE, res.msg);

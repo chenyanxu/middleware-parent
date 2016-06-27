@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<blueprint xmlns:ext="http://aries.apache.org/blueprint/xmlns/blueprint-ext/v1.0.0"
+           xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <ext:property-placeholder/>
+    <reference id="dataSource" interface="javax.sql.DataSource"  filter="(osgi.jndi.service.name=jdbc/ds)"/>
+
+    <!--用于activiti JavaDelegate-->
+    <reference-list id="blueprintListener" availability="optional" interface="org.activiti.engine.delegate.JavaDelegate"
+                    activation="eager">
+        <reference-listener ref="blueprintELResolver" bind-method="bindService" unbind-method="unbindService"/>
+    </reference-list>
+
+    <bean id="blueprintELResolver" class="org.activiti.osgi.blueprint.BlueprintELResolver"/>
+
+    <reference id="transactionManager" interface="javax.transaction.TransactionManager"/>
+
+    <bean id="configuration" class="org.activiti.engine.impl.cfg.JtaProcessEngineConfiguration" ext:field-injection="true">
+        <property name="databaseType" value="postgres"/>
+        <property name="dataSource" ref="dataSource"/>
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="databaseSchemaUpdate" value="true"/>
+        <property name="transactionsExternallyManaged" value="true" />
+        <property name="activityFontName" value="宋体"/>
+        <property name="labelFontName" value="宋体"/>
+    </bean>
+
+    <bean id="processEngineFactory" class="org.activiti.osgi.blueprint.ProcessEngineFactoryWithELResolver"
+          init-method="init" destroy-method="destroy">
+        <property name="processEngineConfiguration" ref="configuration"/>
+        <property name="bundle" ref="blueprintBundle"/>
+        <property name="blueprintELResolver" ref="blueprintELResolver"/>
+    </bean>
+
+    <bean id="processEngine" factory-ref="processEngineFactory" factory-method="getObject"/>
+    <!--流程引擎服务-->
+    <service interface="org.activiti.engine.ProcessEngine">
+        <bean factory-ref="processEngineFactory" factory-method="getObject"/>
+    </service>
+    <!--Repository服务-->
+    <service interface="org.activiti.engine.RepositoryService">
+        <bean factory-ref="processEngine" factory-method="getRepositoryService"/>
+    </service>
+    <!--Runtime服务-->
+    <service interface="org.activiti.engine.RuntimeService">
+        <bean factory-ref="processEngine" factory-method="getRuntimeService"/>
+    </service>
+    <!--Form服务-->
+    <service interface="org.activiti.engine.FormService">
+        <bean factory-ref="processEngine" factory-method="getFormService"/>
+    </service>
+    <!--History服务-->
+    <service interface="org.activiti.engine.HistoryService">
+        <bean factory-ref="processEngine" factory-method="getHistoryService"/>
+    </service>
+    <!--Identity服务-->
+    <service interface="org.activiti.engine.IdentityService">
+        <bean factory-ref="processEngine" factory-method="getIdentityService"/>
+    </service>
+    <!--Task服务-->
+    <service interface="org.activiti.engine.TaskService">
+        <bean factory-ref="processEngine" factory-method="getTaskService"/>
+    </service>
+
+    <!--监听IBizDataHandler模块的加载和卸载-->
+    <reference-list interface="com.kalix.middleware.workflow.api.biz.IBizDataHandler" member-type="service-reference"
+                    availability="optional">
+        <reference-listener bind-method="bind" unbind-method="unbind">
+            <bean class="com.kalix.middleware.workflow.engine.listener.BizDataListener"/>
+        </reference-listener>
+    </reference-list>
+
+    <!--监听IFormHandler模块的加载和卸载-->
+    <reference-list interface="com.kalix.middleware.workflow.api.biz.IFormHandler" member-type="service-reference"
+                    availability="optional">
+        <reference-listener bind-method="bind" unbind-method="unbind">
+            <bean class="com.kalix.middleware.workflow.engine.listener.FormListener"/>
+        </reference-listener>
+    </reference-list>
+</blueprint>

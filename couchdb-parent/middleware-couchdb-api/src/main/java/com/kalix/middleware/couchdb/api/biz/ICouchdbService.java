@@ -1,6 +1,6 @@
 package com.kalix.middleware.couchdb.api.biz;
 
-import com.kalix.framework.core.api.biz.JsonStatus;
+import com.kalix.framework.core.api.persistence.JsonStatus;
 import org.lightcouch.Response;
 
 /**

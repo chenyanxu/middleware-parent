@@ -19,6 +19,7 @@
         <module>attachment-parent</module>
         <module>couchdb-parent</module>
         <module>excel-parent</module>
+        <module>workflow-parent</module>
     </modules>
 
     <dependencyManagement>
