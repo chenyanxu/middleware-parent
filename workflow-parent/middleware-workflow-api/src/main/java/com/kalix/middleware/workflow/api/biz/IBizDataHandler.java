@@ -3,6 +3,7 @@ package com.kalix.middleware.workflow.api.biz;
 /**
  * 实现工作流业务数据的统一接口,用于流程历史查看
  */
+@Deprecated
 public interface IBizDataHandler {
 
     /**
