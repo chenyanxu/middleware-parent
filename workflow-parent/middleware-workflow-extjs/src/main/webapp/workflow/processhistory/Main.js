@@ -10,10 +10,8 @@ Ext.define('kalix.workflow.processhistory.Main', {
     requires: [
         'kalix.workflow.processhistory.view.ProcessHistorySearchForm',
         'kalix.workflow.processhistory.view.ProcessHistoryGrid',
-        'kalix.workflow.processhistory.viewModel.ProcessHistoryViewModel'
     ],
     storeId: 'processHistoryStore',
-    viewModel: 'processHistoryViewModel',
     items: [{
         xtype: 'processHistorySearchForm',
         title: '流程历史查询'

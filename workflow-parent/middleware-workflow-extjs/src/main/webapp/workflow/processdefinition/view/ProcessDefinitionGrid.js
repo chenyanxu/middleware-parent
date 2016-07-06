@@ -14,13 +14,7 @@ Ext.define('kalix.workflow.processdefinition.view.ProcessDefinitionGrid', {
     xtype: 'processDefinitionGrid',
     controller: {
         type: 'processDefinitionGridController',
-        storeId: 'processDefinitionStore',
-        /*cfgForm: 'kalix.roffice.chance.view.TaskWindow',
-         cfgViewForm: 'kalix.roffice.chance.view.TaskViewWindow',*/
         cfgModel: 'kalix.workflow.processdefinition.model.ProcessDefinitionModel'
-    },
-    viewModel: {
-        type: 'processDefinitionViewModel'
     },
     store: {
         type: 'processDefinitionStore'

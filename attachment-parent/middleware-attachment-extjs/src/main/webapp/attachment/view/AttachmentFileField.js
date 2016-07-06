@@ -179,12 +179,11 @@ Ext.define('kalix.attachment.view.AttachmentFileField', {
                 xtype: 'filebutton',
                 ownerCt: me,
                 id: me.id + '-button',
-                iconCls: 'iconfont icon-attachment-upload',
-                //icon: CONFIG.restRoot + '/attachment/resources/images/attachment_add.png',
+                iconCls: 'iconfont icon-upload',
                 ui: me.ui,
                 disabled: false,
                 text: me.buttonText,
-                style: me.buttonOnly ? '' : me.getButtonMarginProp() + me.buttonMargin + 'px',
+                style:  me.buttonOnly ? '' : me.getButtonMarginProp() + me.buttonMargin + 'px',
                 inputName: me.getName(),
                 listeners: {
                     scope: me,
@@ -196,6 +195,7 @@ Ext.define('kalix.attachment.view.AttachmentFileField', {
                         target.btnWrap.getParent().dom.style.borderWidth=0;
                         target.btnWrap.getParent().dom.style.top = '2px';
                         target.btnInnerEl.dom.style.color = '#606060';
+                        target.btnIconEl.dom.style.color='#919191';
                     }
                 }
             }, me.buttonConfig);

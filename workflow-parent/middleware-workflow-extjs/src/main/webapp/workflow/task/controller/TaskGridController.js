@@ -102,9 +102,7 @@ Ext.define('kalix.workflow.task.controller.TaskGridController', {
                             }
                         }
                         // viewModel.set('taskIds',ids);
-                        var view = Ext.create('kalix.workflow.task.view.TaskDelegateWindow', {
-                            bind: {icon: '{delegate_image_path}'}
-                        });
+                        var view = Ext.create('kalix.workflow.task.view.TaskDelegateWindow');
 
                         view.lookupViewModel().set('taskIds', ids);
                         view.show();

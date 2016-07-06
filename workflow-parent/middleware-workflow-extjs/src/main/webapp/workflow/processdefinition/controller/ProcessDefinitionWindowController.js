@@ -14,7 +14,6 @@ Ext.define('kalix.workflow.processdefinition.controller.ProcessDefinitionWindowC
         window.frames[0].bpmnModeler.saveXML({format: true}, function (err, xml) {
             console.log(xml);
 
-
             Ext.Ajax.request({
                 url: CONFIG.restRoot + '/camel/rest/workflow/deploy',
                 scope: this,

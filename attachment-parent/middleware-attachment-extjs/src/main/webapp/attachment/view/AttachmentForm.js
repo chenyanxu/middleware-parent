@@ -26,9 +26,6 @@ Ext.define('kalix.attachment.view.AttachmentForm', {
     listeners:{
         afterrender: function (target) {
            target.ariaEl.dom.style.border='none';
-        },
-        beforerender: function (target) {
-            this.items.getAt(0).triggers.filebutton.component.icon = this.filebutonIcon;
         }
     }
 });

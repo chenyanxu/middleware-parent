@@ -67,7 +67,7 @@ Ext.define('kalix.attachment.controller.AttachmentGridController', {
     },
     onDelete: function (grid, rowIndex, colIndex) {
         var model = grid.getStore().getData().items[rowIndex];
-        var store = Ext.app.Application.instance.getApplication().getStore(this.storeId);
+        var store = grid.getStore();
 
         Ext.Msg.confirm("警告", "确定要删除吗？", function (button) {
             if (button == "yes") {

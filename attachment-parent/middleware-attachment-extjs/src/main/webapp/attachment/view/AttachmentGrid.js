@@ -12,13 +12,12 @@ Ext.define('kalix.attachment.view.AttachmentGrid', {
     xtype: 'attachmentGrid',
     autoLoad: false,
     controller: {
-        type: 'attachmentGridController',
-        storeId: 'attachmentStore'
+        type: 'attachmentGridController'
     },
+    viewModel:Ext.create('Ext.app.ViewModel'),
     store: {
         type: 'attachmentStore'
     },
-    //scrollable : true,
     height:460,
     columns: {
         defaults: {flex: 1,renderer: 'addTooltip'},
@@ -54,7 +53,8 @@ Ext.define('kalix.attachment.view.AttachmentGrid', {
                 text: '上传日期',
                 dataIndex: 'uploadDate',
                 xtype: 'datecolumn',
-                format: 'Y-m-d H:i'
+                format: 'Y-m-d H:i',
+                renderer: null
             },
             {
                 xtype: 'securityGridColumnCommon',
@@ -62,13 +62,13 @@ Ext.define('kalix.attachment.view.AttachmentGrid', {
                 width:60,
                 items: [
                     {
-                        icon: "resources/images/download.png",
+                        iconCls: 'iconfont icon-download',
                         permission: 'roffice:cmModule:contractMenu:delete',
                         tooltip: '下载',
                         handler: 'onDownload'
                     },
                     {
-                        icon: "resources/images/delete.png",
+                        iconCls: 'iconfont icon-delete',
                         permission: 'roffice:cmModule:contractMenu:delete',
                         tooltip: '删除',
                         handler: 'onDelete'
@@ -84,7 +84,6 @@ Ext.define('kalix.attachment.view.AttachmentGrid', {
         verifyItems: [
             {
                 xtype: 'attachmentForm',
-                filebutonIcon: CONFIG.restRoot + '/attachment/resources/images/attachment_add.png',
                 permission: ''
             }
         ]

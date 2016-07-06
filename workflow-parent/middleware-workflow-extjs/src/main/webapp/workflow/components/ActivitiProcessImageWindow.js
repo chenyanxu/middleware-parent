@@ -17,7 +17,7 @@ Ext.define('kalix.workflow.components.ActivitiProcessImageWindow', {
     constructor: function () {
         this.callParent(arguments);
 
-        var src = this.imgUrl;
+        var src ='/image?'+ this.imgUrl;
         var myMask = new Ext.LoadMask({
             msg: '加 载 中 . . .',
             target: this

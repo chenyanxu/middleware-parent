@@ -7,18 +7,13 @@
 Ext.define('kalix.workflow.activityhistory.view.ActivityHistoryGrid', {
     extend: 'kalix.view.components.common.BaseGrid',
     requires: [
-        'kalix.workflow.activityhistory.store.ActivityHistoryStore',
-        'kalix.workflow.activityhistory.controller.ActivityHistoryGridController'
+        'kalix.workflow.activityhistory.store.ActivityHistoryStore'
     ],
     alias: 'widget.activityHistoryGrid',
     xtype: 'activityHistoryGrid',
     autoLoad: false,
     stripeRows: true,
     manageHeight: true,
-    controller: {
-        type: 'activityHistoryGridController',
-        storeId: 'activityHistoryStore'
-    },
     store: {
         type: 'activityHistoryStore'
     },

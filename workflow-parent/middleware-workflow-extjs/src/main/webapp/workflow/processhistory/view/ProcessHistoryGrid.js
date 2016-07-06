@@ -14,11 +14,7 @@ Ext.define('kalix.workflow.processhistory.view.ProcessHistoryGrid', {
     xtype: 'processHistoryGrid',
     controller: {
         type: 'processHistoryGridController',
-        storeId: 'processHistoryStore',
         cfgModel: 'kalix.workflow.processhistory.model.ProcessHistoryModel'
-    },
-    viewModel: {
-        type: 'processHistoryViewModel'
     },
     store: {
         type: 'processHistoryStore'

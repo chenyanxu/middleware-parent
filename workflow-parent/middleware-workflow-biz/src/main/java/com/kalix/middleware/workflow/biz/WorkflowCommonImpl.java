@@ -56,14 +56,6 @@ public class WorkflowCommonImpl implements IWorkflowCommon {
         return null;
     }
 
-//    @Override
-//    public BizDataDTO getBizData(String processDefinitionId) {
-//        IBizDataHandler bizDataHandler = BizDataManager.getInstall().findPanelByKey(WorkflowUtil.getProcessKey(processDefinitionId));
-//        Mapper mapper = new DozerBeanMapper();
-//        BizDataDTO bizDataDTO = mapper.map(bizDataHandler, BizDataDTO.class);
-//        return bizDataDTO;
-//    }
-
     @Override
     public FormDTO getBizDataForm(String processDefinitionId) {
         if (processDefinitionId != null) {

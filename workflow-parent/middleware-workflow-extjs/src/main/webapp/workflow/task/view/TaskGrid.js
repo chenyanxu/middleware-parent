@@ -14,13 +14,7 @@ Ext.define('kalix.workflow.task.view.TaskGrid', {
     xtype: 'taskGrid',
     controller: {
         type: 'taskGridController',
-        storeId: 'taskStore',
-        /*cfgForm: 'kalix.roffice.chance.view.TaskWindow',
-         cfgViewForm: 'kalix.roffice.chance.view.TaskViewWindow',*/
         cfgModel: 'kalix.workflow.task.model.TaskModel'
-    },
-    viewModel: {
-        type: 'taskViewModel'
     },
     store: {
         type: 'taskStore'
@@ -63,10 +57,6 @@ Ext.define('kalix.workflow.task.view.TaskGrid', {
                 dataIndex: 'description',
                 renderer: 'addTooltip'
             },
-            /*{
-             text: '执行人',
-             dataIndex: 'assignee'
-             },*/
             {
                 text: '创建时间',
                 dataIndex: 'createTime',

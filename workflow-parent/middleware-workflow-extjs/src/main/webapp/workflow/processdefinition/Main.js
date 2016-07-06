@@ -8,12 +8,10 @@
 Ext.define('kalix.workflow.processdefinition.Main', {
     extend: 'kalix.container.BaseContainer',
     requires: [
-        'kalix.workflow.processdefinition.viewModel.ProcessDefinitionViewModel',
         'kalix.workflow.processdefinition.view.ProcessDefinitionGrid',
         'kalix.workflow.processdefinition.view.ProcessDefinitionSearchForm'
     ],
     storeId:'processDefinitionStore',
-    viewModel:'processDefinitionViewModel',
     items: [
     {
         xtype: 'processDefinitionSearchForm',

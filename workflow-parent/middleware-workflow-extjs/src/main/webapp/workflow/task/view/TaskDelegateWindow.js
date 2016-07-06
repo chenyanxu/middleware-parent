@@ -11,7 +11,6 @@ Ext.define('kalix.workflow.task.view.TaskDelegateWindow', {
     alias: 'widget.taskDelegateWindow',
     xtype: "taskDelegateWindow",
     controller: 'taskDelegateController',
-    viewModel:'taskViewModel',
     width: 400,
     border: false,
     modal: true,

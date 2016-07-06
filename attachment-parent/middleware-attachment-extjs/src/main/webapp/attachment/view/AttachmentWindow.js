@@ -5,13 +5,11 @@ Ext.define('kalix.attachment.view.AttachmentWindow', {
     extend: 'kalix.view.components.common.BaseWindow',
     requires: [
         'kalix.controller.BaseWindowController',
-        'kalix.attachment.viewModel.AttachmentViewModel',
         'kalix.attachment.view.AttachmentGrid',
         'kalix.attachment.view.AttachmentForm'
     ],
     alias: 'widget.attachmentWindow',
     xtype: "attachmentWindow",
-    viewModel: 'attachmentViewModel',
     controller: {
         type: 'baseWindowController',
         storeId: 'attachmentStore'

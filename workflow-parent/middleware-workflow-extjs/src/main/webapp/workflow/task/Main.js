@@ -10,10 +10,8 @@ Ext.define('kalix.workflow.task.Main', {
     requires: [
         'kalix.workflow.task.view.TaskSearchForm',
         'kalix.workflow.task.view.TaskGrid',
-        'kalix.workflow.task.viewModel.TaskViewModel'
     ],
     storeId:'taskStore',
-    viewModel:'taskViewModel',
     items: [{
         xtype: 'taskSearchForm',
         title: '待办任务查询'
