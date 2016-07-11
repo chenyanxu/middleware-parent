@@ -19,7 +19,7 @@ Ext.define('kalix.workflow.task.controller.TaskGridController', {
          */
         onOpenCurrentProcess: function (grid, rowIndex, colIndex) {
             var rec = grid.getStore().getAt(rowIndex);
-            var imgUrl = this.getView().getViewModel().get('processShowUrl') + '?taskId=' + rec.data.id;
+            var imgUrl = 'taskId=' + rec.data.id;
             var win = Ext.create('kalix.workflow.components.ActivitiProcessImageWindow', {
                 title: '流程查看 - ' + rec.data.name,
                 imgUrl: imgUrl
