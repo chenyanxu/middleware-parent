@@ -7,6 +7,20 @@ import com.kalix.middleware.workflow.api.biz.IFormHandler;
  * Created by Administrator on 2016/6/2.
  */
 public abstract class AbstractModifyFormHandler implements IFormHandler {
+    private String processDefinitionId;
+
+    public AbstractModifyFormHandler(){
+        String[] splits=this.getClass().getSimpleName().split("Modify");
+
+        if(splits.length>0) {
+            processDefinitionId=splits[0].toLowerCase();
+        }
+    }
+
+    @Override
+    public String getProcessDefinitionId() {
+        return processDefinitionId;
+    }
     /**
      * 获得form的key
      *
