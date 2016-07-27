@@ -31,7 +31,7 @@ Ext.define('kalix.workflow.approve.controller.ApproveWindowController', {
         });
     },
     onEnd: function () {
-        this.onApprove();
+        this.onApprove(arguments[0]);
     },
     onModify: function () {
         //var sealModifyForm = this.getView().items.items[0];
