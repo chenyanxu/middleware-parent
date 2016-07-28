@@ -1,6 +1,6 @@
 package com.kalix.middleware.workflow.biz;
 
-import com.kalix.admin.core.api.biz.IRoleBeanService;
+//import com.kalix.admin.core.api.biz.IRoleBeanService;
 import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.api.persistence.JsonData;
 import com.kalix.framework.core.api.security.IUserLoginService;
@@ -30,7 +30,7 @@ public class TaskServiceImpl implements ITaskService {
     private HistoryService historyService;
     private JsonData jsonData = new JsonData();
     private IUserLoginService userLoginService;
-    private IRoleBeanService roleBeanService;
+    //private IRoleBeanService roleBeanService;
 
     /**
      * 获得工作流任务列表
@@ -44,7 +44,7 @@ public class TaskServiceImpl implements ITaskService {
         List<TaskDTO> taskDTOList;
         List<Task> taskGroupList;//获得用户组的任务列表
         List<Task> taskUserList;//获得基于用户的任务列表
-        List<String> roleBeanList = roleBeanService.getRoleNameListByLoginName(userName);
+        List<String> roleBeanList =null; //roleBeanService.getRoleNameListByLoginName(userName);
         if (StringUtils.isNotEmpty(jsonStr)) {
             Map map = SerializeUtil.json2Map(jsonStr);
             String taskName = (String) map.get("name");
@@ -145,7 +145,7 @@ public class TaskServiceImpl implements ITaskService {
         this.historyService = historyService;
     }
 
-    public void setRoleBeanService(IRoleBeanService roleBeanService) {
-        this.roleBeanService = roleBeanService;
-    }
+//    public void setRoleBeanService(IRoleBeanService roleBeanService) {
+//        this.roleBeanService = roleBeanService;
+//    }
 }
