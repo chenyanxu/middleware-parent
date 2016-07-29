@@ -20,7 +20,7 @@
         <property name="taskService" ref="taskService"/>
     </bean>
 
-
+    <reference id="shiroService" interface="com.kalix.framework.core.api.security.IShiroService"/>
     <reference id="repositoryService" interface="org.activiti.engine.RepositoryService"/>
     <reference id="taskService" interface="org.activiti.engine.TaskService"/>
     <reference id="historyService" interface="org.activiti.engine.HistoryService"/>
@@ -28,7 +28,6 @@
     <reference id="processEngine" interface="org.activiti.engine.ProcessEngine"/>
     <reference id="formService" interface="org.activiti.engine.FormService"/>
     <reference id="userLoginService" interface="com.kalix.framework.core.api.security.IUserLoginService"/>
-    <reference id="roleBeanService" interface="com.kalix.admin.core.api.biz.IRoleBeanService"/>
 
     <!-- 注册process服务-->
     <bean class="com.kalix.middleware.workflow.biz.ProcessServiceImpl" id="processServiceImpl">
@@ -46,7 +45,8 @@
         <property name="taskService" ref="taskService"/>
         <property name="userLoginService" ref="userLoginService"/>
         <property name="runtimeService" ref="runtimeService"/>
-        <property name="roleBeanService" ref="roleBeanService"/>
+        <property name="shiroService" ref="shiroService"/>
+        <property name="historyService" ref="historyService"/>
     </bean>
 
     <service interface="com.kalix.middleware.workflow.api.biz.ITaskService" ref="taskServiceImpl"/>

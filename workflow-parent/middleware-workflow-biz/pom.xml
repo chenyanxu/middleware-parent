@@ -49,10 +49,5 @@
             <groupId>net.sf.dozer</groupId>
             <artifactId>dozer-osgi</artifactId>
         </dependency>
-
-        <!--<dependency>-->
-            <!--<groupId>com.kalix.admin.core</groupId>-->
-            <!--<artifactId>admin-core-api</artifactId>-->
-        <!--</dependency>-->
     </dependencies>
 </project>

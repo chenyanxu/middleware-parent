@@ -1,8 +1,8 @@
 package com.kalix.middleware.workflow.biz;
 
-//import com.kalix.admin.core.api.biz.IRoleBeanService;
 import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.api.persistence.JsonData;
+import com.kalix.framework.core.api.security.IShiroService;
 import com.kalix.framework.core.api.security.IUserLoginService;
 import com.kalix.framework.core.util.*;
 import com.kalix.middleware.workflow.api.biz.ITaskService;
@@ -17,6 +17,8 @@ import org.activiti.engine.task.Task;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,8 +32,7 @@ public class TaskServiceImpl implements ITaskService {
     private HistoryService historyService;
     private JsonData jsonData = new JsonData();
     private IUserLoginService userLoginService;
-    //private IRoleBeanService roleBeanService;
-
+    private IShiroService shiroService;
     /**
      * 获得工作流任务列表
      *
@@ -44,13 +45,31 @@ public class TaskServiceImpl implements ITaskService {
         List<TaskDTO> taskDTOList;
         List<Task> taskGroupList;//获得用户组的任务列表
         List<Task> taskUserList;//获得基于用户的任务列表
-        List<String> roleBeanList =null; //roleBeanService.getRoleNameListByLoginName(userName);
+
+        String rtnStr=null;
+
+        try {
+            rtnStr = HttpClientUtil.shiroGet("http://localhost:8181/kalix/camel/rest/users/user/dutys/list",this.shiroService.getSession().getId().toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        List<String> dutyNameList =null;
+
+        if(rtnStr!=null){
+            dutyNameList=SerializeUtil.unserializeJson(rtnStr,List.class);
+        }
+        else{
+            dutyNameList=new ArrayList<>();
+        }
+
+
         if (StringUtils.isNotEmpty(jsonStr)) {
             Map map = SerializeUtil.json2Map(jsonStr);
             String taskName = (String) map.get("name");
             Assert.notNull(taskName);
             taskGroupList = taskService
-                    .createTaskQuery().taskCandidateGroupIn(roleBeanList)
+                    .createTaskQuery().taskCandidateGroupIn(dutyNameList)
                     .taskNameLike("%" + taskName + "%").orderByTaskCreateTime().desc()
                     .listPage((page - 1) * limit, limit);
             taskUserList = taskService
@@ -59,7 +78,7 @@ public class TaskServiceImpl implements ITaskService {
                     .listPage((page - 1) * limit, limit);
         } else {
             taskGroupList = taskService
-                    .createTaskQuery().taskCandidateGroupIn(roleBeanList)
+                    .createTaskQuery().taskCandidateGroupIn(dutyNameList)
                     .orderByTaskCreateTime().desc()
                     .listPage((page - 1) * limit, limit);
             taskUserList = taskService
@@ -67,7 +86,9 @@ public class TaskServiceImpl implements ITaskService {
                     .orderByTaskCreateTime().desc()
                     .listPage((page - 1) * limit, limit);
         }
+
         taskGroupList.addAll(taskUserList);
+
         if (taskGroupList != null) {
             Mapper mapper = new DozerBeanMapper();
             taskDTOList = DozerHelper.map(mapper, taskGroupList, TaskDTO.class);
@@ -80,6 +101,7 @@ public class TaskServiceImpl implements ITaskService {
                     dto.setBusinessKey(processInstance.getBusinessKey());
                 } else {
                     HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(dto.getProcessInstanceId()).singleResult();
+
                     if (historicProcessInstance != null) {
                         dto.setEntityId(WorkflowUtil.getBizId(historicProcessInstance.getBusinessKey()));
                         dto.setBusinessKey(processInstance.getBusinessKey());
@@ -103,6 +125,7 @@ public class TaskServiceImpl implements ITaskService {
         HistoricProcessInstance historicProcessInstance;
         historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         String userName = historicProcessInstance.getStartUserId();
+
         return userName;
     }
 
@@ -145,7 +168,7 @@ public class TaskServiceImpl implements ITaskService {
         this.historyService = historyService;
     }
 
-//    public void setRoleBeanService(IRoleBeanService roleBeanService) {
-//        this.roleBeanService = roleBeanService;
-//    }
+    public void setShiroService(IShiroService shiroService) {
+        this.shiroService = shiroService;
+    }
 }
