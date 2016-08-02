@@ -5,8 +5,6 @@
        http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
        http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
 
-    <reference id="couchdbServiceForDelete" interface="com.kalix.middleware.couchdb.api.biz.ICouchdbService"/>
-
     <camelContext id="couchdbCamel" xmlns="http://camel.apache.org/schema/blueprint">
         <restConfiguration component="servlet" bindingMode="json">
             <dataFormatProperty key="prettyPrint" value="true"/>
@@ -15,8 +13,11 @@
             <delete id="route-removeCouchdb"
                     outType="com.kalix.framework.core.api.persistence.JsonStatus">
                 <description>Create a attachment</description>
-                <to uri="bean:couchdbServiceForDelete?method=deleteAttach(${header.id},${header.rev})"/>
+                <to uri="bean:couchdbService?method=deleteAttach(${header.id},${header.rev})"/>
             </delete>
+            <post id="route-addCouchdb" type="java.util.Map">
+                <to uri="bean:couchdbService?method=addAttachment"/>
+            </post>
         </rest>
     </camelContext>
 </blueprint>

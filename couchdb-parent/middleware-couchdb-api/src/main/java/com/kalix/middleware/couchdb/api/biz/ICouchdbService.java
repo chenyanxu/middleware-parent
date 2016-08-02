@@ -3,6 +3,8 @@ package com.kalix.middleware.couchdb.api.biz;
 import com.kalix.framework.core.api.persistence.JsonStatus;
 import org.lightcouch.Response;
 
+import java.util.Map;
+
 /**
  ** @author chenyanxu
  */
@@ -53,4 +55,6 @@ public interface ICouchdbService {
      * @return
      */
     String getDBUrl();
+
+    String addAttachment(Map<String,String> params);
 }

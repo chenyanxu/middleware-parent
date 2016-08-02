@@ -8,6 +8,8 @@ import org.lightcouch.CouchDbClient;
 import org.lightcouch.Document;
 import org.lightcouch.Response;
 
+import java.util.Map;
+
 /**
  * @author chenyanxu
  */
@@ -68,6 +70,10 @@ public class CouchdbServiceImpl implements ICouchdbService {
         return dbClient.getDBUri().toString();
     }
 
+    @Override
+    public String addAttachment(Map<String,String> params){
+        return null;
+    }
 //    @Override
 //    public String updateAttach(CouchdbAttachBean couchdbAttachBean, String value, String type) {
 //        Response response = new Response();
