@@ -3,7 +3,6 @@ package com.kalix.middleware.workflow.biz;
 import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.api.persistence.JsonData;
 import com.kalix.framework.core.api.security.IShiroService;
-import com.kalix.framework.core.api.security.IUserLoginService;
 import com.kalix.framework.core.util.*;
 import com.kalix.middleware.workflow.api.biz.ITaskService;
 import com.kalix.middleware.workflow.api.model.TaskDTO;
