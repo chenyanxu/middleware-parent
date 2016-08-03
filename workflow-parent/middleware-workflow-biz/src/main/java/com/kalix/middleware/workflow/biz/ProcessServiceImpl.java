@@ -2,6 +2,7 @@ package com.kalix.middleware.workflow.biz;
 
 import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.api.persistence.JsonData;
+import com.kalix.framework.core.api.security.IShiroService;
 import com.kalix.framework.core.api.security.IUserLoginService;
 import com.kalix.framework.core.util.*;
 import com.kalix.middleware.workflow.api.biz.IProcessService;
@@ -31,10 +32,10 @@ import java.util.Map;
  */
 public class ProcessServiceImpl implements IProcessService {
     private transient RepositoryService repositoryService;
+    private IShiroService shiroService;
     private RuntimeService runtimeService;
     private HistoryService historyService;
     private TaskService taskService;
-    private IUserLoginService userLoginService;
     private JsonData jsonData = new JsonData();
 
 
@@ -104,7 +105,7 @@ public class ProcessServiceImpl implements IProcessService {
      */
     @Override
     public JsonData getMyProcessHistory(int page, int limit, String jsonStr) {
-        String loginUser = userLoginService.getLoginName();
+        String loginUser = this.shiroService.getCurrentUserLoginName();
         List<HistoricProcessInstanceDTO> historicProcessDTOList;
         List<HistoricProcessInstance> processHistoryList;
         if (StringUtils.isNotEmpty(jsonStr)) {
@@ -261,7 +262,7 @@ public class ProcessServiceImpl implements IProcessService {
         this.historyService = historyService;
     }
 
-    public void setUserLoginService(IUserLoginService userLoginService) {
-        this.userLoginService = userLoginService;
+    public void setShiroService(IShiroService shiroService) {
+        this.shiroService = shiroService;
     }
 }

@@ -27,7 +27,6 @@
     <reference id="runtimeService" interface="org.activiti.engine.RuntimeService"/>
     <reference id="processEngine" interface="org.activiti.engine.ProcessEngine"/>
     <reference id="formService" interface="org.activiti.engine.FormService"/>
-    <reference id="userLoginService" interface="com.kalix.framework.core.api.security.IUserLoginService"/>
 
     <!-- 注册process服务-->
     <bean class="com.kalix.middleware.workflow.biz.ProcessServiceImpl" id="processServiceImpl">
@@ -35,7 +34,7 @@
         <property name="historyService" ref="historyService"/>
         <property name="taskService" ref="taskService"/>
         <property name="runtimeService" ref="runtimeService"/>
-        <property name="userLoginService" ref="userLoginService"/>
+        <property name="shiroService" ref="shiroService"/>
     </bean>
 
     <service interface="com.kalix.middleware.workflow.api.biz.IProcessService" ref="processServiceImpl"/>
@@ -43,7 +42,6 @@
     <!-- 注册task服务-->
     <bean id="taskServiceImpl" class="com.kalix.middleware.workflow.biz.TaskServiceImpl">
         <property name="taskService" ref="taskService"/>
-        <property name="userLoginService" ref="userLoginService"/>
         <property name="runtimeService" ref="runtimeService"/>
         <property name="shiroService" ref="shiroService"/>
         <property name="historyService" ref="historyService"/>

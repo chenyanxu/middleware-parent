@@ -87,7 +87,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
 
             TP bean = this.getEntity(new Long(beanId));
 
-            String userName=this.getShiroService().getCurrentUserName();
+            String userName=this.getShiroService().getCurrentUserLoginName();
             //判断是否有人委托
             if (task.getDelegationState()!=null && task.getDelegationState().equals(DelegationState.PENDING)) {
                 taskService.resolveTask(task.getId());

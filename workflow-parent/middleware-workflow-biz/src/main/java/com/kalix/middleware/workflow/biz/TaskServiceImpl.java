@@ -31,7 +31,6 @@ public class TaskServiceImpl implements ITaskService {
     private RuntimeService runtimeService;
     private HistoryService historyService;
     private JsonData jsonData = new JsonData();
-    private IUserLoginService userLoginService;
     private IShiroService shiroService;
     /**
      * 获得工作流任务列表
@@ -41,7 +40,7 @@ public class TaskServiceImpl implements ITaskService {
     @Override
     public JsonData getTasks(int page, int limit, String jsonStr) {
         //获得当前登陆用户
-        String userName = userLoginService.getLoginName();
+        String userName = this.shiroService.getCurrentUserLoginName();
         List<TaskDTO> taskDTOList;
         List<Task> taskGroupList;//获得用户组的任务列表
         List<Task> taskUserList;//获得基于用户的任务列表
@@ -137,7 +136,7 @@ public class TaskServiceImpl implements ITaskService {
             jsonStatus.setSuccess(true);
             String[] taskId = taskIds.split(":");
             for (String id : taskId) {
-                taskService.claim(id, userLoginService.getLoginName());
+                taskService.claim(id, this.shiroService.getCurrentUserLoginName());
                 taskService.delegateTask(id, userId);
             }
             jsonStatus.setMsg("委托任务处理成功！");
@@ -154,10 +153,6 @@ public class TaskServiceImpl implements ITaskService {
 
     public void setTaskService(TaskService taskService) {
         this.taskService = taskService;
-    }
-
-    public void setUserLoginService(IUserLoginService userLoginService) {
-        this.userLoginService = userLoginService;
     }
 
     public void setRuntimeService(RuntimeService runtimeService) {
