@@ -42,7 +42,7 @@ public abstract class WorkflowEntity extends PersistentEntity {
     private String processInstanceId;//流程实例id
     private String currentNode;//当前环节
     private short status = 0;
-    private String auditResult="无审批结果";//审批最终结果
+    private String auditResult="流程尚未启动";//审批最终结果
 
     public String getProcessInstanceId() {
         return processInstanceId;
