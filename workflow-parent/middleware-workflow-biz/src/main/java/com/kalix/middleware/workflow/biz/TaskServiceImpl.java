@@ -31,6 +31,7 @@ public class TaskServiceImpl implements ITaskService {
     private HistoryService historyService;
     private JsonData jsonData = new JsonData();
     private IShiroService shiroService;
+
     /**
      * 获得工作流任务列表
      *
@@ -41,48 +42,50 @@ public class TaskServiceImpl implements ITaskService {
         //获得当前登陆用户
         String userName = this.shiroService.getCurrentUserLoginName();
         List<TaskDTO> taskDTOList;
-        List<Task> taskGroupList;//获得用户组的任务列表
+        List<Task> taskGroupList = new ArrayList<>();//获得用户组的任务列表
         List<Task> taskUserList;//获得基于用户的任务列表
 
-        String rtnStr=null;
+        String rtnStr = null;
 
         try {
-            rtnStr = HttpClientUtil.shiroGet("http://localhost:8181/kalix/camel/rest/users/user/dutys/list",this.shiroService.getSession().getId().toString());
+            rtnStr = HttpClientUtil.shiroGet("http://localhost:8181/kalix/camel/rest/users/user/dutys/list", this.shiroService.getSession().getId().toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        List<String> dutyNameList =null;
+        List<String> dutyNameList = null;
 
-        if(rtnStr!=null){
-            dutyNameList=SerializeUtil.unserializeJson(rtnStr,List.class);
+        if (rtnStr != null) {
+            dutyNameList = SerializeUtil.unserializeJson(rtnStr, List.class);
+        } else {
+            dutyNameList = new ArrayList<>();
         }
-        else{
-            dutyNameList=new ArrayList<>();
-        }
 
+        Map map = SerializeUtil.json2Map(jsonStr);
+        String taskName = (String) map.get("name");
+        //Assert.notNull(taskName);
+        if (StringUtils.isNotEmpty(taskName)) {
+            if (dutyNameList.size() > 0)
+                taskGroupList = taskService
+                        .createTaskQuery().taskCandidateGroupIn(dutyNameList)
+                        .taskNameLike("%" + taskName + "%").orderByTaskCreateTime().desc()
+                        .listPage((page - 1) * limit, limit);
 
-        if (StringUtils.isNotEmpty(jsonStr)) {
-            Map map = SerializeUtil.json2Map(jsonStr);
-            String taskName = (String) map.get("name");
-            Assert.notNull(taskName);
-            taskGroupList = taskService
-                    .createTaskQuery().taskCandidateGroupIn(dutyNameList)
-                    .taskNameLike("%" + taskName + "%").orderByTaskCreateTime().desc()
-                    .listPage((page - 1) * limit, limit);
             taskUserList = taskService
-                    .createTaskQuery().taskAssignee(userName)
+                    .createTaskQuery().taskCandidateUser(userName)
                     .taskNameLike("%" + taskName + "%").orderByTaskCreateTime().desc()
                     .listPage((page - 1) * limit, limit);
         } else {
-            taskGroupList = taskService
-                    .createTaskQuery().taskCandidateGroupIn(dutyNameList)
-                    .orderByTaskCreateTime().desc()
-                    .listPage((page - 1) * limit, limit);
             taskUserList = taskService
-                    .createTaskQuery().taskAssignee(userName)
+                    .createTaskQuery().taskCandidateUser(userName)
                     .orderByTaskCreateTime().desc()
                     .listPage((page - 1) * limit, limit);
+            if (dutyNameList.size() > 0)
+                taskGroupList = taskService
+                        .createTaskQuery().taskCandidateGroupIn(dutyNameList)
+                        .orderByTaskCreateTime().desc()
+                        .listPage((page - 1) * limit, limit);
+
         }
 
         taskGroupList.addAll(taskUserList);
@@ -120,10 +123,11 @@ public class TaskServiceImpl implements ITaskService {
      * @return
      */
     public String getStartUserName(String processInstanceId) {
+        String userName = "";
         HistoricProcessInstance historicProcessInstance;
         historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
-        String userName = historicProcessInstance.getStartUserId();
-
+        if (historicProcessInstance != null)
+            userName = historicProcessInstance.getStartUserId();
         return userName;
     }
 
