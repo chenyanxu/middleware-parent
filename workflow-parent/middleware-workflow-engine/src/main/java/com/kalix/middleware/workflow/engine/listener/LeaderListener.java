@@ -1,5 +1,7 @@
 package com.kalix.middleware.workflow.engine.listener;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.kalix.framework.core.api.security.IShiroService;
 import com.kalix.framework.core.util.HttpClientUtil;
 import com.kalix.framework.core.util.JNDIHelper;
@@ -9,6 +11,7 @@ import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.TaskListener;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,14 +46,15 @@ public class LeaderListener implements TaskListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        List<Long> orgList = new ArrayList<>();
+        List<String> orgList = new ArrayList<>();
 
-        if (rtnStr != null) {
-            orgList = SerializeUtil.unserializeJson(rtnOrgStr, List.class);
+        if (rtnOrgStr != null) {
+            Type type = new TypeToken<ArrayList<String>>() {}.getType();
+            orgList = SerializeUtil.unserializeJson(rtnOrgStr, type);
         }
         if (orgList.size() > 0) {
             boolean succeed=false;
-            for (Long orgId : orgList) {
+            for (String orgId : orgList) {
                 //获得兄弟机构下名称为“上级领导”职位下的全部用户
                 try {
                     rtnStr = HttpClientUtil.shiroGet("http://localhost:8181/kalix/camel/rest/users/user/dutys/" + orgId + "/" + "上级领导", this.shiroService.getSession().getId().toString());
@@ -72,6 +76,9 @@ public class LeaderListener implements TaskListener {
             if(!succeed){
                 throw new RuntimeException("未能找到名称为上级领导的职位！");
             }
+        }
+        else{
+            throw new RuntimeException("未能找到组织机构！");
         }
     }
 }
