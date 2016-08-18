@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+
+    <reference id="categoryService" interface="com.kalix.middleware.workflow.api.biz.ICategoryBeanService"/>
+
+    <camelContext id="categoryCamel" xmlns="http://camel.apache.org/schema/blueprint">
+
+        <restConfiguration component="servlet" bindingMode="json">
+            <dataFormatProperty key="prettyPrint" value="true"/>
+        </restConfiguration>
+
+        <!-- defines the rest services using the context-path /function -->
+        <rest path="/categorys" consumes="application/json;charset=utf-8" produces="application/json;charset=utf-8">
+            <description>category rest service</description>
+
+            <get id="route-getAllCategory" outType="com.kalix.framework.core.api.persistence.JsonData">
+                <description>Find all Categorys</description>
+                <to uri="bean:categoryService?method=getAllEntityByQuery(${header.page},${header.limit},${header.jsonStr})"/>
+            </get>
+
+            <!-- this is a rest POST to create a category -->
+            <post id="route-addCategory" type="com.kalix.middleware.workflow.entities.CategoryBean"
+                  outType="com.kalix.framework.core.api.persistence.JsonStatus">
+                <description>Create a Category</description>
+                <to uri="bean:categoryService?method=saveEntity"/>
+            </post>
+
+            <!-- this is a rest GET to view a category by the given id -->
+            <get uri="/{id}" id="route-getCategory" outType="com.kalix.middleware.workflow.entities.CategoryBean">
+                <description>Find Category by id</description>
+                <to uri="bean:categoryService?method=getEntity(${header.id})"/>
+            </get>
+
+            <!-- this is a rest PUT to update a category -->
+            <put uri="/{id}" id="route-updateCategory" type="com.kalix.middleware.workflow.entities.CategoryBean"
+                 outType="com.kalix.framework.core.api.persistence.JsonStatus">
+                <description>Updates a Category</description>
+                <to uri="bean:categoryService?method=updateEntity"/>
+            </put>
+
+            <!-- this is a rest DELETE to delete a category -->
+            <delete uri="/{id}" id="route-deleteCategory"
+                    outType="com.kalix.framework.core.api.persistence.JsonStatus">
+                <description>Delete a Category</description>
+                <to uri="bean:categoryService?method=deleteEntity(${header.id})"/>
+            </delete>
+
+            <get uri="/getAll" id="route-getAllCategory-ext" outType="com.kalix.middleware.workflow.entities.CategoryBean">
+                <description>Find all Categorys</description>
+                <to uri="bean:categoryService?method=getAllEntity()"/>
+            </get>
+
+            <get uri="/getType" id="route-getAllWorkFlowsByType" outType="com.kalix.framework.core.api.persistence.JsonData">
+                <description>Find all workFlows</description>
+                <to uri="bean:categoryService?method=getAllWorkFlow(${header.category})"/>
+            </get>
+        </rest>
+
+    </camelContext>
+</blueprint>

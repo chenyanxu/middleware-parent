@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- default-activation="lazy" -->
+<blueprint xmlns:jpa="http://aries.apache.org/xmlns/jpa/v2.0.0"
+           xmlns:tx="http://aries.apache.org/xmlns/transactions/v1.2.0"
+           xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <jpa:enable/>
+    <tx:enable-annotations/>
+
+    <!--用户dao-->
+    <service id="categoryBeanDao" ref="categoryBeanDaoImpl" interface="com.kalix.middleware.workflow.api.dao.ICategoryBeanDao"/>
+
+    <bean id="categoryBeanDaoImpl"
+          class="com.kalix.middleware.workflow.dao.CategoryBeanDaoImpl"> <!--init-method="init">-->
+        <tx:transaction method="*" value="Required"/>
+    </bean>
+
+</blueprint>
+

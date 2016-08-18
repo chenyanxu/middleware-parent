@@ -63,4 +63,15 @@
         <property name="taskService" ref="taskService"/>
         <property name="processEngine" ref="processEngine"/>
     </bean>
+
+    <reference id="categoryBeanDao" interface="com.kalix.middleware.workflow.api.dao.ICategoryBeanDao"/>
+
+    <service interface="com.kalix.middleware.workflow.api.biz.ICategoryBeanService" ref="categoryBeanServiceImpl">
+    </service>
+
+    <bean id="categoryBeanServiceImpl" class="com.kalix.middleware.workflow.biz.CategoryBeanServiceImpl">
+        <property name="dao" ref="categoryBeanDao"/>
+        <property name="processEngine" ref="processEngine"/>
+        <!--<property name="shiroService" ref="shiroService"/>-->
+    </bean>
 </blueprint>
