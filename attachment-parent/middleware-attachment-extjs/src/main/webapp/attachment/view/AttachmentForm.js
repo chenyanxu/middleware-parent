@@ -12,7 +12,7 @@ Ext.define('kalix.attachment.view.AttachmentForm', {
     items: [
         {
             xtype: 'attachmentFileField',
-            width:50,
+            width:60,
             buttonOnly:true,
             buttonText: '上传',
             name: 'attachment',
