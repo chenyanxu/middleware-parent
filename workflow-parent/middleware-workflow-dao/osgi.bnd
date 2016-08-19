@@ -3,8 +3,7 @@
 #-----------------------------------------------------------------
 
 Bundle-Activator: ${bundle.namespace}.internal.InitActivator
-Import-Package: com.kalix.framework.core.api.persistence,\
-                com.kalix.framework.core.api.biz,\
-                com.kalix.middleware.workflow.api.model,\
-                com.kalix.middleware.workflow.entities,*
+#Meta-Persistence: META-INF/persistence.xml
+#JPA-PersistenceUnits:core-cm
+Import-Package:javax.persistence,*
 Bundle-Category: Kalix Middleware Workflow

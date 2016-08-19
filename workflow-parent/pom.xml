@@ -15,7 +15,9 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>middleware-workflow-entities</module>
         <module>middleware-workflow-api</module>
+        <module>middleware-workflow-dao</module>
         <module>middleware-workflow-engine</module>
         <module>middleware-workflow-biz</module>
         <module>middleware-workflow-rest</module>
@@ -32,6 +34,11 @@
             <dependency>
                 <groupId>com.kalix.middleware.workflow</groupId>
                 <artifactId>middleware-workflow-engine</artifactId>
+                <version>${globle.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kalix.middleware.workflow</groupId>
+                <artifactId>middleware-workflow-entities</artifactId>
                 <version>${globle.version}</version>
             </dependency>
 

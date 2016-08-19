@@ -27,6 +27,11 @@
             <groupId>com.kalix.framework.core</groupId>
             <artifactId>framework-core-impl</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.kalix.middleware.workflow</groupId>
+            <artifactId>middleware-workflow-entities</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
