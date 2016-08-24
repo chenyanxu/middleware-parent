@@ -3,7 +3,7 @@
            xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
     <ext:property-placeholder/>
-    <reference id="dataSource" interface="javax.sql.DataSource"  filter="(osgi.jndi.service.name=jdbc/ds)"/>
+    <reference id="dataSource" interface="javax.sql.DataSource" filter="(osgi.jndi.service.name=jdbc/ds)"/>
 
     <!--用于activiti JavaDelegate-->
     <reference-list id="blueprintListener" availability="optional" interface="org.activiti.engine.delegate.JavaDelegate"
@@ -15,14 +15,30 @@
 
     <reference id="transactionManager" interface="javax.transaction.TransactionManager"/>
 
-    <bean id="configuration" class="org.activiti.engine.impl.cfg.JtaProcessEngineConfiguration" ext:field-injection="true">
+    <bean id="configuration" class="org.activiti.engine.impl.cfg.JtaProcessEngineConfiguration"
+          ext:field-injection="true">
         <property name="databaseType" value="postgres"/>
         <property name="dataSource" ref="dataSource"/>
         <property name="transactionManager" ref="transactionManager"/>
         <property name="databaseSchemaUpdate" value="true"/>
-        <property name="transactionsExternallyManaged" value="true" />
+        <property name="transactionsExternallyManaged" value="true"/>
         <property name="activityFontName" value="宋体"/>
         <property name="labelFontName" value="宋体"/>
+        <property name="eventListeners">
+            <list>
+                <bean class="com.kalix.middleware.workflow.engine.listener.MessageEventListener"/>
+            </list>
+        </property>
+
+        <property name="typedEventListeners">
+            <map>
+                <entry key="TASK_ASSIGNED">
+                    <list>
+                        <bean class="com.kalix.middleware.workflow.engine.listener.MessageEventListener"/>
+                    </list>
+                </entry>
+            </map>
+        </property>
     </bean>
 
     <bean id="processEngineFactory" class="org.activiti.osgi.blueprint.ProcessEngineFactoryWithELResolver"

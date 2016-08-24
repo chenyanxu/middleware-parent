@@ -8,9 +8,9 @@ import org.activiti.engine.delegate.event.impl.ActivitiEntityEventImpl;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.impl.persistence.entity.IdentityLinkEntity;
 import org.activiti.engine.impl.persistence.entity.TaskEntity;
+import org.json.JSONObject;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Dictionary;
@@ -30,7 +30,7 @@ public class MessageEventListener implements ActivitiEventListener {
     public MessageEventListener() {
         try {
             eventAdmin = JNDIHelper.getJNDIServiceForName("org.osgi.service.event.EventAdmin");
-            historyService=JNDIHelper.getJNDIServiceForName("org.activiti.engine.HistoryService");
+//            historyService=JNDIHelper.getJNDIServiceForName("org.activiti.engine.HistoryService");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -55,6 +55,11 @@ public class MessageEventListener implements ActivitiEventListener {
      * @param event
      */
     private void postCompleteEvent(ActivitiEvent event) {
+        try {
+            historyService = JNDIHelper.getJNDIServiceForName("org.activiti.engine.HistoryService");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         String processInstanceId = event.getProcessInstanceId();
         JSONObject taskJson=new JSONObject();
         HistoricProcessInstance historicProcessInstance=historyService.createHistoricProcessInstanceQuery()
@@ -81,6 +86,11 @@ public class MessageEventListener implements ActivitiEventListener {
      * @param event
      */
     private void postCreateEvent(ActivitiEvent event) {
+        try {
+            historyService = JNDIHelper.getJNDIServiceForName("org.activiti.engine.HistoryService");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         JSONObject taskJson=new JSONObject();
         String processInstanceId = event.getProcessInstanceId();
         ActivitiEntityEventImpl entityEvent= (ActivitiEntityEventImpl) event;
@@ -102,5 +112,13 @@ public class MessageEventListener implements ActivitiEventListener {
                 eventAdmin.postEvent(osgi_event);
             }
         }
+    }
+
+    public void setEventAdmin(EventAdmin eventAdmin) {
+        this.eventAdmin = eventAdmin;
+    }
+
+    public void setHistoryService(HistoryService historyService) {
+        this.historyService = historyService;
     }
 }
