@@ -18,6 +18,7 @@
         <module>couchdb-parent</module>
         <module>excel-parent</module>
         <module>workflow-parent</module>
+        <module>statemachine-parent</module>
     </modules>
     <build>
         <plugins>
