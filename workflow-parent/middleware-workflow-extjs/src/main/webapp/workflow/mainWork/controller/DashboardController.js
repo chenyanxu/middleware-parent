@@ -12,7 +12,7 @@ Ext.define('kalix.workflow.mainWork.controller.DashboardController', {
      * @param colIndex
      */
     onOpenProcessDefinition: function (name,key) {
-        var imgUrl = "/image" + "?processDefinitionId=" + key;
+        var imgUrl = "processDefinitionId=" + key;
         var win = Ext.create('kalix.workflow.components.ActivitiProcessImageWindow', {
             title: '流程定义查看 - ' + name,
             imgUrl: imgUrl
