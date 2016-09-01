@@ -6,6 +6,7 @@ import com.kalix.framework.core.impl.biz.ShiroGenericBizServiceImpl;
 import com.kalix.middleware.workflow.api.biz.IWorkflowBizService;
 import com.kalix.middleware.workflow.api.exception.NoLeaderException;
 import com.kalix.middleware.workflow.api.exception.NoOrgException;
+import com.kalix.middleware.workflow.api.exception.NotSameStartException;
 import com.kalix.middleware.workflow.api.model.WorkflowEntity;
 import com.kalix.middleware.workflow.api.model.WorkflowStaus;
 import com.kalix.middleware.workflow.api.util.WorkflowUtil;
@@ -42,6 +43,9 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             String userName = this.getShiroService().getSubject().getPrincipal().toString();
             identityService.setAuthenticatedUserId(userName);
             TP bean = this.getEntity(new Long(id));
+            //检查流程启动人和申请人是同一个人
+            if (bean.getCreateBy().equals(this.getShiroService().getCurrentUserRealName()))
+                throw new NotSameStartException();
             //启动流程
             ProcessInstance instance = runtimeService.startProcessInstanceByKey(getProcessKeyName(), bizKey);
 
