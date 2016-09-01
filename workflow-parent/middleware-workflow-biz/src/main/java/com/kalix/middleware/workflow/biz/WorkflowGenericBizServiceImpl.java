@@ -4,6 +4,8 @@ import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.api.dao.IGenericDao;
 import com.kalix.framework.core.impl.biz.ShiroGenericBizServiceImpl;
 import com.kalix.middleware.workflow.api.biz.IWorkflowBizService;
+import com.kalix.middleware.workflow.api.exception.NoLeaderException;
+import com.kalix.middleware.workflow.api.exception.NoOrgException;
 import com.kalix.middleware.workflow.api.model.WorkflowEntity;
 import com.kalix.middleware.workflow.api.model.WorkflowStaus;
 import com.kalix.middleware.workflow.api.util.WorkflowUtil;
@@ -51,7 +53,20 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             bean.setAuditResult("审批中...");
             this.updateEntity(bean);
             jsonStatus.setMsg("启动流程成功！");
-        } catch (Exception e) {
+        }
+        catch (NoOrgException e) {
+            e.printStackTrace();
+            jsonStatus.setFailure(true);
+            jsonStatus.setSuccess(false);
+            jsonStatus.setMsg("启动流程失败！"+e.getMessage());
+        }
+        catch (NoLeaderException e) {
+            e.printStackTrace();
+            jsonStatus.setFailure(true);
+            jsonStatus.setSuccess(false);
+            jsonStatus.setMsg("启动流程失败！"+e.getMessage());
+        }
+        catch (Exception e) {
             e.printStackTrace();
             jsonStatus.setFailure(true);
             jsonStatus.setSuccess(false);

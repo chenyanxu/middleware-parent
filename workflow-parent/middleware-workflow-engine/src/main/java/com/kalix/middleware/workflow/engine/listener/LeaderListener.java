@@ -7,6 +7,8 @@ import com.kalix.framework.core.util.HttpClientUtil;
 import com.kalix.framework.core.util.JNDIHelper;
 import com.kalix.framework.core.util.SerializeUtil;
 import com.kalix.middleware.workflow.api.biz.ITaskService;
+import com.kalix.middleware.workflow.api.exception.NoLeaderException;
+import com.kalix.middleware.workflow.api.exception.NoOrgException;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.TaskListener;
 
@@ -74,11 +76,11 @@ public class LeaderListener implements TaskListener {
                 }
             }
             if(!succeed){
-                throw new RuntimeException("未能找到名称为上级领导的职位！");
+                throw new NoLeaderException();
             }
         }
         else{
-            throw new RuntimeException("未能找到组织机构！");
+            throw new NoOrgException();
         }
     }
 }
