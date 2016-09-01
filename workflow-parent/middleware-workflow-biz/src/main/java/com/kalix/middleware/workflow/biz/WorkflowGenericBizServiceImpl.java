@@ -54,23 +54,11 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             this.updateEntity(bean);
             jsonStatus.setMsg("启动流程成功！");
         }
-        catch (NoOrgException e) {
-            e.printStackTrace();
-            jsonStatus.setFailure(true);
-            jsonStatus.setSuccess(false);
-            jsonStatus.setMsg("启动流程失败！"+e.getMessage());
-        }
-        catch (NoLeaderException e) {
-            e.printStackTrace();
-            jsonStatus.setFailure(true);
-            jsonStatus.setSuccess(false);
-            jsonStatus.setMsg("启动流程失败！"+e.getMessage());
-        }
         catch (Exception e) {
             e.printStackTrace();
             jsonStatus.setFailure(true);
             jsonStatus.setSuccess(false);
-            jsonStatus.setMsg("启动流程失败！");
+            jsonStatus.setMsg("启动流程失败！"+e.getMessage());
         }
         return jsonStatus;
     }
