@@ -16,6 +16,12 @@ public interface IWorkflowBizService<T extends PersistentEntity> extends IBizSer
     Map getVariantMap(Map map, T bean);
     //添加处理人的名字到实体中
     void writeClaimResult(String currentTaskId, String userName, T bean);
+
+    /**
+     * 流程启动
+     * @param id
+     * @return
+     */
     JsonStatus startProcess(String id);
     JsonStatus completeTask(String taskId, String accepted, String comment);
 }

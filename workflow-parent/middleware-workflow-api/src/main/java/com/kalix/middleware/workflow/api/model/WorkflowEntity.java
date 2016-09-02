@@ -1,23 +1,3 @@
-/*
- * Copyright (C) 2012 "Lexaden.com"
- *     contact@lexaden.com [http://www.lexaden.com]
- *
- *     This file is part of Lexaden Administration.
- *
- *     Lexaden Administration is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU Affero General Public License as
- *     published by the Free Software Foundation, either version 3 of the
- *     License, or (at your option) any later version.
- *
- *     This program is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU Affero General Public License for more details.
- *
- *     You should have received a copy of the GNU Affero General Public License
- *     along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
 package com.kalix.middleware.workflow.api.model;
 
 //import com.kalix.framework.core.api.persistence.PersistentEntity;
@@ -39,6 +19,8 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 @Access(AccessType.FIELD)
 public abstract class WorkflowEntity extends PersistentEntity {
+    private Long orgId; //组织结构id
+    private String orgName; //组织结构名称
     private String processInstanceId;//流程实例id
     private String currentNode;//当前环节
     private short status = 0;
@@ -74,5 +56,21 @@ public abstract class WorkflowEntity extends PersistentEntity {
 
     public void setAuditResult(String auditResult) {
         this.auditResult = auditResult;
+    }
+
+    public Long getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(Long orgId) {
+        this.orgId = orgId;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
     }
 }

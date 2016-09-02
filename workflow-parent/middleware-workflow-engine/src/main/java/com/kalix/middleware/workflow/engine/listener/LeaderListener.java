@@ -9,6 +9,7 @@ import com.kalix.framework.core.util.SerializeUtil;
 import com.kalix.middleware.workflow.api.biz.ITaskService;
 import com.kalix.middleware.workflow.api.exception.NoLeaderException;
 import com.kalix.middleware.workflow.api.exception.NoOrgException;
+import com.kalix.middleware.workflow.api.exception.NoPersonInDutyException;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.TaskListener;
 
@@ -37,50 +38,31 @@ public class LeaderListener implements TaskListener {
     public void notify(DelegateTask delegateTask) {
         //get starter user name
         String rtnStr = null;
-        String rtnOrgStr = null;
-        String starter = taskService.getStartUserName(delegateTask.getProcessInstanceId());
-        if (starter.isEmpty()) {
-            starter = shiroService.getCurrentUserLoginName();
-        }
-        //获得兄弟机构列表的orgId
+        //读取组织结构id
+        String orgId = (String) delegateTask.getVariable("startOrgId");
+        boolean succeed = false;
+
+        //获得兄弟机构下名称为“上级领导”职位下的全部用户
         try {
-            rtnOrgStr = HttpClientUtil.shiroGet("http://localhost:8181/kalix/camel/rest/users/" + starter + "/orgs/brother", this.shiroService.getSession().getId().toString());
+            rtnStr = HttpClientUtil.shiroGet("http://localhost:8181/kalix/camel/rest/users/user/dutys/" + orgId + "/" + "上级领导", this.shiroService.getSession().getId().toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        List<String> orgList = new ArrayList<>();
+        List<String> userNameList = new ArrayList<>();
 
-        if (rtnOrgStr != null) {
-            Type type = new TypeToken<ArrayList<String>>() {}.getType();
-            orgList = SerializeUtil.unserializeJson(rtnOrgStr, type);
+        if (rtnStr != null) {
+            userNameList = SerializeUtil.unserializeJson(rtnStr, List.class);
         }
-        if (orgList.size() > 0) {
-            boolean succeed=false;
-            for (String orgId : orgList) {
-                //获得兄弟机构下名称为“上级领导”职位下的全部用户
-                try {
-                    rtnStr = HttpClientUtil.shiroGet("http://localhost:8181/kalix/camel/rest/users/user/dutys/" + orgId + "/" + "上级领导", this.shiroService.getSession().getId().toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                List<String> userNameList = new ArrayList<>();
+        if (userNameList.size() > 0) {
+            for (String userName : userNameList)
+                delegateTask.addCandidateUser(userName);
+            succeed = true;
+        } else {
+            throw new NoPersonInDutyException();
+        }
 
-                if (rtnStr != null) {
-                    userNameList = SerializeUtil.unserializeJson(rtnStr, List.class);
-                }
-                if (userNameList.size() > 0) {
-                    for (String userName : userNameList)
-                        delegateTask.addCandidateUser(userName);
-                    succeed=true;
-                    break;
-                }
-            }
-            if(!succeed){
-                throw new NoLeaderException();
-            }
-        }
-        else{
-            throw new NoOrgException();
+        if (!succeed) {
+            throw new NoLeaderException();
         }
     }
 }
