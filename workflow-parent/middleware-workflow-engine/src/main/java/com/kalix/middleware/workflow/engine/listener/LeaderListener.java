@@ -6,6 +6,7 @@ import com.kalix.framework.core.api.security.IShiroService;
 import com.kalix.framework.core.util.HttpClientUtil;
 import com.kalix.framework.core.util.JNDIHelper;
 import com.kalix.framework.core.util.SerializeUtil;
+import com.kalix.middleware.workflow.api.Const;
 import com.kalix.middleware.workflow.api.biz.ITaskService;
 import com.kalix.middleware.workflow.api.exception.NoLeaderException;
 import com.kalix.middleware.workflow.api.exception.NoOrgException;
@@ -39,7 +40,7 @@ public class LeaderListener implements TaskListener {
         //get starter user name
         String rtnStr = null;
         //读取组织结构id
-        String orgId = (String) delegateTask.getVariable("startOrgId");
+        String orgId = (String) delegateTask.getVariable(Const.STARTER_ORG_ID);
         boolean succeed = false;
 
         //获得兄弟机构下名称为“上级领导”职位下的全部用户

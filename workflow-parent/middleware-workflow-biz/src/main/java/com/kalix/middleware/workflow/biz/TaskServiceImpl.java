@@ -44,9 +44,8 @@ public class TaskServiceImpl implements ITaskService {
         List<TaskDTO> taskDTOList;
         List<Task> taskGroupList = new ArrayList<>();//获得用户组的任务列表
         List<Task> taskUserList;//获得基于用户的任务列表
-
+        //获得该用户的职位，职位组成标准：orgName-dutyName
         String rtnStr = null;
-
         try {
             rtnStr = HttpClientUtil.shiroGet("http://localhost:8181/kalix/camel/rest/users/user/dutys/list", this.shiroService.getSession().getId().toString());
         } catch (IOException e) {
@@ -60,7 +59,7 @@ public class TaskServiceImpl implements ITaskService {
         } else {
             dutyNameList = new ArrayList<>();
         }
-
+        //获得查询条件
         Map map = SerializeUtil.json2Map(jsonStr);
         String taskName = (String) map.get("name");
         //Assert.notNull(taskName);
