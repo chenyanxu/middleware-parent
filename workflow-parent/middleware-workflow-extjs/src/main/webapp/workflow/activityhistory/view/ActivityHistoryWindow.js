@@ -28,7 +28,7 @@ Ext.define('kalix.workflow.activityhistory.view.ActivityHistoryWindow', {
             items: [
                 {
                     xtype: 'activityHistoryGrid',
-                    height: 180
+                    height: 280
                 }
             ]
         }

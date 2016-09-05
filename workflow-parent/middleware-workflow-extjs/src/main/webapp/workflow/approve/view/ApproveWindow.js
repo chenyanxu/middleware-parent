@@ -30,7 +30,7 @@ Ext.define('kalix.workflow.approve.view.ApproveWindow', {
             items: [
                 {
                     xtype: 'activityHistoryGrid',
-                    height: 180
+                    height: 280
                 }
             ]
         },
