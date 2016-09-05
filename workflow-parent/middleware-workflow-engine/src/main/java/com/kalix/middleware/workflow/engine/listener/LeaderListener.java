@@ -1,31 +1,33 @@
 package com.kalix.middleware.workflow.engine.listener;
 
-import com.kalix.framework.core.api.security.IShiroService;
-import com.kalix.framework.core.util.HttpClientUtil;
 import com.kalix.framework.core.util.JNDIHelper;
-import com.kalix.framework.core.util.SerializeUtil;
 import com.kalix.middleware.workflow.api.Const;
-import com.kalix.middleware.workflow.api.biz.ITaskService;
-import com.kalix.middleware.workflow.api.exception.NoLeaderException;
-import com.kalix.middleware.workflow.api.exception.NoPersonInDutyException;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.TaskListener;
+import org.json.JSONObject;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Dictionary;
+import java.util.Hashtable;
+
+import static com.kalix.middleware.workflow.engine.listener.MessageEventListener.WORKFLOW_MESSAGE_TOPIC;
 
 /**
  * 部门领导监听器，用于处理当前申请人的部门领导
  */
 public class LeaderListener implements TaskListener {
-    private ITaskService taskService;
-    private IShiroService shiroService;
+    /* private ITaskService taskService;
+     private IShiroService shiroService;*/
+    JSONObject taskJson = new JSONObject();
+    private EventAdmin eventAdmin;
 
     public LeaderListener() {
         try {
-            taskService = JNDIHelper.getJNDIServiceForName(ITaskService.class.getName());
-            shiroService = JNDIHelper.getJNDIServiceForName(IShiroService.class.getName());
+            /*taskService = JNDIHelper.getJNDIServiceForName(ITaskService.class.getName());
+            shiroService = JNDIHelper.getJNDIServiceForName(IShiroService.class.getName());*/
+            eventAdmin = JNDIHelper.getJNDIServiceForName("org.osgi.service.event.EventAdmin");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -37,7 +39,18 @@ public class LeaderListener implements TaskListener {
         String rtnStr = null;
         //读取组织结构id
         String orgName = (String) delegateTask.getVariable(Const.STARTER_ORG_Name);
-        delegateTask.addCandidateGroup(orgName+"-上级领导");
+        String group = orgName + "-上级领导";
+        delegateTask.addCandidateGroup(group);
+        //发送消息
+        taskJson.put("group", group);
+        taskJson.put("businessKey", delegateTask.getExecution().getProcessBusinessKey());
+        System.out.println("A task group of " + group + " is assigned!");
+        //添加相关内容到消息体
+        Dictionary properties = new Hashtable();
+        properties.put("body", taskJson.toString());
+        Event osgi_event = new Event(WORKFLOW_MESSAGE_TOPIC, properties);
+        eventAdmin.postEvent(osgi_event);
+
         /*boolean succeed = false;
 
         //获得兄弟机构下名称为“上级领导”职位下的全部用户
