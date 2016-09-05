@@ -5,5 +5,5 @@ package com.kalix.middleware.workflow.api;
  */
 public class Const {
     //启动人所属的组织结构id
-    public static final String STARTER_ORG_ID="startOrgId";
+    public static final String STARTER_ORG_Name ="startOrgName";
 }

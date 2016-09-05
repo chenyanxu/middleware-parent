@@ -45,9 +45,9 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             //检查流程启动人和申请人是同一个人
             if (!bean.getCreateBy().equals(this.getShiroService().getCurrentUserRealName()))
                 throw new NotSameStarterException();
-            //put orgid to variant
+            //put orgName to variant
             Map map=new HashMap<>();
-            map.put(Const.STARTER_ORG_ID,String.valueOf(bean.getOrgId()));
+            map.put(Const.STARTER_ORG_Name,String.valueOf(bean.getOrgName()));
             //启动流程
 
             ProcessInstance instance = runtimeService.startProcessInstanceByKey(getProcessKeyName(), bizKey,map);

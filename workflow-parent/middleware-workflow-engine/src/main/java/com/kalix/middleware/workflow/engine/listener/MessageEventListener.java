@@ -82,7 +82,7 @@ public class MessageEventListener implements ActivitiEventListener {
     }
 
     /**
-     * 发送 osgi event 给相应的group
+     * 发送 osgi event 给相应的group,具体的实现在common-parent消息中
      * @param event
      */
     private void postCreateEvent(ActivitiEvent event) {
