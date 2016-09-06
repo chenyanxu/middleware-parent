@@ -20,8 +20,7 @@ Ext.define('kalix.workflow.category.Main', {
         }, {
             xtype: 'categoryGridPanel',
             id: 'categoryGridPanel',
-            title: '流程分类列表',
-            margin: 10
+            title: '流程分类列表'
         }
     ]
 });

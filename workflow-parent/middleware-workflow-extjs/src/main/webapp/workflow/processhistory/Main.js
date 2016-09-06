@@ -17,7 +17,6 @@ Ext.define('kalix.workflow.processhistory.Main', {
         title: '流程历史查询'
     }, {
         xtype: 'processHistoryGrid',
-        title: '流程历史列表',
-        margin: 10
+        title: '流程历史列表'
     }]
 });

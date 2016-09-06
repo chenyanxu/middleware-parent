@@ -17,7 +17,6 @@ Ext.define('kalix.workflow.task.Main', {
         title: '待办任务查询'
     }, {
         xtype: 'taskGrid',
-        title: '待办任务列表',
-        margin: 10
+        title: '待办任务列表'
     }]
 });

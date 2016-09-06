@@ -18,8 +18,7 @@ Ext.define('kalix.workflow.myprocesshistory.Main', {
             store: {
                 type: 'processHistoryStore',
                 proxyUrl: CONFIG.restRoot + '/camel/rest/workflow/myHistory'
-            },
-            margin: 10
+            }
         }
     ]
 });

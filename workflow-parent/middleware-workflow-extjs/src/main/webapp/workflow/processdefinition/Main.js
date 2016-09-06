@@ -19,7 +19,6 @@ Ext.define('kalix.workflow.processdefinition.Main', {
     },
     {
         xtype: 'processDefinitionGrid',
-        title: '流程定义列表',
-        margin: 10
+        title: '流程定义列表'
     }]
 });
