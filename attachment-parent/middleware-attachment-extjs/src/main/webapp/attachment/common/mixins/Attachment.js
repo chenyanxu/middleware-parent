@@ -12,6 +12,7 @@ Ext.define('kalix.attachment.common.mixins.Attachment', {
     vm.set('rec', selModel);
     vm.set('iconCls','iconfont icon-attachment-column');
     vm.set('title','附件管理');
+    vm.set('view_operation', true);
     view.show();
     grid.setSelection(selModel);
   }
