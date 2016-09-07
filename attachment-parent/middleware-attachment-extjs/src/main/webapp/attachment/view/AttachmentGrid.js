@@ -59,17 +59,17 @@ Ext.define('kalix.attachment.view.AttachmentGrid', {
             {
                 xtype: 'securityGridColumnCommon',
                 flex:0,
-                width:60,
-                items: [
+                width:80,
+                verifyItems: [
                     {
                         iconCls: 'iconfont icon-download',
-                        permission: 'roffice:cmModule:contractMenu:delete',
+                        permission: 'attachmentDownload',
                         tooltip: '下载',
                         handler: 'onDownload'
                     },
                     {
                         iconCls: 'iconfont icon-delete',
-                        permission: 'roffice:cmModule:contractMenu:delete',
+                        permission: 'attachmentDelete',
                         tooltip: '删除',
                         handler: 'onDelete'
                     }
@@ -84,7 +84,7 @@ Ext.define('kalix.attachment.view.AttachmentGrid', {
         verifyItems: [
             {
                 xtype: 'attachmentForm',
-                permission: ''
+                permission: 'attachmentUpload'
             }
         ]
     }
