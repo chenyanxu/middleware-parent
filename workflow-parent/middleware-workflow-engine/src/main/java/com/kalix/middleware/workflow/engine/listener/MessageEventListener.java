@@ -68,7 +68,7 @@ public class MessageEventListener implements ActivitiEventListener {
         Dictionary properties = new Hashtable();
 
         taskJson.put("startUserId",startUserId);
-        taskJson.put("businessKey", historicProcessInstance.getBusinessKey());
+        taskJson.put("businessKey", historicProcessInstance.getName());
 
         properties.put("body", taskJson.toString());
         Event osgi_event = new Event(WORKFLOW_STARTER_TOPIC, properties);

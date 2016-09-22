@@ -1,7 +1,7 @@
 package com.kalix.middleware.workflow.biz;
 
-import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.api.persistence.JsonData;
+import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.api.security.IShiroService;
 import com.kalix.framework.core.util.*;
 import com.kalix.middleware.workflow.api.biz.IProcessService;
@@ -52,7 +52,8 @@ public class ProcessServiceImpl implements IProcessService {
             Map map = SerializeUtil.json2Map(jsonStr);
             String processDefinitionName = (String) map.get("name");
             Assert.notNull(processDefinitionName);
-            processDefinitionList = repositoryService.createProcessDefinitionQuery().orderByProcessDefinitionVersion().asc().processDefinitionNameLike("%" + processDefinitionName + "%").listPage((page - 1) * limit, limit);
+            processDefinitionList = repositoryService.createProcessDefinitionQuery().orderByProcessDefinitionVersion().asc()
+                    .processDefinitionNameLike("%" + processDefinitionName + "%").listPage((page - 1) * limit, limit);
             Map<String, ProcessDefinition> mapProcess = new LinkedHashMap<String, ProcessDefinition>();
             if (processDefinitionList != null && processDefinitionList.size() > 0) {
                 for (ProcessDefinition pd : processDefinitionList) {

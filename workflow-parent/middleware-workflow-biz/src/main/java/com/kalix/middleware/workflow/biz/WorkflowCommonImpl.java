@@ -1,12 +1,8 @@
 package com.kalix.middleware.workflow.biz;
 
-import com.kalix.middleware.workflow.api.biz.IBizDataHandler;
 import com.kalix.middleware.workflow.api.biz.IFormHandler;
 import com.kalix.middleware.workflow.api.biz.IWorkflowCommon;
-import com.kalix.middleware.workflow.api.model.BizDataDTO;
 import com.kalix.middleware.workflow.api.model.FormDTO;
-import com.kalix.middleware.workflow.api.util.WorkflowUtil;
-import com.kalix.middleware.workflow.engine.manager.BizDataManager;
 import com.kalix.middleware.workflow.engine.manager.FormManager;
 import org.activiti.engine.FormService;
 import org.activiti.engine.RepositoryService;
@@ -19,6 +15,7 @@ import org.dozer.Mapper;
 
 /**
  * Created by sunlf on 2015/7/30.
+ * 工作流通用业务服务实现类
  */
 public class WorkflowCommonImpl implements IWorkflowCommon {
     private FormService formService;

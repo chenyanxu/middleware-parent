@@ -9,6 +9,7 @@ Ext.define('kalix.workflow.processhistory.model.ProcessHistoryModel', {
     extend: 'Ext.data.Model',
     fields: [
         {name: 'id', type: 'string'},
+        {name: 'name', type: 'string'},//流水号
         {name: 'processDefinitionId', type: 'string'},//流程id
         {name: 'startUserId', type: 'string'},//启动用户id
         {name: 'startTime'},//开始时间

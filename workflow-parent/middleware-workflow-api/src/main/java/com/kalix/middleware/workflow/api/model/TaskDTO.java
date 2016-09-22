@@ -1,7 +1,7 @@
 package com.kalix.middleware.workflow.api.model;
 
-import com.kalix.framework.core.api.web.model.BaseDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.kalix.framework.core.api.web.model.BaseDTO;
 
 import java.util.Date;
 
@@ -17,7 +17,7 @@ public class TaskDTO extends BaseDTO {
     private Date createTime;//创建时间
     private String processInstanceId;//流程实例id
     private String entityId;//业务实体id
-    private String businessKey;//业务主键
+    private String businessNo;//流水号
     private String processDefinitionId;
     private String duration; //任务持续时长
 
@@ -69,12 +69,12 @@ public class TaskDTO extends BaseDTO {
         this.entityId = entityId;
     }
 
-    public String getBusinessKey() {
-        return businessKey;
+    public String getBusinessNo() {
+        return businessNo;
     }
 
-    public void setBusinessKey(String businessKey) {
-        this.businessKey = businessKey;
+    public void setBusinessNo(String businessNo) {
+        this.businessNo = businessNo;
     }
 
     public String getProcessDefinitionId() {

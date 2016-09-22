@@ -4,6 +4,7 @@
            xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
     <jpa:enable/>
     <tx:enable-annotations/>
+
     <service interface="com.kalix.middleware.workflow.api.biz.IWorkflowService" ref="workFlowServiceImpl">
     </service>
 

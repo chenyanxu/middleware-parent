@@ -23,8 +23,9 @@ public abstract class WorkflowEntity extends PersistentEntity {
     private String orgName; //组织结构名称
     private String processInstanceId;//流程实例id
     private String currentNode;//当前环节
-    private short status = 0;
+    private short status = WorkflowStaus.INACTIVE;
     private String auditResult="流程尚未启动";//审批最终结果
+    private String businessNo = ""; //业务编号
 
     public String getProcessInstanceId() {
         return processInstanceId;
@@ -72,5 +73,13 @@ public abstract class WorkflowEntity extends PersistentEntity {
 
     public void setOrgName(String orgName) {
         this.orgName = orgName;
+    }
+
+    public String getBusinessNo() {
+        return businessNo;
+    }
+
+    public void setBusinessNo(String businessNo) {
+        this.businessNo = businessNo;
     }
 }

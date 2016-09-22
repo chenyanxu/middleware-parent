@@ -43,8 +43,8 @@ Ext.define('kalix.workflow.task.view.TaskGrid', {
 
             },
             {
-                text: '业务主键',
-                dataIndex: 'businessKey',
+                text: '编号',
+                dataIndex: 'businessNo',
                 renderer: 'addTooltip'
             },
             {

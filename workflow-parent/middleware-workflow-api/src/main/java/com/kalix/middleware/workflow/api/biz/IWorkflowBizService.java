@@ -23,5 +23,7 @@ public interface IWorkflowBizService<T extends PersistentEntity> extends IBizSer
      * @return
      */
     JsonStatus startProcess(String id);
+
+    String createBusinessNo();
     JsonStatus completeTask(String taskId, String accepted, String comment);
 }

@@ -1,7 +1,7 @@
 package com.kalix.middleware.workflow.biz;
 
-import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.api.persistence.JsonData;
+import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.api.security.IShiroService;
 import com.kalix.framework.core.util.*;
 import com.kalix.middleware.workflow.api.biz.ITaskService;
@@ -98,13 +98,13 @@ public class TaskServiceImpl implements ITaskService {
                 ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(dto.getProcessInstanceId()).singleResult();
                 if (processInstance != null) {
                     dto.setEntityId(WorkflowUtil.getBizId(processInstance.getBusinessKey()));
-                    dto.setBusinessKey(processInstance.getBusinessKey());
+                    dto.setBusinessNo(processInstance.getName());
                 } else {
                     HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(dto.getProcessInstanceId()).singleResult();
 
                     if (historicProcessInstance != null) {
                         dto.setEntityId(WorkflowUtil.getBizId(historicProcessInstance.getBusinessKey()));
-                        dto.setBusinessKey(processInstance.getBusinessKey());
+                        dto.setBusinessNo(processInstance.getName());
                     }
                 }
                 if (dto.getDuration() != null)

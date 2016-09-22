@@ -1,7 +1,7 @@
 package com.kalix.middleware.workflow.api.model;
 
-import com.kalix.framework.core.api.web.model.BaseDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.kalix.framework.core.api.web.model.BaseDTO;
 
 import java.util.Date;
 
@@ -10,6 +10,7 @@ import java.util.Date;
  * 流程实例历史DtO
  */
 public class HistoricProcessInstanceDTO extends BaseDTO {
+    private String name;//流水号
     private String processDefinitionId;//流程id
     private String startUserId;//启动用户id
     @JsonFormat(shape= JsonFormat.Shape.STRING ,pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -92,5 +93,13 @@ public class HistoricProcessInstanceDTO extends BaseDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
