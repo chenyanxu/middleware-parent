@@ -33,6 +33,7 @@ Ext.define('kalix.workflow.processhistory.controller.ProcessHistoryGridControlle
                             var historyWindow = Ext.create('kalix.workflow.activityhistory.view.ActivityHistoryWindow');
                             var vm = historyWindow.lookupViewModel();
 
+                            vm.set('title', '流程历史查看 - '+entity.businessNo);
                             vm.set('rec', entity);
 
                             historyWindow.insert(0, Ext.create(component.formClass, {
