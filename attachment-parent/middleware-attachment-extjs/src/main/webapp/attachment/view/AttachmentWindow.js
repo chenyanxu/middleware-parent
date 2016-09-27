@@ -9,7 +9,7 @@ Ext.define('kalix.attachment.view.AttachmentWindow', {
         'kalix.attachment.view.AttachmentForm'
     ],
     alias: 'widget.attachmentWindow',
-    xtype: "attachmentWindow",
+    xtype: 'attachmentWindow',
     controller: {
         type: 'baseWindowController',
         storeId: 'attachmentStore'
@@ -26,12 +26,6 @@ Ext.define('kalix.attachment.view.AttachmentWindow', {
         beforeshow: function () {
             var store = this.items.getAt(0).store;
             var mainId = this.getViewModel().get('rec').id;
-
-            store.on('load', function (target, records, successful, eOpts) {
-                //records.forEach(function(item) {
-                    //item.set('attachmentSize', item.get('attachmentSize') / 1048576);
-                //});
-            });
 
             store.proxy.extraParams = {jsonStr: '{mainId:' + mainId + '}'}
             store.load();

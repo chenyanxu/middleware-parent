@@ -4,41 +4,55 @@
  * @version 1.0.0
  */
 Ext.define('kalix.workflow.activityhistory.view.ActivityHistoryWindow', {
-    extend: 'Ext.Window',
-    requires: [
-        'kalix.workflow.activityhistory.view.ActivityHistoryGrid',
-        'kalix.workflow.activityhistory.viewModel.ActivityHistoryViewModel'
-    ],
-    xtype: 'activityHistoryWindow',
-    viewModel: 'activityHistoryViewModel',
-    iconCls: 'iconfont icon-history',
-    width: 900,
-    buttonAlign: "center",
-    border: false,
-    modal: true,
-    bind: {
-        title: '{title}'
-    },
-    items: [
+  extend: 'Ext.Window',
+  requires: [
+    'kalix.workflow.activityhistory.view.ActivityHistoryGrid',
+    'kalix.workflow.activityhistory.viewModel.ActivityHistoryViewModel',
+    'kalix.attachment.view.AttachmentGrid'
+  ],
+  xtype: 'activityHistoryWindow',
+  viewModel: 'activityHistoryViewModel',
+  iconCls: 'iconfont icon-history',
+  width: 900,
+  buttonAlign: 'center',
+  border: false,
+  modal: true,
+  bind: {
+    title: '{title}'
+  },
+  items: [
+    {
+      xtype: 'tabpanel',
+      height: 280,
+      bodyPadding:0,
+      items: [
         {
-            xtype: 'fieldset',
-            padding: '0',
-            margin: 0,
-            title: '流程历史',
-            items: [
-                {
-                    xtype: 'activityHistoryGrid',
-                    height: 280
-                }
-            ]
-        }
-    ],
-    buttons: [
+          title: '流程历史',
+          xtype: 'activityHistoryGrid'
+        },
         {
-            text: '关闭',
-            handler: function () {
-                this.up('window').close();
-            }
+          title:'附件',
+          xtype:'attachmentGrid',
+          tbar:{}
         }
-    ]
+      ]
+    }
+  ],
+  buttons: [
+    {
+      text: '关闭',
+      handler: function () {
+        this.up('window').close();
+      }
+    }
+  ],
+  listeners: {
+    beforeshow: function () {
+      var store = this.items.getAt(1).items.getAt(1).store;
+      var mainId = this.getViewModel().get('rec').id;
+
+      store.proxy.extraParams = {jsonStr: '{mainId:' + mainId + '}'}
+      store.load();
+    }
+  }
 });
