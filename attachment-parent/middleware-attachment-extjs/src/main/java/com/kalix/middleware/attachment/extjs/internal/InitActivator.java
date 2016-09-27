@@ -22,7 +22,13 @@ public class InitActivator extends KalixBundleActivator {
 
         reference = bundleContext.getServiceReference(HttpService.class.getName());
         httpService = (HttpService) bundleContext.getService(reference);
-        httpService.registerResources(contextPath + "/app/attachment", "/attachment", null);
+
+        if(deploy){
+            httpService.registerResources(contextPath + "/app/attachment", "/min/attachment", null);
+        }
+        else{
+            httpService.registerResources(contextPath + "/app/attachment", "/attachment", null);
+        }
     }
 
     @Override
