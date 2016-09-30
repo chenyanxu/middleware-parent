@@ -7,7 +7,7 @@
 
     <camelContext id="excelCamel" xmlns="http://camel.apache.org/schema/blueprint">
         <restConfiguration component="servlet" bindingMode="json">
-            <dataFormatProperty key="prettyPrint" value="true"/>
+            <dataFormatProperty key="prettyPrint" value="${rest.pretty}"/>
         </restConfiguration>
 
         <rest path="/excel" consumes="application/json" produces="application/json">

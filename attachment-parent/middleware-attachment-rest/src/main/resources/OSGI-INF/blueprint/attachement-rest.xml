@@ -8,7 +8,7 @@
     <reference id="attachmentBeanService" interface="com.kalix.middleware.attachment.api.biz.IAttachmentBeanService"/>
     <camelContext id="attachmentCamel" xmlns="http://camel.apache.org/schema/blueprint">
         <restConfiguration component="servlet" bindingMode="json">
-            <dataFormatProperty key="prettyPrint" value="true"/>
+            <dataFormatProperty key="prettyPrint" value="${rest.pretty}"/>
         </restConfiguration>
 
         <rest path="/attachments" consumes="application/json" produces="application/json">
