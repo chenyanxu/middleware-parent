@@ -33,7 +33,7 @@ Ext.define('kalix.workflow.activityhistory.view.ActivityHistoryWindow', {
         {
           title:'附件',
           xtype:'attachmentGrid',
-          tbar:{}
+          tbar:null
         }
       ]
     }
