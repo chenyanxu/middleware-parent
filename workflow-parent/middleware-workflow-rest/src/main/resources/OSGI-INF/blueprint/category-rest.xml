@@ -18,7 +18,7 @@
 
             <get id="route-getAllCategory" outType="com.kalix.framework.core.api.persistence.JsonData">
                 <description>Find all Categorys</description>
-                <to uri="bean:categoryService?method=getAllEntityByQuery(${header.page},${header.limit},${header.jsonStr})"/>
+                <to uri="bean:categoryService?method=getAllEntityByQuery(${header.page},${header.limit},${header.jsonStr},${header.sort})"/>
             </get>
 
             <!-- this is a rest POST to create a category -->

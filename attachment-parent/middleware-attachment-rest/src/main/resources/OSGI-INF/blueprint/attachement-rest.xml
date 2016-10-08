@@ -14,7 +14,7 @@
         <rest path="/attachments" consumes="application/json" produces="application/json">
             <get id="route-getAllAttachment" outType="com.kalix.framework.core.api.persistence.JsonData">
                 <description>Find all attachments</description>
-                <to uri="bean:attachmentBeanService?method=getAllEntityByQuery(${header.page},${header.limit},${header.jsonStr})"/>
+                <to uri="bean:attachmentBeanService?method=getAllEntityByQuery(${header.page},${header.limit},${header.jsonStr},${header.sort})"/>
             </get>
             <!-- this is a rest POST to add a attachment-->
             <post id="route-addAttachment" type="com.kalix.middleware.attachment.entities.AttachmentBean"
