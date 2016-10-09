@@ -5,4 +5,5 @@ Bundle-Activator: ${bundle.namespace}.internal.InitActivator
 Import-Package: com.kalix.middleware.attachment.entities,\
                 com.kalix.framework.core.api.persistence,\
                 com.kalix.framework.core.api.biz,*
+Include-Resource: target/classes
 Bundle-Category: Rexen Kalix Attachment
