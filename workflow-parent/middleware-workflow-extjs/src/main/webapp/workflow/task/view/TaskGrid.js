@@ -40,12 +40,12 @@ Ext.define('kalix.workflow.task.view.TaskGrid', {
                 text: '编号',
                 dataIndex: 'id',
                 hidden: true
-
             },
             {
                 text: '编号',
                 dataIndex: 'businessNo',
-                renderer: 'addTooltip'
+                renderer: 'addTooltip',
+                flex: 1.5
             },
             {
                 text: '任务名称',

@@ -7,4 +7,5 @@ Import-Package: com.kalix.framework.core.api.persistence,\
                 com.kalix.framework.core.api.biz,\
                 com.kalix.middleware.workflow.api.model,\
                 com.kalix.middleware.workflow.entities,*
+Include-Resource: target/classes
 Bundle-Category: Kalix Middleware Workflow
