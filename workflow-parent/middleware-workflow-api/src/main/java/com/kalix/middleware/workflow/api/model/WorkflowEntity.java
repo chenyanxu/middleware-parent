@@ -19,6 +19,7 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 @Access(AccessType.FIELD)
 public abstract class WorkflowEntity extends PersistentEntity {
+    private String title; //流程标题
     private Long orgId; //组织结构id
     private String orgName; //组织结构名称
     private String processInstanceId;//流程实例id
@@ -81,5 +82,13 @@ public abstract class WorkflowEntity extends PersistentEntity {
 
     public void setBusinessNo(String businessNo) {
         this.businessNo = businessNo;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
