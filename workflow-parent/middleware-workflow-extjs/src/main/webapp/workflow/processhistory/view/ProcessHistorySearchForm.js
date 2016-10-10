@@ -11,7 +11,7 @@ Ext.define('kalix.workflow.processhistory.view.ProcessHistorySearchForm', {
     items: [
         {
             xtype: 'textfield',
-            fieldLabel: '业务主键',
+            fieldLabel: '流程编号',
             labelAlign: 'right',
             labelWidth: 60,
             width: 200,

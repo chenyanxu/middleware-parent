@@ -19,19 +19,9 @@ Ext.define('kalix.workflow.processdefinition.view.ProcessDefinitionGrid', {
     store: {
         type: 'processDefinitionStore'
     },
-    columns: {
-        defaults: {
-            flex: 1,
-            renderer: 'addTooltip'
-        },
-        items: [
+    columns: [
             {
                 xtype: "rownumberer",
-                text: "行号",
-                width: 50,
-                flex: 0,
-                align: 'center',
-                renderer: null
             },
             {
                 text: '流程定义编号',
@@ -63,48 +53,46 @@ Ext.define('kalix.workflow.processdefinition.view.ProcessDefinitionGrid', {
                 }
             },
             {
-                header: '操作',
-                xtype: "actioncolumn",
-                itemId: 'operationColumn',
-                items: [{
-                    iconCls: 'iconfont icon-edit-column',
-                    tooltip: '编辑',
-                    handler: 'onEdit'
-                }, {
-                    iconCls: 'iconfont icon-delete',
-                    tooltip: '删除',
-                    handler: 'onDelete'
-
-                }, {
-                    itemId: 'activateButton',
-                    getClass: function (v, meta, record) {
-                        if (record.data.suspensionState == 1) {
-                            return "iconfont icon-stop";
-                        }
-                        return "iconfont icon-start";
+                xtype: "securityGridColumnCommon",
+                verifyItems: [
+                    /*{
+                     iconCls: 'iconfont icon-edit-column',
+                     tooltip: '编辑',
+                     handler: 'onEdit',
+                     permission: 'edit'
+                     },*/
+                    {
+                        itemId: 'activateButton',
+                        getClass: function (v, meta, record) {
+                            if (record.data.suspensionState == 1) {
+                                return "iconfont icon-stop";
+                            }
+                            return "iconfont icon-start";
+                        },
+                        getTip: function (value, metadata, record, row, col, store) {
+                            if (record.data.suspensionState == 1) {
+                                return "无效";
+                            }
+                            return '有效';
+                        },
+                        handler: 'onIsActivate',
+                        permission: 'activate'
                     },
-                    getTip: function (value, metadata, record, row, col, store) {
-                        if (record.data.suspensionState == 1) {
-                            return "无效";
-                        }
-                        return '有效';
-                    },
-                    handler: 'onIsActivate'
-                }, {
-                    iconCls: 'iconfont icon-view-column',
-                    tooltip: '查看',
-                    handler: 'onOpenProcessDefinition'
-                }]
+                    {
+                        iconCls: 'iconfont icon-view-column',
+                        tooltip: '查看',
+                        handler: 'onOpenProcessDefinition',
+                        permission: 'view'
+                    }]
             }
-        ]
-    },
+    ],
     tbar: {
         xtype: 'securityToolbar',
         verifyItems: [
             {
                 text: '添加',
                 xtype: 'button',
-                permission: '',
+                permission: 'add',
                 iconCls: 'iconfont icon-add',
                 handler: 'onAdd'
             }

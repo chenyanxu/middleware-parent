@@ -168,9 +168,9 @@ public class ProcessServiceImpl implements IProcessService {
         List<HistoricProcessInstance> processHistoryList;
         if (StringUtils.isNotEmpty(jsonStr)) {
             Map map = SerializeUtil.json2Map(jsonStr);
-            String processInstanceBusinessKey = (String) map.get("name");
-            if (StringUtils.isNotEmpty(processInstanceBusinessKey))
-                processHistoryList = historyService.createHistoricProcessInstanceQuery().processInstanceBusinessKey(processInstanceBusinessKey)
+            String processInstanceName = (String) map.get("name");
+            if (StringUtils.isNotEmpty(processInstanceName))
+                processHistoryList = historyService.createHistoricProcessInstanceQuery().processInstanceNameLike("%" + processInstanceName + "%")
                         .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
             else {
                 processHistoryList = historyService.createHistoricProcessInstanceQuery()
