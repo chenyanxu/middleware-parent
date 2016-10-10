@@ -1,5 +1,5 @@
 /**
- * 待办任务定义表格
+ * 待办流程定义表格
  * @author majian <br/>
  *         date:2015-7-3
  * @version 1.0.0

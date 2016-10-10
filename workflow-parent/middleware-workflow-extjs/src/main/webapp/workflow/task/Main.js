@@ -1,5 +1,5 @@
 /**
- * 待办任务首页
+ * 待办流程首页
  *
  * @author majian
  * date:2015-6-18
@@ -14,9 +14,9 @@ Ext.define('kalix.workflow.task.Main', {
     storeId:'taskStore',
     items: [{
         xtype: 'taskSearchForm',
-        title: '待办任务查询'
+        title: '待办流程查询'
     }, {
         xtype: 'taskGrid',
-        title: '待办任务列表'
+        title: '待办流程列表'
     }]
 });
