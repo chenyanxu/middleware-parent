@@ -49,7 +49,7 @@ public class BaseBpmnImageServlet extends HttpServlet {
         /**得到图片输出流**/
         InputStream imageStream = new DefaultProcessDiagramGenerator().generateDiagram(bpmnModel, "png",
                 Collections.<String>emptyList(), Collections.<String>emptyList(), processEngine.getProcessEngineConfiguration().getActivityFontName(),
-                processEngine.getProcessEngineConfiguration().getLabelFontName(), null, 1.0);
+                processEngine.getProcessEngineConfiguration().getLabelFontName(), null, null, 1.0);
         return imageStream;
     }
 
@@ -67,7 +67,7 @@ public class BaseBpmnImageServlet extends HttpServlet {
         DefaultProcessDiagramGenerator defaultProcessDiagramGenerator = new DefaultProcessDiagramGenerator();
         InputStream imageStream = defaultProcessDiagramGenerator.generateDiagram(bpmnModel, "png",
                 activeActivityIds, highLightedFlows, processEngine.getProcessEngineConfiguration().getActivityFontName(),
-                processEngine.getProcessEngineConfiguration().getLabelFontName(), null, 1.0);
+                processEngine.getProcessEngineConfiguration().getLabelFontName(), null, null, 1.0);
         return imageStream;
     }
 
