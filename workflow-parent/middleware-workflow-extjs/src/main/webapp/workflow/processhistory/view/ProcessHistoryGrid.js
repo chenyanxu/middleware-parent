@@ -88,11 +88,12 @@ Ext.define('kalix.workflow.processhistory.view.ProcessHistoryGrid', {
             },
             {
                 header: '操作',
-                xtype: "actioncolumn",
-                items: [{
+                xtype: "securityGridColumnCommon",
+                verifyItems: [{
                     iconCls: 'iconfont icon-history',
                     tooltip: '查看流程历史',
-                    handler: 'onOpenHistoryActivity'
+                    handler: 'onOpenHistoryActivity',
+                    permission: 'view'
                 }]
             }
         ]
