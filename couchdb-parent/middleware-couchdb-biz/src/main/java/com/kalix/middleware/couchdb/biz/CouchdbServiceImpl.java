@@ -22,6 +22,7 @@ public class CouchdbServiceImpl implements ICouchdbService {
     private int port = Integer.parseInt((String) ConfigUtil.getConfigProp("PORT", CONFIG_COUCH_DB));
     private String user = (String) ConfigUtil.getConfigProp("USER", CONFIG_COUCH_DB);
     private String password = (String) ConfigUtil.getConfigProp("PASSWORD", CONFIG_COUCH_DB);
+    private String url = (String) ConfigUtil.getConfigProp("COUCHDB_URL", CONFIG_COUCH_DB); //couchdb访问公网地址
 
     public CouchdbServiceImpl() {
         dbClient = new CouchDbClient(db_name, true, protocol, ip, port, user, password);
@@ -67,7 +68,7 @@ public class CouchdbServiceImpl implements ICouchdbService {
 
     @Override
     public String getDBUrl() {
-        return dbClient.getDBUri().toString();
+        return url;
     }
 
     @Override
