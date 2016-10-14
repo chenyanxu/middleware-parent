@@ -17,8 +17,8 @@ Ext.define('kalix.workflow.category.viewModel.CategoryViewModel', {
         view_title: '查看流程分类',
         add_title: '添加流程分类',
         edit_title: '修改流程分类',
-        add_image_path: '/kalix/app/pms/category/resources/images/category_add.png',
-        view_image_path: '/kalix/app/pms/category/resources/images/category_view.png',
-        edit_image_path: '/kalix/app/pms/category/resources/images/category_edit.png',
+        add_image_path: CONFIG.restRoot + '/app/pms/category/resources/images/category_add.png',
+        view_image_path: CONFIG.restRoot + '/app/pms/category/resources/images/category_view.png',
+        edit_image_path: CONFIG.restRoot + '/app/pms/category/resources/images/category_edit.png',
     }
 });
