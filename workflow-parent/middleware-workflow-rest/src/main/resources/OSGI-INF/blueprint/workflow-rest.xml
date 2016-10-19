@@ -42,6 +42,12 @@
                 <to uri="bean:processService?method=getMyProcessHistory(${header.page},${header.limit},${header.jsonStr})"/>
             </get>
 
+            <get id="route-getMyInvolvedHistoryProcess" uri="/myInvolvedHistory"
+                 outType="com.kalix.framework.core.api.persistence.JsonData">
+                <description>Find All My Involved History Process</description>
+                <to uri="bean:processService?method=getMyInvolvedProcessHistory(${header.page},${header.limit},${header.jsonStr})"/>
+            </get>
+
             <get id="route-activateProcessDefinition" uri="/activate" outType="com.kalix.framework.core.api.persistence.JsonData">
                 <description>Activate Process Definition</description>
                 <to uri="bean:processService?method=activateProcessDefinition(${header.key})"/>
