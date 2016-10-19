@@ -38,3 +38,10 @@
    .processInstanceId(processInstanceId)
    .orderByHistoricTaskInstanceEndTime().asc().list();
 ```
+
+## Activiti开启SQL Log
+
+```bash
+karaf@root()>
+karaf@root()> log:set TRACE org.activiti.engine.impl.persistence.entity
+```
