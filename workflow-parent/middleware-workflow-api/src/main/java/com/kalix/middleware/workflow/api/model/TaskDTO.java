@@ -17,6 +17,7 @@ public class TaskDTO extends BaseDTO {
     private Date createTime;//创建时间
     private String processInstanceId;//流程实例id
     private String entityId;//业务实体id
+    private String businessKey;//业务主键
     private String businessNo;//流水号
     private String processDefinitionId;
     private String duration; //任务持续时长
@@ -91,5 +92,13 @@ public class TaskDTO extends BaseDTO {
 
     public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    public String getBusinessKey() {
+        return businessKey;
+    }
+
+    public void setBusinessKey(String businessKey) {
+        this.businessKey = businessKey;
     }
 }

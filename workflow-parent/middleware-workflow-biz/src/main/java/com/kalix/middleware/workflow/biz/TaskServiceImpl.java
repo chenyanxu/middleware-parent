@@ -99,12 +99,14 @@ public class TaskServiceImpl implements ITaskService {
                 if (processInstance != null) {
                     dto.setEntityId(WorkflowUtil.getBizId(processInstance.getBusinessKey()));
                     dto.setBusinessNo(processInstance.getName());
+                    dto.setBusinessKey(processInstance.getBusinessKey());
                 } else {
                     HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(dto.getProcessInstanceId()).singleResult();
 
                     if (historicProcessInstance != null) {
                         dto.setEntityId(WorkflowUtil.getBizId(historicProcessInstance.getBusinessKey()));
                         dto.setBusinessNo(processInstance.getName());
+                        dto.setBusinessKey(processInstance.getBusinessKey());
                     }
                 }
                 if (dto.getDuration() != null)
