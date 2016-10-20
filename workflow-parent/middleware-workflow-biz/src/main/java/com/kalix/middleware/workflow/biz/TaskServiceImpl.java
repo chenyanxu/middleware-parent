@@ -47,7 +47,7 @@ public class TaskServiceImpl implements ITaskService {
         //获得该用户的职位，职位组成标准：orgName-dutyName
         String rtnStr = null;
         try {
-            rtnStr = HttpClientUtil.shiroGet("http://localhost:8181/kalix/camel/rest/users/user/dutys/list", this.shiroService.getSession().getId().toString());
+            rtnStr = HttpClientUtil.shiroGet("http://localhost:8181/camel/rest/users/user/dutys/list", this.shiroService.getSession().getId().toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
