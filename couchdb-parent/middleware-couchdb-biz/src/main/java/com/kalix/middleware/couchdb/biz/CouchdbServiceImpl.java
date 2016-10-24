@@ -2,6 +2,7 @@ package com.kalix.middleware.couchdb.biz;
 
 import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.util.ConfigUtil;
+import com.kalix.framework.core.util.SystemUtil;
 import com.kalix.middleware.couchdb.api.biz.ICouchdbService;
 import org.lightcouch.Attachment;
 import org.lightcouch.CouchDbClient;
@@ -15,7 +16,7 @@ import java.util.Map;
  */
 public class CouchdbServiceImpl implements ICouchdbService {
     public static final String CONFIG_COUCH_DB = "ConfigCouchdb";
-    private final CouchDbClient dbClient;
+    private CouchDbClient dbClient;
     private String db_name = (String) ConfigUtil.getConfigProp("DB_NAME", CONFIG_COUCH_DB);
     private String protocol = (String) ConfigUtil.getConfigProp("PROTOCOL", CONFIG_COUCH_DB);
     private String ip = (String) ConfigUtil.getConfigProp("IP", CONFIG_COUCH_DB);
@@ -25,7 +26,14 @@ public class CouchdbServiceImpl implements ICouchdbService {
     private String url = (String) ConfigUtil.getConfigProp("COUCHDB_URL", CONFIG_COUCH_DB); //couchdb访问公网地址
 
     public CouchdbServiceImpl() {
-        dbClient = new CouchDbClient(db_name, true, protocol, ip, port, user, password);
+        try {
+            dbClient = new CouchDbClient(db_name, true, protocol, ip, port, user, password);
+            SystemUtil.succeedPrintln("succeed connect to couchdb!");
+        } catch (Exception e) {
+            SystemUtil.errorPrintln("can not connect to couchdb!");
+//            e.printStackTrace();
+        }
+
     }
 
     @Override
