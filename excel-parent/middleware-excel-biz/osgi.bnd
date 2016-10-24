@@ -10,4 +10,5 @@ Import-Package: com.kalix.framework.core.util,\
                 org.lightcouch,\
                 org.osgi.framework,\
                 org.osgi.service.blueprint,\
-                org.apache.commons.codec.binary
+                org.apache.commons.codec.binary,\
+                com.kalix.framework.core.api.osgi
