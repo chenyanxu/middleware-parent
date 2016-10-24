@@ -1,6 +1,7 @@
 package com.kalix.middleware.couchdb.api.biz;
 
 import com.kalix.framework.core.api.persistence.JsonStatus;
+import com.kalix.framework.core.api.system.IAttachmentService;
 import org.lightcouch.Response;
 
 import java.util.Map;
@@ -8,7 +9,7 @@ import java.util.Map;
 /**
  ** @author chenyanxu
  */
-public interface ICouchdbService {
+public interface ICouchdbService extends IAttachmentService {
     /**
      * 添加附件到couchdb数据库
      *

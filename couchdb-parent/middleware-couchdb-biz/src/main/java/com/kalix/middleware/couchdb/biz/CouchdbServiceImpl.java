@@ -83,6 +83,17 @@ public class CouchdbServiceImpl implements ICouchdbService {
     public String addAttachment(Map<String,String> params){
         return null;
     }
+
+    @Override
+    public String addNewAttachment(String value, String key, String type) {
+        Response response = addAttachment(value, key, type);
+        return response.getId();
+    }
+
+    @Override
+    public String getAttachmentUrl() {
+        return getDBUrl();
+    }
 //    @Override
 //    public String updateAttach(CouchdbAttachBean couchdbAttachBean, String value, String type) {
 //        Response response = new Response();
