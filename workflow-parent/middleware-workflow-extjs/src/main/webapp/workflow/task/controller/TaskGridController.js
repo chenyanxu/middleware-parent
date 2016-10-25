@@ -66,12 +66,7 @@ Ext.define('kalix.workflow.task.controller.TaskGridController', {
                             vm.set('taskId', rec.data.id);
                             vm.set('businessKey', bizUrl);
 
-                            approvalWindow.insert(0, Ext.create(component.formClass, {
-                                layout: {
-                                    type: 'table',
-                                    columns: 6
-                                }
-                            }));
+                            approvalWindow.insert(0, Ext.create(component.formClass));
 
                             approvalWindow.show();
                             approvalWindow.items.getAt(1).items.getAt(0).getStore().getProxy().extraParams = {historyProcessId: rec.data.processInstanceId};
