@@ -77,6 +77,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
 
             jsonStatus.setMsg("启动流程成功！");
         } catch (Exception e) {
+            e.printStackTrace();
             throw new ProcessStartException(e.getMessage());
         }
         return jsonStatus;
