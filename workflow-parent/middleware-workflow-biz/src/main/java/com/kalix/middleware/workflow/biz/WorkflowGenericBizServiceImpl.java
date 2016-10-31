@@ -76,9 +76,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             jsonStatus.setMsg("启动流程成功！");
         } catch (Exception e) {
             e.printStackTrace();
-            jsonStatus.setFailure(true);
-            jsonStatus.setSuccess(false);
-            jsonStatus.setMsg("启动流程失败！" + e.getMessage());
+            throw new RuntimeException("启动流程失败！" + e.getMessage());
         }
         return jsonStatus;
     }
@@ -107,6 +105,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
                     new SimpleDateFormat("yyyyMMdd").format(dateNow), list.size() + 1);
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
 
         return no;
@@ -176,9 +175,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             jsonStatus.setMsg("任务处理成功！");
         } catch (Exception e) {
             e.printStackTrace();
-            jsonStatus.setFailure(true);
-            jsonStatus.setSuccess(false);
-            jsonStatus.setMsg("任务处理失败！");
+            throw new RuntimeException("任务处理失败！" + e.getMessage());
         }
         return jsonStatus;
     }
