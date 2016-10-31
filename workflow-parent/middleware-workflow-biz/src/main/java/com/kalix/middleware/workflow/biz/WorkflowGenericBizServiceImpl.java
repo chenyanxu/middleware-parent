@@ -74,6 +74,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             this.updateEntity(bean);
 
             runtimeService.setProcessInstanceName(instance.getId(), bizNo);
+
             jsonStatus.setMsg("启动流程成功！");
         } catch (Exception e) {
             throw new ProcessStartException(e.getMessage());
@@ -169,6 +170,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
                 String result = passed ? "审批通过" : currentTaskName + "不通过";
                 bean.setAuditResult(result);
             }
+
             this.updateEntity(bean);
             jsonStatus.setMsg("任务处理成功！");
         } catch (Exception e) {
