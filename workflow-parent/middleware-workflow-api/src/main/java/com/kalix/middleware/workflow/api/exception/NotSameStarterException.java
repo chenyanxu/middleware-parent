@@ -12,4 +12,8 @@ public class NotSameStarterException extends ActivitiException {
     {
         super(msg);
     }
+
+    public NotSameStarterException(String msg) {
+        super(msg);
+    }
 }
