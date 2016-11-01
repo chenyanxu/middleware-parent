@@ -15,7 +15,7 @@ Ext.define('kalix.workflow.category.view.CategorySearchForm', {
     		labelAlign: 'right',
     		labelWidth: 60,
     		width: 200,
-    		name: 'name'
+    		name: '%name%'
     	},
     	{
     		xtype: 'textfield',
@@ -23,7 +23,7 @@ Ext.define('kalix.workflow.category.view.CategorySearchForm', {
     		labelAlign: 'right',
     		labelWidth: 60,
     		width: 200,
-    		name: 'key'
+    		name: '%key%'
     	}
     ]
 
