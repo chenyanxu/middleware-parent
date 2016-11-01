@@ -22,7 +22,6 @@ import org.activiti.engine.task.DelegationState;
 import org.activiti.engine.task.Task;
 
 import javax.transaction.Transactional;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -54,7 +53,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             TP bean = this.getEntity(new Long(id));
             //检查流程启动人和申请人是同一个人
             if (!bean.getCreateBy().equals(this.getShiroService().getCurrentUserRealName()))
-                throw new NotSameStarterException();
+                throw new NotSameStarterException("");
             //put orgName to variant
             Map map = new HashMap<>();
             map.put(Const.STARTER_ORG_Name, String.valueOf(bean.getOrgName()));
@@ -80,12 +79,14 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             e.printStackTrace();
             throw new ProcessStartException(e.getMessage());
         }
+
         return jsonStatus;
     }
 
     /**
      * 创建流程业务编号
      * 格式：流程名称-当前日期-流水号（3位）
+     *
      * @return
      */
     @Override
@@ -107,6 +108,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
                     new SimpleDateFormat("yyyyMMdd").format(dateNow), list.size() + 1);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException("创建流程编号失败！");
         }
 
         return no;
@@ -194,12 +196,9 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             String name = currentTaskId.substring(0, 1).toUpperCase() + currentTaskId.substring(1);
             Method method = bean.getClass().getDeclaredMethod("set" + name, String.class);
             method.invoke(bean, userName);
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            throw new TaskProcessException(e.getMessage());
         }
     }
 
