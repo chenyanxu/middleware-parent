@@ -12,4 +12,8 @@ public class NotSameStarterException extends KalixRuntimeException {
     public NotSameStarterException(String msg) {
         super(content, msg);
     }
+
+    public NotSameStarterException(){
+        super(content, "");
+    }
 }
