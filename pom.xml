@@ -19,6 +19,7 @@
         <module>excel-parent</module>
         <module>workflow-parent</module>
         <module>statemachine-parent</module>
+        <module>karaf-features</module>
     </modules>
     <build>
         <plugins>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features xmlns="http://karaf.apache.org/xmlns/features/v1.4.0"
+          name="kalix-features-middleware-${project.middleware.version}">
+    <feature name="middleware-all" version="${project.middleware.version}">
+        <feature>middleware-workflow</feature>
+        <feature>middleware-attachment</feature>
+        <feature>middleware-couchdb</feature>
+        <feature>middleware-excel</feature>
+    </feature>
+
+    <feature name="middleware-workflow" version="${project.middleware.version}">
+        <bundle>mvn:com.kalix.middleware.workflow/middleware-workflow-engine/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.workflow/middleware-workflow-entities/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.workflow/middleware-workflow-dao/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.workflow/middleware-workflow-api/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.workflow/middleware-workflow-biz/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.workflow/middleware-workflow-rest/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.workflow/middleware-workflow-extjs/${project.middleware.version}</bundle>
+    </feature>
+
+    <feature name="middleware-attachment" version="${project.middleware.version}">
+        <bundle>mvn:com.kalix.middleware.attachment/middleware-attachment-api/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.attachment/middleware-attachment-biz/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.attachment/middleware-attachment-entities/${project.middleware.version}
+        </bundle>
+        <bundle>mvn:com.kalix.middleware.attachment/middleware-attachment-dao/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.attachment/middleware-attachment-rest/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.attachment/middleware-attachment-extjs/${project.middleware.version}</bundle>
+    </feature>
+
+    <feature name="middleware-couchdb" version="${project.middleware.version}">
+        <bundle>mvn:com.kalix.middleware.couchdb/middleware-couchdb-api/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.couchdb/middleware-couchdb-biz/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.couchdb/middleware-couchdb-rest/${project.middleware.version}</bundle>
+    </feature>
+
+    <feature name="middleware-excel" version="${project.middleware.version}">
+        <bundle>mvn:com.kalix.middleware.excel/middleware-excel-api/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.excel/middleware-excel-biz/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.excel/middleware-excel-rest/${project.middleware.version}</bundle>
+    </feature>
+
+</features>
