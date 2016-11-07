@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.kalix.middleware</groupId>
         <artifactId>middleware-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0-RELEASE</version>
     </parent>
 
     <groupId>com.kalix.middleware.couchdb</groupId>
@@ -24,7 +24,7 @@
             <dependency>
                 <groupId>com.kalix.middleware.couchdb</groupId>
                 <artifactId>middleware-couchdb-api</artifactId>
-                <version>${globle.version}</version>
+                <version>${project.middleware.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

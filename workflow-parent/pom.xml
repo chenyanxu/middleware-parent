@@ -5,7 +5,7 @@
     <parent>
         <artifactId>middleware-parent</artifactId>
         <groupId>com.kalix.middleware</groupId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0-RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -29,23 +29,23 @@
             <dependency>
                 <groupId>com.kalix.middleware.workflow</groupId>
                 <artifactId>middleware-workflow-api</artifactId>
-                <version>${globle.version}</version>
+                <version>${project.middleware.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.kalix.middleware.workflow</groupId>
                 <artifactId>middleware-workflow-engine</artifactId>
-                <version>${globle.version}</version>
+                <version>${project.middleware.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.kalix.middleware.workflow</groupId>
                 <artifactId>middleware-workflow-entities</artifactId>
-                <version>${globle.version}</version>
+                <version>${project.middleware.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.kalix.admin.core</groupId>
                 <artifactId>admin-core-api</artifactId>
-                <version>${globle.version}</version>
+                <version>${project.admin.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

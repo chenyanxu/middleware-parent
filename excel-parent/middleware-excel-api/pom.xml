@@ -6,11 +6,12 @@
     <parent>
         <groupId>com.kalix.middleware.excel</groupId>
         <artifactId>excel-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0-RELEASE</version>
     </parent>
 
     <artifactId>middleware-excel-api</artifactId>
     <name>Kalix Middleware Excel API</name>
+    <version>${project.middleware.version}</version>
     <packaging>bundle</packaging>
 
     <properties>
