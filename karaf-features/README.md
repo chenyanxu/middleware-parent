@@ -3,4 +3,4 @@
 ## 安装
   feature:repo-add mvn:com.kalix.middleware/karaf-features/1.0/xml/features
 ### 部署全部：
-  feature:install oa-all
+  feature:install middleware-all
