@@ -6,13 +6,12 @@
     <parent>
         <groupId>com.kalix.middleware.workflow</groupId>
         <artifactId>workflow-parent</artifactId>
-        <version>1.0.0-RELEASE</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>middleware-workflow-entities</artifactId>
     <name>Kalix Middleware Workflow Entities</name>
     <description>Middleware Workflow Entities</description>
-    <version>${project.middleware.version}</version>
     <packaging>bundle</packaging>
 
 

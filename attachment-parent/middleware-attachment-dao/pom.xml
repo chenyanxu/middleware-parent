@@ -5,12 +5,11 @@
     <parent>
         <groupId>com.kalix.middleware.attachment</groupId>
         <artifactId>attachment-parent</artifactId>
-        <version>1.0.0-RELEASE</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>middleware-attachment-dao</artifactId>
     <name>Kalix Middleware Attachment Dao</name>
-    <version>${project.middleware.version}</version>
     <packaging>bundle</packaging>
 
     <properties>

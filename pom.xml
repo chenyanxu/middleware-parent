@@ -5,13 +5,19 @@
     <parent>
         <groupId>com.kalix</groupId>
         <artifactId>kalix-parent</artifactId>
-        <version>1.0.0-RELEASE</version>
+        <version>1.0.0</version>
     </parent>
 
     <groupId>com.kalix.middleware</groupId>
     <artifactId>middleware-parent</artifactId>
     <name>Kalix Middleware Parent</name>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+
+    <scm>
+        <connection>scm:git:https://github.com/chenyanxu/middleware-parent.git</connection>
+        <developerConnection>scm:git:https://github.com/chenyanxu/middleware-parent.git</developerConnection>
+    </scm>
 
     <modules>
         <module>attachment-parent</module>
@@ -65,17 +71,17 @@
             <artifactId>framework-core-api</artifactId>
         </dependency>
     </dependencies>
-    <reporting>
-    <plugins>
-      <plugin>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.10.3</version>
-        <configuration>
-          <detectLinks>true</detectLinks>
-          <detectJavaApiLink>true</detectJavaApiLink>
-          <linksource>true</linksource>
-        </configuration>
-      </plugin>
-    </plugins>
-  </reporting>
+    <!--<reporting>-->
+    <!--<plugins>-->
+      <!--<plugin>-->
+        <!--<artifactId>maven-javadoc-plugin</artifactId>-->
+        <!--<version>2.10.3</version>-->
+        <!--<configuration>-->
+          <!--<detectLinks>true</detectLinks>-->
+          <!--<detectJavaApiLink>true</detectJavaApiLink>-->
+          <!--<linksource>true</linksource>-->
+        <!--</configuration>-->
+      <!--</plugin>-->
+    <!--</plugins>-->
+  <!--</reporting>-->
 </project>
