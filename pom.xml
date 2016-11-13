@@ -11,13 +11,14 @@
     <groupId>com.kalix.middleware</groupId>
     <artifactId>middleware-parent</artifactId>
     <name>Kalix Middleware Parent</name>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
 
     <scm>
         <connection>scm:git:https://github.com/chenyanxu/middleware-parent.git</connection>
         <developerConnection>scm:git:https://github.com/chenyanxu/middleware-parent.git</developerConnection>
-    </scm>
+      <tag>middleware-parent-1.0.0</tag>
+  </scm>
 
     <modules>
         <module>attachment-parent</module>
