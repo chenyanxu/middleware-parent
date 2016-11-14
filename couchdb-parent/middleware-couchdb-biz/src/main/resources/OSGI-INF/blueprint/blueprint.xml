@@ -10,4 +10,10 @@
 
     <service id="attachmentService" interface="com.kalix.framework.core.api.system.IAttachmentService"
              ref="couchdbServiceImpl"/>
+
+    <service interface="org.osgi.service.cm.ManagedService" ref="couchdbServiceImpl">
+        <service-properties>
+            <entry key="service.pid" value="ConfigCouchdb"/>
+        </service-properties>
+    </service>
 </blueprint>

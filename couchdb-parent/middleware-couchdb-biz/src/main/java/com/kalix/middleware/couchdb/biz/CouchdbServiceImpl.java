@@ -8,32 +8,25 @@ import org.lightcouch.Attachment;
 import org.lightcouch.CouchDbClient;
 import org.lightcouch.Document;
 import org.lightcouch.Response;
+import org.osgi.service.cm.ConfigurationException;
+import org.osgi.service.cm.ManagedService;
 
+import java.util.Dictionary;
 import java.util.Map;
 
 /**
  * @author chenyanxu
  */
-public class CouchdbServiceImpl implements ICouchdbService {
+public class CouchdbServiceImpl implements ICouchdbService, ManagedService {
     public static final String CONFIG_COUCH_DB = "ConfigCouchdb";
     private CouchDbClient dbClient;
-    private String db_name = (String) ConfigUtil.getConfigProp("DB_NAME", CONFIG_COUCH_DB);
-    private String protocol = (String) ConfigUtil.getConfigProp("PROTOCOL", CONFIG_COUCH_DB);
-    private String ip = (String) ConfigUtil.getConfigProp("IP", CONFIG_COUCH_DB);
-    private int port = Integer.parseInt((String) ConfigUtil.getConfigProp("PORT", CONFIG_COUCH_DB));
-    private String user = (String) ConfigUtil.getConfigProp("USER", CONFIG_COUCH_DB);
-    private String password = (String) ConfigUtil.getConfigProp("PASSWORD", CONFIG_COUCH_DB);
-    private String url = (String) ConfigUtil.getConfigProp("COUCHDB_URL", CONFIG_COUCH_DB); //couchdb访问公网地址
+
+    private String db_name, protocol, ip, user, password;
+    private String url; //couchdb访问公网地址
+    private int port;
 
     public CouchdbServiceImpl() {
-        try {
-            dbClient = new CouchDbClient(db_name, true, protocol, ip, port, user, password);
-            SystemUtil.succeedPrintln("succeed connect to couchdb!");
-        } catch (Exception e) {
-            SystemUtil.errorPrintln("can not connect to couchdb!");
-//            e.printStackTrace();
-        }
-
+        initDbclient();
     }
 
     @Override
@@ -62,11 +55,11 @@ public class CouchdbServiceImpl implements ICouchdbService {
     public JsonStatus deleteAttach(String id, String rev) {
         Response response = null;
 
-        try{
+        try {
             response = dbClient.remove(id, rev);
 
             return JsonStatus.successResult("");
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
 
             return JsonStatus.failureResult("");
@@ -80,7 +73,7 @@ public class CouchdbServiceImpl implements ICouchdbService {
     }
 
     @Override
-    public String addAttachment(Map<String,String> params){
+    public String addAttachment(Map<String, String> params) {
         return null;
     }
 
@@ -94,6 +87,34 @@ public class CouchdbServiceImpl implements ICouchdbService {
     public String getAttachmentUrl() {
         return getDBUrl();
     }
+
+    @Override
+    public void updated(Dictionary<String, ?> dictionary) throws ConfigurationException {
+        initDbclient();
+    }
+
+    private void readConfig() {
+        db_name = (String) ConfigUtil.getConfigProp("DB_NAME", CONFIG_COUCH_DB);
+        protocol = (String) ConfigUtil.getConfigProp("PROTOCOL", CONFIG_COUCH_DB);
+        ip = (String) ConfigUtil.getConfigProp("IP", CONFIG_COUCH_DB);
+        port = Integer.parseInt((String) ConfigUtil.getConfigProp("PORT", CONFIG_COUCH_DB));
+        user = (String) ConfigUtil.getConfigProp("USER", CONFIG_COUCH_DB);
+        password = (String) ConfigUtil.getConfigProp("PASSWORD", CONFIG_COUCH_DB);
+        url = (String) ConfigUtil.getConfigProp("COUCHDB_URL", CONFIG_COUCH_DB);
+    }
+
+    private void initDbclient() {
+        readConfig();
+        try {
+            dbClient = new CouchDbClient(db_name, true, protocol, ip, port, user, password);
+            SystemUtil.succeedPrintln("succeed connect to couchdb! IP address is " + ip);
+        } catch (Exception e) {
+            SystemUtil.errorPrintln("can not connect to couchdb address " + ip + "!");
+            e.printStackTrace();
+        }
+    }
+
+
 //    @Override
 //    public String updateAttach(CouchdbAttachBean couchdbAttachBean, String value, String type) {
 //        Response response = new Response();
