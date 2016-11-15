@@ -35,6 +35,9 @@ public class CouchdbServiceImpl implements ICouchdbService, ManagedService {
         Document document = new Document();
         Response response = null;
         try {
+            if (dbClient == null) {
+                initDbclient();
+            }
             attachment.setContentType(type);
             attachment.setData(value);
             document.addAttachment(key, attachment);
@@ -56,6 +59,9 @@ public class CouchdbServiceImpl implements ICouchdbService, ManagedService {
         Response response = null;
 
         try {
+            if (dbClient == null) {
+                initDbclient();
+            }
             response = dbClient.remove(id, rev);
 
             return JsonStatus.successResult("");
