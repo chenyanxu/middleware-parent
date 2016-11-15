@@ -68,7 +68,7 @@ public class MessageEventListener implements ActivitiEventListener {
         Dictionary properties = new Hashtable();
 
         taskJson.put("startUserId",startUserId);
-        taskJson.put("businessKey", historicProcessInstance.getName());
+        taskJson.put("businessNo", historicProcessInstance.getName());
 
         properties.put("body", taskJson.toString());
         Event osgi_event = new Event(WORKFLOW_STARTER_TOPIC, properties);
@@ -104,7 +104,7 @@ public class MessageEventListener implements ActivitiEventListener {
 
                 if (historicProcessInstance != null) {
                     taskJson.put("group", id.getGroupId());
-                    taskJson.put("businessKey", historicProcessInstance.getBusinessKey());
+                    taskJson.put("businessNo", historicProcessInstance.getName());
                     System.out.println("A task group of " + id.getGroupId() + " is assigned!");
                     //添加相关内容到消息体
                     Dictionary properties = new Hashtable();

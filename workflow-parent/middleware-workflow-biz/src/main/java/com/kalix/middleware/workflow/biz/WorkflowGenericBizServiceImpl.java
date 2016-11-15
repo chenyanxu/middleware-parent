@@ -53,21 +53,24 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             TP bean = this.getEntity(new Long(id));
             //检查流程启动人和申请人是同一个人
             if (!bean.getCreateBy().equals(this.getShiroService().getCurrentUserRealName()))
-                throw new NotSameStarterException("");
+                throw new NotSameStarterException();
             //put orgName to variant
             Map map = new HashMap<>();
             map.put(Const.STARTER_ORG_Name, String.valueOf(bean.getOrgName()));
             //启动流程
+            //创建流程业务编号
+            String bizNo = createBusinessNo();
+            map.put(Const.BUSINESS_NO, bizNo);
 
             ProcessInstance instance = runtimeService.startProcessInstanceByKey(getProcessKeyName(), bizKey, map);
 
             Task task = taskService.createTaskQuery().processInstanceId(instance.getProcessInstanceId()).singleResult();
+
             //设置实体状态
             bean.setProcessInstanceId(instance.getProcessInstanceId());
             bean.setCurrentNode(task.getName());
             bean.setAuditResult("审批中...");
-            //创建流程业务编号
-            String bizNo = createBusinessNo();
+
             bean.setBusinessNo(bizNo);
             bean.setStatus(WorkflowStaus.ACTIVE);
             this.updateEntity(bean);
@@ -178,7 +181,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             jsonStatus.setMsg("任务处理成功！");
         } catch (Exception e) {
             e.printStackTrace();
-            throw new TaskProcessException(e.getMessage());
+            throw new TaskProcessException();
         }
         return jsonStatus;
     }
@@ -198,7 +201,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             method.invoke(bean, userName);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new TaskProcessException(e.getMessage());
+            throw new TaskProcessException();
         }
     }
 
