@@ -7,7 +7,6 @@ import com.kalix.framework.core.util.DateUtil;
 import com.kalix.middleware.workflow.api.Const;
 import com.kalix.middleware.workflow.api.biz.IWorkflowBizService;
 import com.kalix.middleware.workflow.api.exception.NotSameStarterException;
-import com.kalix.middleware.workflow.api.exception.ProcessStartException;
 import com.kalix.middleware.workflow.api.exception.TaskProcessException;
 import com.kalix.middleware.workflow.api.model.WorkflowEntity;
 import com.kalix.middleware.workflow.api.model.WorkflowStaus;
@@ -80,7 +79,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             jsonStatus.setMsg("启动流程成功！");
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ProcessStartException(e.getMessage());
+            throw e;
         }
 
         return jsonStatus;
