@@ -170,22 +170,33 @@ public class ProcessServiceImpl implements IProcessService {
      */
     @Override
     public JsonData getProcessHistory(int page, int limit, String jsonStr) {
-        List<HistoricProcessInstanceDTO> historicProcessDTOList;
-        List<HistoricProcessInstance> processHistoryList;
+//        List<HistoricProcessInstanceDTO> historicProcessDTOList;
+        List<HistoricProcessInstance> processHistoryList = null;
         if (StringUtils.isNotEmpty(jsonStr)) {
             Map map = SerializeUtil.json2Map(jsonStr);
             //流程编号查询
             String processInstanceName = (String) map.get("name");
-            if (StringUtils.isNotEmpty(processInstanceName))
+            /*String startDate=(String) map.get("startDate");
+            String endDate=(String) map.get("endDate");*/
+            String startUser = (String) map.get("startUser");
+            if (StringUtils.isNotEmpty(processInstanceName) && StringUtils.isNotEmpty(startUser))
+                processHistoryList = historyService.createHistoricProcessInstanceQuery().processInstanceNameLike("%" + processInstanceName + "%")
+                        .startedBy(startUser).orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+            else if (StringUtils.isNotEmpty(processInstanceName) && (!StringUtils.isNotEmpty(startUser))) {
                 processHistoryList = historyService.createHistoricProcessInstanceQuery().processInstanceNameLike("%" + processInstanceName + "%")
                         .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
-            else {
+
+            } else if (!StringUtils.isNotEmpty(processInstanceName) && (StringUtils.isNotEmpty(startUser))) {
+                processHistoryList = historyService.createHistoricProcessInstanceQuery().startedBy(startUser)
+                        .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+
+            } else
                 processHistoryList = historyService.createHistoricProcessInstanceQuery()
                         .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
-            }
-        } else
-            processHistoryList = historyService.createHistoricProcessInstanceQuery()
-                    .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+        }
+
+
+
         if (processHistoryList != null) {
             generateJsonData(processHistoryList);
         }
