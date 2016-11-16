@@ -44,7 +44,8 @@ public class TaskServiceImpl implements ITaskService {
         List<TaskDTO> taskDTOList;
         List<Task> taskGroupList = new ArrayList<>();//获得用户组的任务列表
         List<Task> taskUserList;//获得基于用户的任务列表
-        //获得该用户的职位，职位组成标准：orgName-dutyName
+        //获得该用户的职位，职位组成标准：orgName&dutyName
+        //该服务位于IDutyBeanService中的 getUserDutyNameList() 方法实现
         String rtnStr = null;
         try {
             rtnStr = HttpClientUtil.shiroGet("/users/user/dutys/list", this.shiroService.getSession().getId().toString());
