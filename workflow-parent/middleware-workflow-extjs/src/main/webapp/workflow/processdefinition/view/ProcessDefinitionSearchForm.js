@@ -15,7 +15,7 @@ Ext.define('kalix.workflow.processdefinition.view.ProcessDefinitionSearchForm', 
             labelAlign: 'right',
             labelWidth: 100,
             width: 250,
-            name: '%name%'
+            name: 'name'
         }
     ]
 });
