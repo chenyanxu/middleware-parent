@@ -2,7 +2,6 @@ package com.kalix.middleware.workflow.engine.listener;
 
 import com.kalix.framework.core.util.JNDIHelper;
 import com.kalix.middleware.workflow.api.Const;
-import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.TaskListener;
 import org.json.JSONObject;
@@ -42,9 +41,9 @@ public class LeaderListener implements TaskListener {
         String rtnStr = null;
         //读取组织结构id
         String orgName = (String) delegateTask.getVariable(Const.STARTER_ORG_Name);
-        String group = orgName + Const.STARTER_ORG_Name + Const.LEADER_NAME;
+        String group = orgName + Const.CONNECTOR_CHAR + Const.LEADER_NAME;
         delegateTask.addCandidateGroup(group);
-        DelegateExecution execution = delegateTask.getExecution();
+//        DelegateExecution execution = delegateTask.getExecution();
 
         //发送消息
         String businessNo = (String) delegateTask.getVariable(Const.BUSINESS_NO);
