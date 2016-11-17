@@ -40,7 +40,7 @@ public class LeaderListener implements TaskListener {
         //get starter user name
         String rtnStr = null;
         //读取组织结构id
-        String orgName = (String) delegateTask.getVariable(Const.STARTER_ORG_Name);
+        String orgName = (String) delegateTask.getVariable(Const.VAR_STARTER_ORG_Name);
         String group = orgName + Const.CONNECTOR_CHAR + Const.LEADER_NAME;
         delegateTask.addCandidateGroup(group);
 //        DelegateExecution execution = delegateTask.getExecution();
