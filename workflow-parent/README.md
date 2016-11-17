@@ -45,3 +45,18 @@
 karaf@root()>
 karaf@root()> log:set TRACE org.activiti.engine.impl.persistence.entity
 ```
+
+## 获得流程历史变量
+
+```java
+    //set dto title field
+    List<HistoricVariableInstance> varList = historyService.createHistoricVariableInstanceQuery()
+            .processInstanceId(dto.getProcessInstanceId()).list();
+    for (HistoricVariableInstance var : varList) {
+        HistoricVariableInstanceEntity varEntity = (HistoricVariableInstanceEntity) var;
+        if (varEntity.getName().equals(Const.VAR_TITLE)) {
+            dto.setTitle(varEntity.getTextValue());
+            break;
+        }
+    }
+```
