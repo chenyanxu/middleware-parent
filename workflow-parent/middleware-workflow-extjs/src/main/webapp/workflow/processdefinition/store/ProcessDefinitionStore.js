@@ -11,5 +11,5 @@ Ext.define('kalix.workflow.processdefinition.store.ProcessDefinitionStore', {
     alias: 'store.processDefinitionStore',
     xtype: 'processDefinitionStore',
     storeId: "processDefinitionStore",
-    proxyUrl: CONFIG.restRoot+'/camel/rest/workflow/'
+    proxyUrl: CONFIG.restRoot + '/camel/rest/workflow'
 });

@@ -67,6 +67,8 @@ public class ProcessServiceImpl implements IProcessService {
                 }
                 processDefinitionList = new ArrayList<ProcessDefinition>(mapProcess.values());
             }
+        } else {
+            processDefinitionList = repositoryService.createProcessDefinitionQuery().latestVersion().listPage((page - 1) * limit, limit);
         }
 
         if (processDefinitionList != null) {
@@ -195,6 +197,9 @@ public class ProcessServiceImpl implements IProcessService {
             } else
                 processHistoryList = historyService.createHistoricProcessInstanceQuery()
                         .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+        } else {
+            processHistoryList = historyService.createHistoricProcessInstanceQuery()
+                    .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
         }
 
 
