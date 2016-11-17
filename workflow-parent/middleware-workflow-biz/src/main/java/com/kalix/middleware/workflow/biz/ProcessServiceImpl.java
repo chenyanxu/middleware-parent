@@ -15,6 +15,8 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricVariableInstance;
+import org.activiti.engine.impl.persistence.entity.HistoricVariableInstanceEntity;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
@@ -229,6 +231,17 @@ public class ProcessServiceImpl implements IProcessService {
                 for (Comment comment : commentList) {
                     str = comment.getFullMessage() + str + " ";
                 }
+                List<HistoricVariableInstance> varList = historyService.createHistoricVariableInstanceQuery()
+                        .processInstanceId(historyProcessId).taskId(historicActivityInstance.getTaskId()).list();
+                for (HistoricVariableInstance var : varList) {
+                    HistoricVariableInstanceEntity varEntity = (HistoricVariableInstanceEntity) var;
+                    if (varEntity.getName().equals("accepted")) {
+                        String result = varEntity.getLongValue() == 1L ? "审批通过" : "审批不通过";
+                        historicActivityInstance.setResult(result);
+                        break;
+                    }
+                }
+
                 //替换userid为usename
 //                historicActivityInstance.setAssignee(commentList.get(0).getUserId());
                 historicActivityInstance.setComment(str);

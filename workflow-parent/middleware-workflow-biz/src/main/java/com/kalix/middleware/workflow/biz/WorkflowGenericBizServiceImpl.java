@@ -161,9 +161,13 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             taskService.addComment(task.getId(), processInstanceId, comment);
             Map<String, Object> submitMap = new HashMap<String, Object>();
             boolean passed = accepted.equals("同意") ? true : false;
+            //完成任务
             submitMap.put("accepted", passed);
+            Map vars = getVariantMap(submitMap, bean);
+            //保存变量并关联taskid
+            taskService.setVariablesLocal(task.getId(), vars);
+            taskService.complete(task.getId(), vars);
 
-            taskService.complete(task.getId(), getVariantMap(submitMap, bean));
             List<Task> curTask = taskService.createTaskQuery().processInstanceId(processInstanceId).list();
             //设置实体状态
             if (curTask.size() > 0) {//流程未结束

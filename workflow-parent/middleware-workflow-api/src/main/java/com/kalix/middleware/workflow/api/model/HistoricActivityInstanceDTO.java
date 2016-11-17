@@ -1,7 +1,7 @@
 package com.kalix.middleware.workflow.api.model;
 
-import com.kalix.framework.core.api.web.model.BaseDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.kalix.framework.core.api.web.model.BaseDTO;
 
 import java.util.Date;
 
@@ -16,7 +16,8 @@ public class HistoricActivityInstanceDTO extends BaseDTO {
     private Date startTime;
     @JsonFormat(shape= JsonFormat.Shape.STRING ,pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date endTime;
-    private String comment;
+    private String result; //审批结果
+    private String comment; //审批意见
     private String taskId;
     private String durationInMillis; //任务持续时长
 
@@ -74,5 +75,13 @@ public class HistoricActivityInstanceDTO extends BaseDTO {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }

@@ -14,6 +14,7 @@ Ext.define('kalix.workflow.activityhistory.model.ActivityHistoryModel', {
         {name: 'startTime', type: 'string'},//开始时间
         {name: 'endTime', type: 'string'},//结束时间
         {name: 'durationInMillis', type: 'string'},//任务持续时长
+        {name: 'result', type: 'string'},//审批结果
         {name: 'comment', type: 'string'},//审批意见
     ]
 });
