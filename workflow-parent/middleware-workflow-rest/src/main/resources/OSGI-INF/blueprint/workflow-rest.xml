@@ -2,7 +2,8 @@
 <blueprint xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
            xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
-       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+       http://camel.apache.org/schema/blueprint
+       http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
 
     <reference id="processService" interface="com.kalix.middleware.workflow.api.biz.IProcessService"/>
     <reference id="taskService" interface="com.kalix.middleware.workflow.api.biz.ITaskService"/>
@@ -29,6 +30,11 @@
             <!-- this is a rest GET to view an user by the given id -->
             <get id="route-getAllProcess" outType="com.kalix.framework.core.api.persistence.JsonData">
                 <description>Find All Process</description>
+                <param name="page" type="query" description="page number" defaultValue="1" dataType="integer"/>
+                <param name="limit" type="query" description="page limit" defaultValue="10" dataType="integer"
+                       required="true"/>
+                <param name="jsonStr" type="query" description="query data"
+                       defaultValue="{&quot;name&quot;:&quot;&quot;}" dataType="string" required="false"/>
                 <to uri="bean:processService?method=getProcessDefinition(${header.page},${header.limit},${header.jsonStr})"/>
             </get>
 
