@@ -55,11 +55,12 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
                 throw new NotSameStarterException();
             //put orgName to variant
             Map map = new HashMap<>();
-            map.put(Const.STARTER_ORG_Name, String.valueOf(bean.getOrgName()));
+            map.put(Const.VAR_STARTER_ORG_Name, String.valueOf(bean.getOrgName()));
             //启动流程
             //创建流程业务编号
             String bizNo = createBusinessNo();
             map.put(Const.BUSINESS_NO, bizNo);
+            map.put(Const.VAR_TITLE, bean.getTitle());
 
             ProcessInstance instance = runtimeService.startProcessInstanceByKey(getProcessKeyName(), bizKey, map);
 
@@ -162,7 +163,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             Map<String, Object> submitMap = new HashMap<String, Object>();
             boolean passed = accepted.equals("同意") ? true : false;
             //完成任务
-            submitMap.put("accepted", passed);
+            submitMap.put(Const.VAR_ACCEPTED, passed);
             Map vars = getVariantMap(submitMap, bean);
             //保存变量并关联taskid
             taskService.setVariablesLocal(task.getId(), vars);

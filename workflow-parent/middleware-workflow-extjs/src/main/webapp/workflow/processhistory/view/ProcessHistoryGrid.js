@@ -38,14 +38,10 @@ Ext.define('kalix.workflow.processhistory.view.ProcessHistoryGrid', {
             dataIndex: 'name',
             flex: 1.5
         },
-        /*{
-         text: '业务主键',
-         dataIndex: 'businessKey'
+        {
+            text: '业务名称',
+            dataIndex: 'title'
          },
-         {
-         text: '流程定义编号',
-         dataIndex: 'processDefinitionId'
-         },*/
         {
             text: '启动用户',
             dataIndex: 'startUserId'

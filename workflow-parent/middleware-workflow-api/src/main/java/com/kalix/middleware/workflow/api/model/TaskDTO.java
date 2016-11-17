@@ -11,6 +11,7 @@ import java.util.Date;
  */
 public class TaskDTO extends BaseDTO {
     private String name;//任务名称
+    private String title;//业务名称
     private String description;//任务描述
     private String assignee;//执行人
     @JsonFormat(shape= JsonFormat.Shape.STRING ,pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -100,5 +101,13 @@ public class TaskDTO extends BaseDTO {
 
     public void setBusinessKey(String businessKey) {
         this.businessKey = businessKey;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

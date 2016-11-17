@@ -4,6 +4,7 @@ import com.kalix.framework.core.api.persistence.JsonData;
 import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.api.security.IShiroService;
 import com.kalix.framework.core.util.*;
+import com.kalix.middleware.workflow.api.Const;
 import com.kalix.middleware.workflow.api.biz.ITaskService;
 import com.kalix.middleware.workflow.api.model.TaskDTO;
 import com.kalix.middleware.workflow.api.util.WorkflowUtil;
@@ -11,6 +12,8 @@ import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricVariableInstance;
+import org.activiti.engine.impl.persistence.entity.HistoricVariableInstanceEntity;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.dozer.DozerBeanMapper;
@@ -44,7 +47,7 @@ public class TaskServiceImpl implements ITaskService {
         List<TaskDTO> taskDTOList;
         List<Task> taskGroupList = new ArrayList<>();//获得用户组的任务列表
         List<Task> taskUserList;//获得基于用户的任务列表
-        //获得该用户的职位，职位组成标准：orgName&dutyName
+        //获得该用户的职位，职位组成标准：orgName::dutyName
         //该服务位于IDutyBeanService中的 getUserDutyNameList() 方法实现
         String rtnStr = null;
         try {
@@ -110,6 +113,18 @@ public class TaskServiceImpl implements ITaskService {
                         dto.setBusinessKey(processInstance.getBusinessKey());
                     }
                 }
+
+                //set dto title field
+                List<HistoricVariableInstance> varList = historyService.createHistoricVariableInstanceQuery()
+                        .processInstanceId(dto.getProcessInstanceId()).list();
+                for (HistoricVariableInstance var : varList) {
+                    HistoricVariableInstanceEntity varEntity = (HistoricVariableInstanceEntity) var;
+                    if (varEntity.getName().equals(Const.VAR_TITLE)) {
+                        dto.setTitle(varEntity.getTextValue());
+                        break;
+                    }
+                }
+
                 if (dto.getDuration() != null)
                     dto.setDuration(DateUtil.formatDuring(Long.parseLong(dto.getDuration())));
             }

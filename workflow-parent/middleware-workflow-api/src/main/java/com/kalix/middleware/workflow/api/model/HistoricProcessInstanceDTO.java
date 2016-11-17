@@ -11,6 +11,7 @@ import java.util.Date;
  */
 public class HistoricProcessInstanceDTO extends BaseDTO {
     private String name;//流水号
+    private String title;//业务的名称
     private String processDefinitionId;//流程id
     private String startUserId;//启动用户id
     @JsonFormat(shape= JsonFormat.Shape.STRING ,pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -101,5 +102,13 @@ public class HistoricProcessInstanceDTO extends BaseDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

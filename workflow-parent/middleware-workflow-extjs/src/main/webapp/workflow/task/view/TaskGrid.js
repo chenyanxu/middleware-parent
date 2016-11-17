@@ -48,6 +48,11 @@ Ext.define('kalix.workflow.task.view.TaskGrid', {
                 flex: 1.5
             },
             {
+                text: '业务名称',
+                dataIndex: 'title',
+                renderer: 'addTooltip'
+            },
+            {
                 text: '任务名称',
                 dataIndex: 'name',
                 renderer: 'addTooltip'

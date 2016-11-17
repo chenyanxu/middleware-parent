@@ -4,6 +4,7 @@ import com.kalix.framework.core.api.persistence.JsonData;
 import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.api.security.IShiroService;
 import com.kalix.framework.core.util.*;
+import com.kalix.middleware.workflow.api.Const;
 import com.kalix.middleware.workflow.api.biz.IProcessService;
 import com.kalix.middleware.workflow.api.model.HistoricActivityInstanceDTO;
 import com.kalix.middleware.workflow.api.model.HistoricProcessInstanceDTO;
@@ -240,7 +241,7 @@ public class ProcessServiceImpl implements IProcessService {
                         .processInstanceId(historyProcessId).taskId(historicActivityInstance.getTaskId()).list();
                 for (HistoricVariableInstance var : varList) {
                     HistoricVariableInstanceEntity varEntity = (HistoricVariableInstanceEntity) var;
-                    if (varEntity.getName().equals("accepted")) {
+                    if (varEntity.getName().equals(Const.VAR_ACCEPTED)) {
                         String result = varEntity.getLongValue() == 1L ? "审批通过" : "审批不通过";
                         historicActivityInstance.setResult(result);
                         break;
@@ -298,10 +299,23 @@ public class ProcessServiceImpl implements IProcessService {
                 dto.setEntityId(WorkflowUtil.getBizId(processInstance.getBusinessKey()));
             } else {
 
+
                 HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(dto.getProcessInstanceId()).singleResult();
                 if (historicProcessInstance != null)
                     dto.setEntityId(WorkflowUtil.getBizId(historicProcessInstance.getBusinessKey()));
             }
+
+            //create title
+            List<HistoricVariableInstance> varList = historyService.createHistoricVariableInstanceQuery()
+                    .processInstanceId(dto.getProcessInstanceId()).list();
+            for (HistoricVariableInstance var : varList) {
+                HistoricVariableInstanceEntity varEntity = (HistoricVariableInstanceEntity) var;
+                if (varEntity.getName().equals(Const.VAR_TITLE)) {
+                    dto.setTitle(varEntity.getTextValue());
+                    break;
+                }
+            }
+
             if (dto.getDurationInMillis() != null) {
                 dto.setDurationInMillis(DateUtil.formatDuring(Long.decode(dto.getDurationInMillis())));
             }
