@@ -24,6 +24,7 @@
         <property name="transactionsExternallyManaged" value="true"/>
         <property name="activityFontName" value="宋体"/>
         <property name="labelFontName" value="宋体"/>
+        <property name="annotationFontName" value="宋体"/>
         <property name="eventListeners">
             <list>
                 <bean class="com.kalix.middleware.workflow.engine.listener.MessageEventListener"/>
