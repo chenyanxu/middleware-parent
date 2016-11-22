@@ -20,5 +20,13 @@ Ext.define('kalix.workflow.myprocesshistory.Main', {
                 proxyUrl: CONFIG.restRoot + '/camel/rest/workflow/myHistory'
             }
         }
-    ]
+    ],
+    listeners: {
+        afterrender: function (target, eOpts) {
+            var startUserCtrl = target.items.getAt(0).items.getAt(1);
+            if (startUserCtrl) {
+                startUserCtrl.setVisible(false);
+            }
+        }
+    }
 });

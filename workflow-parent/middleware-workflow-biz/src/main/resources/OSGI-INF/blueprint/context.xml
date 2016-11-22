@@ -36,6 +36,7 @@
         <property name="taskService" ref="taskService"/>
         <property name="runtimeService" ref="runtimeService"/>
         <property name="shiroService" ref="shiroService"/>
+        <property name="processEngine" ref="processEngine"/>
     </bean>
 
     <service interface="com.kalix.middleware.workflow.api.biz.IProcessService" ref="processServiceImpl"/>

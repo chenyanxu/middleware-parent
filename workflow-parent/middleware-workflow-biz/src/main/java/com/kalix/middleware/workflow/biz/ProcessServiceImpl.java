@@ -10,13 +10,11 @@ import com.kalix.middleware.workflow.api.model.HistoricActivityInstanceDTO;
 import com.kalix.middleware.workflow.api.model.HistoricProcessInstanceDTO;
 import com.kalix.middleware.workflow.api.model.ProcessDefinitionDTO;
 import com.kalix.middleware.workflow.api.util.WorkflowUtil;
-import org.activiti.engine.HistoryService;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
+import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricVariableInstance;
+import org.activiti.engine.history.NativeHistoricProcessInstanceQuery;
 import org.activiti.engine.impl.persistence.entity.HistoricVariableInstanceEntity;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -40,6 +38,7 @@ public class ProcessServiceImpl implements IProcessService {
     private TaskService taskService;
     private JsonData jsonData = new JsonData();
 
+    private ProcessEngine processEngine;
 
     /**
      * 获得流程定义列表
@@ -150,12 +149,26 @@ public class ProcessServiceImpl implements IProcessService {
             Map map = SerializeUtil.json2Map(jsonStr);
             //流程编号查询
             String processInstanceName = (String) map.get("name");
-            if (StringUtils.isNotEmpty(processInstanceName))
-                processHistoryList = historyService.createHistoricProcessInstanceQuery().processInstanceNameLike("%" + processInstanceName + "%")
-                        .involvedUser(loginUser).orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+            //流程启动用户查询条件
+            String startUser = (String) map.get("startUser");
+            if (StringUtils.isNotEmpty(processInstanceName) && StringUtils.isNotEmpty(startUser)) {
+                processHistoryList = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
+                        .processInstanceNameLike("%" + processInstanceName + "%").startedBy(startUser)
+                        .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+            }
+            else if (StringUtils.isNotEmpty(processInstanceName) && !StringUtils.isNotEmpty(startUser)) {
+                processHistoryList = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
+                        .processInstanceNameLike("%" + processInstanceName + "%")
+                        .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+            }
+            else if (!StringUtils.isNotEmpty(processInstanceName) && StringUtils.isNotEmpty(startUser)) {
+                processHistoryList = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
+                        .startedBy(startUser)
+                        .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+            }
             else {
-                processHistoryList = historyService.createHistoricProcessInstanceQuery()
-                        .involvedUser(loginUser).orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+                processHistoryList = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
+                        .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
             }
         } else
             processHistoryList = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
@@ -184,15 +197,27 @@ public class ProcessServiceImpl implements IProcessService {
             /*String startDate=(String) map.get("startDate");
             String endDate=(String) map.get("endDate");*/
             String startUser = (String) map.get("startUser");
-            if (StringUtils.isNotEmpty(processInstanceName) && StringUtils.isNotEmpty(startUser))
-                processHistoryList = historyService.createHistoricProcessInstanceQuery().processInstanceNameLike("%" + processInstanceName + "%")
-                        .startedBy(startUser).orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+            if (StringUtils.isNotEmpty(processInstanceName) && StringUtils.isNotEmpty(startUser)) {
+                processHistoryList = historyService.createHistoricProcessInstanceQuery()
+                        .processInstanceNameLike("%" + processInstanceName + "%").startedBy(startUser)
+                        .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+
+                // 自定义查询(表act_hi_procinst)
+                /*String sql = "SELECT * FROM " + processEngine.getManagementService().getTableName(HistoricProcessInstance.class) + " T " +
+                        " WHERE T.NAME_ LIKE '%" + processInstanceName + "%' AND T.START_USER_ID_ LIKE '%" + startUser + "%' " +
+                        " ORDER BY T.START_TIME_ DESC ";
+                        //" AND ROWNUM<=" + num + " ORDER BY T.START_TIME_ DESC ";
+                NativeHistoricProcessInstanceQuery nhpiq = historyService.createNativeHistoricProcessInstanceQuery().sql(sql);
+                processHistoryList = nhpiq.listPage((page - 1) * limit, limit);*/
+            }
             else if (StringUtils.isNotEmpty(processInstanceName) && (!StringUtils.isNotEmpty(startUser))) {
-                processHistoryList = historyService.createHistoricProcessInstanceQuery().processInstanceNameLike("%" + processInstanceName + "%")
+                processHistoryList = historyService.createHistoricProcessInstanceQuery()
+                        .processInstanceNameLike("%" + processInstanceName + "%")
                         .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
 
             } else if (!StringUtils.isNotEmpty(processInstanceName) && (StringUtils.isNotEmpty(startUser))) {
-                processHistoryList = historyService.createHistoricProcessInstanceQuery().startedBy(startUser)
+                processHistoryList = historyService.createHistoricProcessInstanceQuery()
+                        .startedBy(startUser)
                         .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
 
             } else
@@ -343,5 +368,9 @@ public class ProcessServiceImpl implements IProcessService {
 
     public void setShiroService(IShiroService shiroService) {
         this.shiroService = shiroService;
+    }
+
+    public void setProcessEngine(ProcessEngine processEngine) {
+        this.processEngine = processEngine;
     }
 }
