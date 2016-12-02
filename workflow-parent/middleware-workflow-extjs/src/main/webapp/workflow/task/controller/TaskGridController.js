@@ -21,7 +21,7 @@ Ext.define('kalix.workflow.task.controller.TaskGridController', {
             var rec = grid.getStore().getAt(rowIndex);
             var imgUrl = 'taskId=' + rec.data.id;
             var win = Ext.create('kalix.workflow.components.ActivitiProcessImageWindow', {
-                title: '流程查看 - ' + rec.data.businessNo,
+                title: '当前流程 - 编号[' + rec.data.businessNo + ']',
                 imgUrl: imgUrl
             });
             win.show();
@@ -53,7 +53,7 @@ Ext.define('kalix.workflow.task.controller.TaskGridController', {
                         method: "GET",
                         callback: function (options, success, response) {
                             var component = Ext.JSON.decode(response.responseText);
-                            if(component.windowClass == null || component.windowClass == ''){
+                            if (component.windowClass == null || component.windowClass == '') {
                                 Ext.Msg.alert(CONFIG.ALTER_TITLE_FAILURE, "没有窗口类.");
                                 return;
                             }
