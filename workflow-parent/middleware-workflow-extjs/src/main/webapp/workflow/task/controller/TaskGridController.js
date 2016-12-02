@@ -21,7 +21,7 @@ Ext.define('kalix.workflow.task.controller.TaskGridController', {
             var rec = grid.getStore().getAt(rowIndex);
             var imgUrl = 'taskId=' + rec.data.id;
             var win = Ext.create('kalix.workflow.components.ActivitiProcessImageWindow', {
-                title: '流程查看 - ' + rec.data.name,
+                title: '流程查看 - ' + rec.data.businessNo,
                 imgUrl: imgUrl
             });
             win.show();
