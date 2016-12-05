@@ -7,33 +7,31 @@ import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2016/12/1.
  */
 public class XmppMsgServiceImpl implements IXmppMsgService {
 
     @Override
-    public JsonStatus sendMessage(String tousers, String msg) {
-        JsonStatus jsonStatus = new JsonStatus();
+    public void sendMessage(List<String> toUsers, String msg) {
         try {
             String xmppAdmin = (String)ConfigUtil.getConfigProp("XMPP_ADMIN","ConfigXMPP");
             String pass = (String)ConfigUtil.getConfigProp("XMPP_ADMINPASS","ConfigXMPP");
-            jsonStatus = sendMessage(xmppAdmin,pass,tousers,msg);
+            sendMessage(xmppAdmin, pass, toUsers, msg);
         }
         catch (Exception e) {
             e.printStackTrace();
-            jsonStatus.setFailure(true);
-            jsonStatus.setMsg(e.getMessage());
         }
-        return jsonStatus;
     }
 
     @Override
-    public JsonStatus sendMessage(String fromuser, String fromuserpass, String tousers, String msg) {
+    public void sendMessage(String fromUser, String fromUserPass, List<String> toUsers, String msg) {
 
-        JsonStatus jsonStatus = new JsonStatus();
+        XMPPConnection connection = null;
         try {
-            // 创建一个到jabber.org服务器指定端口的连接
+            // 创建一个到jabber.org服务器指re定端口的连接
             /*XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
                 .setUsernameAndPassword("admin", "hanling")
                 .setServiceName("node1.cluster.kalix.com")
@@ -48,7 +46,7 @@ public class XmppMsgServiceImpl implements IXmppMsgService {
 
             // Create the configuration for this new connection
             String xmppHost = (String)ConfigUtil.getConfigProp("XMPP_HOST","ConfigXMPP");
-            Integer xmppPort = (Integer)ConfigUtil.getConfigProp("XMPP_PORT","ConfigXMPP");
+            Integer xmppPort = Integer.parseInt((String)ConfigUtil.getConfigProp("XMPP_PORT","ConfigXMPP"));
             String xmppServiceName = (String)ConfigUtil.getConfigProp("XMPP_SERVICENAME","ConfigXMPP");
             ConnectionConfiguration connConfig = new ConnectionConfiguration(xmppHost, xmppPort, xmppServiceName);
             //connConfig.setSecurityMode(ConnectionConfiguration.SecurityMode.required);
@@ -57,34 +55,38 @@ public class XmppMsgServiceImpl implements IXmppMsgService {
             connConfig.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);
             connConfig.setCompressionEnabled(false);
             connConfig.setDebuggerEnabled(false);
-            XMPPConnection connection = new XMPPTCPConnection(connConfig);
+            connection = new XMPPTCPConnection(connConfig);
             connection.connect();
             // Log into the server
-            String username = fromuser + "@" + xmppServiceName;
+            String username = fromUser + "@" + xmppServiceName;
             //connection.login("admin@node1.cluster.kalix.com", "hanling", "Work");
-            connection.login(username, fromuserpass);
+            connection.login(username, fromUserPass);
 
-            String userjid = tousers + "@" + xmppServiceName;
-            //userjid = "sunlf@node1.cluster.kalix.com";
-            Chat chat = ChatManager.getInstanceFor(connection).createChat(userjid, new MessageListener() {
+            if (toUsers != null) {
+                for (String toUser : toUsers) {
+                    String userJID = toUser + "@" + xmppServiceName;
+                    //userJID = "sunlf@node1.cluster.kalix.com";
+                    Chat chat = ChatManager.getInstanceFor(connection).createChat(userJID, new MessageListener() {
                         @Override
                         public void processMessage(Chat chat, Message message) {
                             System.out.println("Receivedmessage:" + message);
                         }
                     });
-            chat.sendMessage("hello wendy!");
-
-            if (connection != null)
-                connection.disconnect();
-
-            jsonStatus.setSuccess(true);
-            jsonStatus.setMsg("消息发送成功!");
+                    chat.sendMessage(msg);
+                }
+            }
         }
         catch (Exception e) {
             e.printStackTrace();
-            jsonStatus.setFailure(true);
-            jsonStatus.setMsg(e.getMessage());
         }
-        return jsonStatus;
+        finally {
+            if (connection != null) {
+                try {
+                    connection.disconnect();
+                } catch (SmackException.NotConnectedException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
     }
 }
