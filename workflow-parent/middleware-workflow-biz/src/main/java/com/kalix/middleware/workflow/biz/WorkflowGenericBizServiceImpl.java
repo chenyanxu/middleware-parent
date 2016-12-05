@@ -1,9 +1,14 @@
 package com.kalix.middleware.workflow.biz;
 
+import com.google.gson.Gson;
 import com.kalix.framework.core.api.dao.IGenericDao;
+import com.kalix.framework.core.api.persistence.JsonData;
 import com.kalix.framework.core.api.persistence.JsonStatus;
+import com.kalix.framework.core.api.security.IDataAuthService;
 import com.kalix.framework.core.impl.biz.ShiroGenericBizServiceImpl;
 import com.kalix.framework.core.util.DateUtil;
+import com.kalix.framework.core.util.JNDIHelper;
+import com.kalix.framework.core.util.SerializeUtil;
 import com.kalix.middleware.workflow.api.Const;
 import com.kalix.middleware.workflow.api.biz.IWorkflowBizService;
 import com.kalix.middleware.workflow.api.exception.NotSameStarterException;
@@ -21,6 +26,7 @@ import org.activiti.engine.task.DelegationState;
 import org.activiti.engine.task.Task;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -207,6 +213,25 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             e.printStackTrace();
             throw new TaskProcessException();
         }
+    }
+
+    @Override
+    public JsonData getAllEntityByQuery(Integer page, Integer limit, String jsonStr, String sort) {
+        IDataAuthService dataAuthService = null;
+        try {
+            dataAuthService = JNDIHelper.getJNDIServiceForName(IDataAuthService.class.getName());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //false 只能查看自己的数据
+        Long userid = this.shiroService.getCurrentUserId();
+        if (!dataAuthService.isAuth(this.entityClassName, userid)) {
+            Map<String, String> map = SerializeUtil.json2Map(jsonStr);
+            map.put("createById", String.valueOf(userid));
+            jsonStr = new Gson().toJson(map);
+        }
+
+        return super.getAllEntityByQuery(page, limit, jsonStr, sort);
     }
 
     public Map getVariantMap(Map map, T bean) {
