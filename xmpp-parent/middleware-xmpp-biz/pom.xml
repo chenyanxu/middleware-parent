@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>middleware-xmpp-biz</artifactId>
-    <name>Kalix Middleware XMPP Biz </name>
+    <name>Kalix Middleware XMPP Biz</name>
     <packaging>bundle</packaging>
 
     <properties>
