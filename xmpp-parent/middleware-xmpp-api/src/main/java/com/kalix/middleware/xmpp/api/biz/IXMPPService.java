@@ -8,9 +8,9 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/12/1.
  */
-public interface IXmppMsgService extends IService {
+public interface IXMPPService extends IService {
 
-    void sendMessage(List<String> toUsers, String msg);
+    void sendMessage(List<String> receivers, String msg);
 
-    void sendMessage(String fromUser, String fromUserPass, List<String> toUsers, String msg);
+    void sendMessage(String sender, String senderPass, List<String> receivers, String msg);
 }

@@ -1,8 +1,7 @@
 package com.kalix.middleware.xmpp.biz;
 
-import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.util.ConfigUtil;
-import com.kalix.middleware.xmpp.api.biz.IXmppMsgService;
+import com.kalix.middleware.xmpp.api.biz.IXMPPService;
 import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
@@ -12,14 +11,14 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/12/1.
  */
-public class XmppMsgServiceImpl implements IXmppMsgService {
+public class XMPPServiceImpl implements IXMPPService {
 
     @Override
-    public void sendMessage(List<String> toUsers, String msg) {
+    public void sendMessage(List<String> receivers, String msg) {
         try {
             String xmppAdmin = (String)ConfigUtil.getConfigProp("XMPP_ADMIN","ConfigXMPP");
             String pass = (String)ConfigUtil.getConfigProp("XMPP_ADMINPASS","ConfigXMPP");
-            sendMessage(xmppAdmin, pass, toUsers, msg);
+            sendMessage(xmppAdmin, pass, receivers, msg);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -27,7 +26,7 @@ public class XmppMsgServiceImpl implements IXmppMsgService {
     }
 
     @Override
-    public void sendMessage(String fromUser, String fromUserPass, List<String> toUsers, String msg) {
+    public void sendMessage(String sender, String senderPass, List<String> receivers, String msg) {
 
         XMPPConnection connection = null;
         try {
@@ -58,13 +57,13 @@ public class XmppMsgServiceImpl implements IXmppMsgService {
             connection = new XMPPTCPConnection(connConfig);
             connection.connect();
             // Log into the server
-            String username = fromUser + "@" + xmppServiceName;
+            String username = sender + "@" + xmppServiceName;
             //connection.login("admin@node1.cluster.kalix.com", "hanling", "Work");
-            connection.login(username, fromUserPass);
+            connection.login(username, senderPass);
 
-            if (toUsers != null) {
-                for (String toUser : toUsers) {
-                    String userJID = toUser + "@" + xmppServiceName;
+            if (receivers != null) {
+                for (String receiver : receivers) {
+                    String userJID = receiver + "@" + xmppServiceName;
                     //userJID = "sunlf@node1.cluster.kalix.com";
                     Chat chat = ChatManager.getInstanceFor(connection).createChat(userJID, new MessageListener() {
                         @Override
