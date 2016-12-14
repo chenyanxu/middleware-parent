@@ -75,12 +75,12 @@ public class TaskServiceImpl implements ITaskService {
                         .listPage((page - 1) * limit, limit);
 
             taskUserList = taskService
-                    .createTaskQuery().taskCandidateUser(userName)
+                    .createTaskQuery().taskCandidateOrAssigned(userName)
                     .taskNameLike("%" + taskName + "%").orderByTaskCreateTime().desc()
                     .listPage((page - 1) * limit, limit);
         } else {
             taskUserList = taskService
-                    .createTaskQuery().taskCandidateUser(userName)
+                    .createTaskQuery().taskCandidateOrAssigned(userName)//.taskCandidateUser(userName)
                     .orderByTaskCreateTime().desc()
                     .listPage((page - 1) * limit, limit);
             if (dutyNameList.size() > 0)

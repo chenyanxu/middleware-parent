@@ -60,3 +60,30 @@ karaf@root()> log:set TRACE org.activiti.engine.impl.persistence.entity
         }
     }
 ```
+
+## 指定发起人
+
+> activiti 指定发起人，并作为流程变量在流程中的其他任务中使用，
+
+> 在流程文件中定义开始事件
+
+```
+ <startEvent id="start"   activiti:initiator="initiator" />
+```
+
+> initiator 作为一个流程变量在其他任务节点中使用
+
+```
+ <userTask id="theTask" name="My Task">
+    	<humanPerformer>
+    		<resourceAssignmentExpression>
+    			<formalExpression>${initiator}</formalExpression>
+    		</resourceAssignmentExpression>
+    	</humanPerformer>
+    </userTask>
+```
+> 发起流程是指定发起人
+```
+identityService.setAuthenticatedUserId("startuser");
+runtimeService.startProcessInstanceByKey("simpleProcess");
+```

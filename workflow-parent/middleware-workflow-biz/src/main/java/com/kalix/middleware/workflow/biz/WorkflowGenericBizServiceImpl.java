@@ -54,27 +54,30 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             String bizKey = getProcessKeyName() + ":" + id;
             //获得当前登陆用户
             String userName = this.getShiroService().getSubject().getPrincipal().toString();
+            //设置流程启动人
             identityService.setAuthenticatedUserId(userName);
             TP bean = this.getEntity(new Long(id));
             //检查流程启动人和申请人是同一个人
             if (!bean.getCreateBy().equals(this.getShiroService().getCurrentUserRealName()))
                 throw new NotSameStarterException();
-            //put orgName to variant
+
+            //获得启动参数
             Map map = new HashMap<>();
-            map.put(Const.VAR_STARTER_ORG_Name, String.valueOf(bean.getOrgName()));
+            getStartMap(map, bean);
+            map.put(Const.VAR_INITIATOR, userName);
             //启动流程
             //创建流程业务编号
             String bizNo = createBusinessNo();
             map.put(Const.BUSINESS_NO, bizNo);
-            map.put(Const.VAR_TITLE, bean.getTitle());
+
 
             ProcessInstance instance = runtimeService.startProcessInstanceByKey(getProcessKeyName(), bizKey, map);
 
-            Task task = taskService.createTaskQuery().processInstanceId(instance.getProcessInstanceId()).singleResult();
+            List<Task> task = taskService.createTaskQuery().processInstanceId(instance.getProcessInstanceId()).list();
 
             //设置实体状态
             bean.setProcessInstanceId(instance.getProcessInstanceId());
-            bean.setCurrentNode(task.getName());
+            bean.setCurrentNode(task.get(0).getName());
             bean.setAuditResult("审批中...");
 
             bean.setBusinessNo(bizNo);
@@ -90,6 +93,19 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
         }
 
         return jsonStatus;
+    }
+
+    /**
+     * 初始化启动的参数，可以重载增加新的变量
+     *
+     * @param bean
+     * @return
+     */
+    public void getStartMap(Map map, TP bean) {
+        //put orgName to variant
+
+        map.put(Const.VAR_STARTER_ORG_Name, String.valueOf(bean.getOrgName()));
+        map.put(Const.VAR_TITLE, bean.getTitle());
     }
 
     /**
@@ -211,7 +227,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             method.invoke(bean, userName);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new TaskProcessException();
+//            throw new TaskProcessException();
         }
     }
 
