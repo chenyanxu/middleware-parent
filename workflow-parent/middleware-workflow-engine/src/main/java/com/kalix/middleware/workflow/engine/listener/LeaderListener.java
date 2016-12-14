@@ -43,6 +43,12 @@ public class LeaderListener implements TaskListener {
         String orgName = (String) delegateTask.getVariable(Const.VAR_STARTER_ORG_Name);
         String group = orgName + Const.CONNECTOR_CHAR + Const.LEADER_NAME;
         delegateTask.addCandidateGroup(group);
+
+        //如果group为一个人，则直接签收任务
+        if (delegateTask.getAssignee() == null && delegateTask.getCandidates().size() == 1) {
+            delegateTask.setAssignee(delegateTask.getCandidates().stream().filter(id -> id.getUserId() != null)
+                    .findFirst().map(id -> id.getUserId()).orElse(null));
+        }
 //        DelegateExecution execution = delegateTask.getExecution();
 
         //发送消息
