@@ -5,7 +5,7 @@
     <reference id="shiroService" interface="com.kalix.framework.core.api.security.IShiroService"/>
     <reference id="attachmentBeanDao" interface="com.kalix.middleware.attachment.api.dao.IAttachmentBeanDao"/>
 
-    <bean id="attachmentBeanServiceImpl" class="com.kalix.middlewaren.attachment.biz.AttachmentBeanServiceImpl">
+    <bean id="attachmentBeanServiceImpl" class="com.kalix.middleware.attachment.biz.AttachmentBeanServiceImpl">
         <property name="dao" ref="attachmentBeanDao"/>
         <property name="shiroService" ref="shiroService"/>
     </bean>
