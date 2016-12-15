@@ -14,11 +14,11 @@ import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricVariableInstance;
-import org.activiti.engine.history.NativeHistoricProcessInstanceQuery;
 import org.activiti.engine.impl.persistence.entity.HistoricVariableInstanceEntity;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
+import org.activiti.engine.task.IdentityLink;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
@@ -155,18 +155,15 @@ public class ProcessServiceImpl implements IProcessService {
                 processHistoryList = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
                         .processInstanceNameLike("%" + processInstanceName + "%").startedBy(startUser)
                         .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
-            }
-            else if (StringUtils.isNotEmpty(processInstanceName) && !StringUtils.isNotEmpty(startUser)) {
+            } else if (StringUtils.isNotEmpty(processInstanceName) && !StringUtils.isNotEmpty(startUser)) {
                 processHistoryList = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
                         .processInstanceNameLike("%" + processInstanceName + "%")
                         .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
-            }
-            else if (!StringUtils.isNotEmpty(processInstanceName) && StringUtils.isNotEmpty(startUser)) {
+            } else if (!StringUtils.isNotEmpty(processInstanceName) && StringUtils.isNotEmpty(startUser)) {
                 processHistoryList = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
                         .startedBy(startUser)
                         .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
-            }
-            else {
+            } else {
                 processHistoryList = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
                         .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
             }
@@ -209,8 +206,7 @@ public class ProcessServiceImpl implements IProcessService {
                         //" AND ROWNUM<=" + num + " ORDER BY T.START_TIME_ DESC ";
                 NativeHistoricProcessInstanceQuery nhpiq = historyService.createNativeHistoricProcessInstanceQuery().sql(sql);
                 processHistoryList = nhpiq.listPage((page - 1) * limit, limit);*/
-            }
-            else if (StringUtils.isNotEmpty(processInstanceName) && (!StringUtils.isNotEmpty(startUser))) {
+            } else if (StringUtils.isNotEmpty(processInstanceName) && (!StringUtils.isNotEmpty(startUser))) {
                 processHistoryList = historyService.createHistoricProcessInstanceQuery()
                         .processInstanceNameLike("%" + processInstanceName + "%")
                         .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
@@ -227,7 +223,6 @@ public class ProcessServiceImpl implements IProcessService {
             processHistoryList = historyService.createHistoricProcessInstanceQuery()
                     .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
         }
-
 
 
         if (processHistoryList != null) {
@@ -275,6 +270,25 @@ public class ProcessServiceImpl implements IProcessService {
 
                 //替换userid为usename
 //                historicActivityInstance.setAssignee(commentList.get(0).getUserId());
+                if (historicActivityInstance.getAssignee() == null) {
+                    //获得任务的执行人
+//                    HistoricTaskInstance historyTask= historyService.createHistoricTaskInstanceQuery().taskId(historicActivityInstance.getTaskId()).singleResult();
+                    try {
+                        List<IdentityLink> identityLinks = taskService.getIdentityLinksForTask(historicActivityInstance.getTaskId());
+                        String _str = "";
+                        for (IdentityLink id : identityLinks) {
+                            if (id.getUserId() != null)
+                                _str = _str + id.getUserId();
+                            else
+                                _str = "无";
+                        }
+                        historicActivityInstance.setAssignee(_str);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
                 historicActivityInstance.setComment(str);
                 if (historicActivityInstance.getDurationInMillis() != null)
                     historicActivityInstance.setDurationInMillis(DateUtil.formatDuring(Long.parseLong(historicActivityInstance.getDurationInMillis())));
@@ -323,8 +337,6 @@ public class ProcessServiceImpl implements IProcessService {
             if (processInstance != null) {
                 dto.setEntityId(WorkflowUtil.getBizId(processInstance.getBusinessKey()));
             } else {
-
-
                 HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(dto.getProcessInstanceId()).singleResult();
                 if (historicProcessInstance != null)
                     dto.setEntityId(WorkflowUtil.getBizId(historicProcessInstance.getBusinessKey()));

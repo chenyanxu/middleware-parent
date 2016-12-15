@@ -86,6 +86,8 @@ public class MessageEventListener implements ActivitiEventListener {
      * @param event
      */
     private void postCreateEvent(ActivitiEvent event) {
+
+
         try {
             historyService = JNDIHelper.getJNDIServiceForName("org.activiti.engine.HistoryService");
         } catch (IOException e) {
@@ -96,6 +98,13 @@ public class MessageEventListener implements ActivitiEventListener {
         ActivitiEntityEventImpl entityEvent= (ActivitiEntityEventImpl) event;
         TaskEntity task= (TaskEntity) entityEvent.getEntity();
         List<IdentityLinkEntity> idList=task.getIdentityLinks();
+
+        //如果group为一个人，则直接签收任务
+        if (task.getAssignee() == null && task.getCandidates().size() == 1) {
+            task.setAssignee(task.getCandidates().stream().filter(id -> id.getUserId() != null)
+                    .findFirst().map(id -> id.getUserId()).orElse(null));
+        }
+
         if (idList.size() > 0) {
             for (IdentityLinkEntity id : idList) {
 
