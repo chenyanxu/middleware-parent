@@ -8,7 +8,7 @@ Ext.define('kalix.workflow.approve.viewModel.ApproveViewModel', {
     extend: 'Ext.app.ViewModel',
     alias: 'viewmodel.approveViewModel',
     data: {
-        view_operation: false,
+        //view_operation: false,
         approveOpinion: '',
         businessKey: '',
         taskId: '',

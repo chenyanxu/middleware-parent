@@ -30,7 +30,11 @@ Ext.define('kalix.workflow.approve.view.ApproveWindow', {
             items: [
                 {
                     xtype: 'activityHistoryGrid',
-                    height: 280
+                    bind:{
+                        iconCls:'{xx}',
+                    },
+                    title:'',
+                    height: 240
                 }
             ]
         },
@@ -48,36 +52,38 @@ Ext.define('kalix.workflow.approve.view.ApproveWindow', {
                         value: '{approveOpinion}'
                     }
                 }
-            ],
-            bind: {
-                hidden: '{view_operation}'
-            }
-        }
-    ],
-    buttons: [
-        {
-            text: '同意',
-            handler: 'onApprove',
-            bind: {
-                hidden: '{view_operation}'
-            }
-        },
-        {
-            text: '不同意',
-            handler: 'onApprove',
-            bind: {
-                hidden: '{view_operation}'
-            }
-        },
-        {
-            text: '关闭',
-            glyph: 'xf00d@FontAwesome',
-            handler: function () {
-                this.up('window').close();
-            },
-            bind: {
-                hidden: '{!view_operation}'
-            }
+            ]
+            ,
+            // bind: {
+            //     hidden: '{view_operation}'
+            // }
         }
     ]
+    // ,
+    // buttons: [
+    //     {
+    //         text: '同意',
+    //         handler: 'onApprove',
+    //         bind: {
+    //             hidden: '{view_operation}'
+    //         }
+    //     },
+    //     {
+    //         text: '不同意',
+    //         handler: 'onApprove',
+    //         bind: {
+    //             hidden: '{view_operation}'
+    //         }
+    //     },
+    //     {
+    //         text: '关闭',
+    //         glyph: 'xf00d@FontAwesome',
+    //         handler: function () {
+    //             this.up('window').close();
+    //         },
+    //         bind: {
+    //             hidden: '{!view_operation}'
+    //         }
+    //     }
+    // ]
 });
