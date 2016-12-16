@@ -1,4 +1,4 @@
-package com.kalix.middlewaren.attachment.biz;
+package com.kalix.middleware.attachment.biz;
 
 import com.kalix.framework.core.impl.biz.ShiroGenericBizServiceImpl;
 import com.kalix.middleware.attachment.api.biz.IAttachmentBeanService;

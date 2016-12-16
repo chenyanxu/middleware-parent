@@ -1,4 +1,4 @@
-package com.kalix.middlewaren.attachment.biz.internal;
+package com.kalix.middleware.attachment.biz.internal;
 
 import com.kalix.framework.core.api.osgi.BaseBundleActivator;
 

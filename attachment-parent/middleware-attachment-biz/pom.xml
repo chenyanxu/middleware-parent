@@ -14,7 +14,7 @@
     <packaging>bundle</packaging>
 
     <properties>
-        <bundle.symbolicName>com.kalix.middlewaren.attachment.biz</bundle.symbolicName>
+        <bundle.symbolicName>com.kalix.middleware.attachment.biz</bundle.symbolicName>
     </properties>
 
     <dependencies>
