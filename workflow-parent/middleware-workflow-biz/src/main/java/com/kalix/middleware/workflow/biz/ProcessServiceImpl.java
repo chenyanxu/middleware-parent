@@ -262,7 +262,7 @@ public class ProcessServiceImpl implements IProcessService {
                 for (HistoricVariableInstance var : varList) {
                     HistoricVariableInstanceEntity varEntity = (HistoricVariableInstanceEntity) var;
                     if (varEntity.getName().equals(Const.VAR_ACCEPTED)) {
-                        String result = varEntity.getLongValue() == 1L ? "审批通过" : "审批不通过";
+                        String result = varEntity.getTextValue();
                         historicActivityInstance.setResult(result);
                         break;
                     }
