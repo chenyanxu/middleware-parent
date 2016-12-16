@@ -40,4 +40,9 @@ public abstract class AbstractModifyFormHandler implements IFormHandler {
     public String getWindowClass() {
         return "kalix.workflow.approve.view.ModifyWindow";
     }
+
+    @Override
+    public String getButtonValue() {
+        return _defultButtonValue;
+    }
 }

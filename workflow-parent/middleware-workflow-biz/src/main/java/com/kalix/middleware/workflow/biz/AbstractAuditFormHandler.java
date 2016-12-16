@@ -8,8 +8,6 @@ import com.kalix.middleware.workflow.api.biz.IFormHandler;
  */
 public abstract class AbstractAuditFormHandler implements IFormHandler {
     private String processDefinitionId;
-    private final String _defultButtonValue = "同意,不同意";
-    private final String _defultFormKey = "audit.form";
 
     public AbstractAuditFormHandler() {
 

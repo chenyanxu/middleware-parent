@@ -4,6 +4,9 @@ package com.kalix.middleware.workflow.api.biz;
  * 实现工作流form的统一接口，用于流程执行过程中的界面显示
  */
 public interface IFormHandler {
+
+    final String _defultButtonValue = "同意,不同意";
+    final String _defultFormKey = "audit.form";
     /**
      * 获得form的key
      *

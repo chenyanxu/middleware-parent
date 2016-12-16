@@ -40,4 +40,9 @@ public abstract class AbstractEndFormHandler implements IFormHandler {
     public String getWindowClass() {
         return "kalix.workflow.approve.view.EndWindow";
     }
+
+    @Override
+    public String getButtonValue() {
+        return _defultButtonValue;
+    }
 }
