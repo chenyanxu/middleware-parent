@@ -31,4 +31,11 @@ public interface IFormHandler {
      * @return
      */
     String getWindowClass();
+
+    /**
+     * 根据formkey获得提交按钮显示的文字
+     *
+     * @return
+     */
+    String getButtonValue();
 }

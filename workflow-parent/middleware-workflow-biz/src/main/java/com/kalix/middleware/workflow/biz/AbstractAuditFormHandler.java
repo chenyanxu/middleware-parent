@@ -8,12 +8,15 @@ import com.kalix.middleware.workflow.api.biz.IFormHandler;
  */
 public abstract class AbstractAuditFormHandler implements IFormHandler {
     private String processDefinitionId;
+    private final String _defultButtonValue = "同意,不同意";
+    private final String _defultFormKey = "audit.form";
 
-    public AbstractAuditFormHandler(){
-        String[] splits=this.getClass().getSimpleName().split("Audit");
+    public AbstractAuditFormHandler() {
 
-        if(splits.length>0) {
-            processDefinitionId=splits[0].toLowerCase();
+        String[] splits = this.getClass().getSimpleName().split("Audit");
+
+        if (splits.length > 0) {
+            processDefinitionId = splits[0].toLowerCase();
         }
     }
 
@@ -29,7 +32,7 @@ public abstract class AbstractAuditFormHandler implements IFormHandler {
      */
     @Override
     public String getFormKey() {
-        return "audit.form";
+        return _defultFormKey;
     }
 
     /**
@@ -41,4 +44,11 @@ public abstract class AbstractAuditFormHandler implements IFormHandler {
     public String getWindowClass() {
         return "kalix.workflow.approve.view.ApproveWindow";
     }
+
+    @Override
+    public String getButtonValue() {
+        return _defultButtonValue;
+    }
+
+
 }

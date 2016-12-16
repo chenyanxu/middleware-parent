@@ -183,9 +183,9 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             identityService.setAuthenticatedUserId(userName);
             taskService.addComment(task.getId(), processInstanceId, comment);
             Map<String, Object> submitMap = new HashMap<String, Object>();
-            boolean passed = accepted.equals("同意") ? true : false;
+//            boolean passed = accepted.equals("同意") ? true : false;
             //完成任务
-            submitMap.put(Const.VAR_ACCEPTED, passed);
+            submitMap.put(Const.VAR_ACCEPTED, accepted);
             Map vars = getVariantMap(submitMap, bean);
             //保存变量并关联taskid
             taskService.setVariablesLocal(task.getId(), vars);
@@ -199,7 +199,8 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             } else {//流程已结束
                 bean.setCurrentNode("");
                 bean.setStatus(WorkflowStaus.FINISH);
-                String result = passed ? "审批通过" : currentTaskName + "不通过";
+//                String result = passed ? "审批通过" : currentTaskName + "不通过";
+                String result = "审批结果:" + currentTaskName + accepted;
                 bean.setAuditResult(result);
             }
 

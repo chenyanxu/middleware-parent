@@ -41,4 +41,9 @@ public abstract class AbstractBizDataFormHandler implements IFormHandler {
     public String getWindowClass() {
         return "";
     }
+
+    @Override
+    public String getButtonValue() {
+        throw new RuntimeException("not implements!");
+    }
 }

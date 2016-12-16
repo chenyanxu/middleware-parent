@@ -11,6 +11,7 @@ public class FormDTO extends BaseDTO {
     private String processDefinitionId;
     private String formClass;
     private String windowClass;
+    private String buttonValue;
 
     public String getFormKey() {
         return formKey;
@@ -42,5 +43,13 @@ public class FormDTO extends BaseDTO {
 
     public void setWindowClass(String windowClass) {
         this.windowClass = windowClass;
+    }
+
+    public String getButtonValue() {
+        return buttonValue;
+    }
+
+    public void setButtonValue(String buttonValue) {
+        this.buttonValue = buttonValue;
     }
 }
