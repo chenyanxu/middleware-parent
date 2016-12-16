@@ -44,6 +44,6 @@ public abstract class AbstractBizDataFormHandler implements IFormHandler {
 
     @Override
     public String getButtonValue() {
-        throw new RuntimeException("not implements!");
+        return "";
     }
 }
