@@ -13,6 +13,7 @@ import com.kalix.middleware.workflow.api.util.WorkflowUtil;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.impl.persistence.entity.HistoricVariableInstanceEntity;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -114,22 +115,30 @@ public class ProcessServiceImpl implements IProcessService {
         String loginUser = this.shiroService.getCurrentUserLoginName();
         List<HistoricProcessInstanceDTO> historicProcessDTOList;
         List<HistoricProcessInstance> processHistoryList;
+        HistoricProcessInstanceQuery query=null;
+        long count = 0;
         if (StringUtils.isNotEmpty(jsonStr)) {
             Map map = SerializeUtil.json2Map(jsonStr);
             //流程编号查询
             String processInstanceName = (String) map.get("name");
-            if (StringUtils.isNotEmpty(processInstanceName))
-                processHistoryList = historyService.createHistoricProcessInstanceQuery().processInstanceNameLike("%" + processInstanceName + "%")
-                        .startedBy(loginUser).orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
-            else {
-                processHistoryList = historyService.createHistoricProcessInstanceQuery()
-                        .startedBy(loginUser).orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+
+            if (StringUtils.isNotEmpty(processInstanceName)) {
+                query=historyService.createHistoricProcessInstanceQuery().processInstanceNameLike("%" + processInstanceName + "%")
+                        .startedBy(loginUser).orderByProcessInstanceStartTime().desc();
             }
-        } else
-            processHistoryList = historyService.createHistoricProcessInstanceQuery().startedBy(loginUser)
-                    .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+            else {
+                query=historyService.createHistoricProcessInstanceQuery().startedBy(loginUser).
+                        orderByProcessInstanceStartTime().desc();
+            }
+        } else {
+            query=historyService.createHistoricProcessInstanceQuery().startedBy(loginUser)
+                    .orderByProcessInstanceStartTime().desc();
+        }
+
+        processHistoryList=query.listPage((page - 1) * limit, limit);
+
         if (processHistoryList != null) {
-            generateJsonData(processHistoryList);
+            generateJsonData(processHistoryList,query.count());
         }
         return jsonData;
 
@@ -145,6 +154,7 @@ public class ProcessServiceImpl implements IProcessService {
         String loginUser = this.shiroService.getCurrentUserLoginName();
         List<HistoricProcessInstanceDTO> historicProcessDTOList;
         List<HistoricProcessInstance> processHistoryList;
+        HistoricProcessInstanceQuery query=null;
         if (StringUtils.isNotEmpty(jsonStr)) {
             Map map = SerializeUtil.json2Map(jsonStr);
             //流程编号查询
@@ -152,27 +162,29 @@ public class ProcessServiceImpl implements IProcessService {
             //流程启动用户查询条件
             String startUser = (String) map.get("startUser");
             if (StringUtils.isNotEmpty(processInstanceName) && StringUtils.isNotEmpty(startUser)) {
-                processHistoryList = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
+                query = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
                         .processInstanceNameLike("%" + processInstanceName + "%").startedBy(startUser)
-                        .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+                        .orderByProcessInstanceStartTime().desc();
             } else if (StringUtils.isNotEmpty(processInstanceName) && !StringUtils.isNotEmpty(startUser)) {
-                processHistoryList = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
+                query = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
                         .processInstanceNameLike("%" + processInstanceName + "%")
-                        .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+                        .orderByProcessInstanceStartTime().desc();
             } else if (!StringUtils.isNotEmpty(processInstanceName) && StringUtils.isNotEmpty(startUser)) {
-                processHistoryList = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
-                        .startedBy(startUser)
-                        .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+                query = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
+                        .startedBy(startUser).orderByProcessInstanceStartTime().desc();
             } else {
-                processHistoryList = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
-                        .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+                query = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
+                        .orderByProcessInstanceStartTime().desc();
             }
-        } else
-            processHistoryList = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
-                    .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
-        if (processHistoryList != null) {
-            generateJsonData(processHistoryList);
+        } else {
+            query = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
+                    .orderByProcessInstanceStartTime().desc();
         }
+        processHistoryList = query.listPage((page - 1) * limit, limit);
+        if (processHistoryList != null) {
+            generateJsonData(processHistoryList,query.count());
+        }
+
         return jsonData;
 
     }
@@ -187,6 +199,7 @@ public class ProcessServiceImpl implements IProcessService {
     public JsonData getProcessHistory(int page, int limit, String jsonStr) {
 //        List<HistoricProcessInstanceDTO> historicProcessDTOList;
         List<HistoricProcessInstance> processHistoryList = null;
+        HistoricProcessInstanceQuery query=null;
         if (StringUtils.isNotEmpty(jsonStr)) {
             Map map = SerializeUtil.json2Map(jsonStr);
             //流程编号查询
@@ -195,9 +208,9 @@ public class ProcessServiceImpl implements IProcessService {
             String endDate=(String) map.get("endDate");*/
             String startUser = (String) map.get("startUser");
             if (StringUtils.isNotEmpty(processInstanceName) && StringUtils.isNotEmpty(startUser)) {
-                processHistoryList = historyService.createHistoricProcessInstanceQuery()
+                query = historyService.createHistoricProcessInstanceQuery()
                         .processInstanceNameLike("%" + processInstanceName + "%").startedBy(startUser)
-                        .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+                        .orderByProcessInstanceStartTime().desc();
 
                 // 自定义查询(表act_hi_procinst)
                 /*String sql = "SELECT * FROM " + processEngine.getManagementService().getTableName(HistoricProcessInstance.class) + " T " +
@@ -207,26 +220,24 @@ public class ProcessServiceImpl implements IProcessService {
                 NativeHistoricProcessInstanceQuery nhpiq = historyService.createNativeHistoricProcessInstanceQuery().sql(sql);
                 processHistoryList = nhpiq.listPage((page - 1) * limit, limit);*/
             } else if (StringUtils.isNotEmpty(processInstanceName) && (!StringUtils.isNotEmpty(startUser))) {
-                processHistoryList = historyService.createHistoricProcessInstanceQuery()
+                query = historyService.createHistoricProcessInstanceQuery()
                         .processInstanceNameLike("%" + processInstanceName + "%")
-                        .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
-
+                        .orderByProcessInstanceStartTime().desc();
             } else if (!StringUtils.isNotEmpty(processInstanceName) && (StringUtils.isNotEmpty(startUser))) {
-                processHistoryList = historyService.createHistoricProcessInstanceQuery()
-                        .startedBy(startUser)
-                        .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
-
-            } else
-                processHistoryList = historyService.createHistoricProcessInstanceQuery()
-                        .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+                query = historyService.createHistoricProcessInstanceQuery()
+                        .startedBy(startUser).orderByProcessInstanceStartTime().desc();
+            } else {
+                query = historyService.createHistoricProcessInstanceQuery()
+                        .orderByProcessInstanceStartTime().desc();
+            }
         } else {
-            processHistoryList = historyService.createHistoricProcessInstanceQuery()
-                    .orderByProcessInstanceStartTime().desc().listPage((page - 1) * limit, limit);
+            query = historyService.createHistoricProcessInstanceQuery()
+                    .orderByProcessInstanceStartTime().desc();
         }
 
-
+        processHistoryList = query.listPage((page - 1) * limit, limit);
         if (processHistoryList != null) {
-            generateJsonData(processHistoryList);
+            generateJsonData(processHistoryList,query.count());
         }
         return jsonData;
 
@@ -322,7 +333,7 @@ public class ProcessServiceImpl implements IProcessService {
         return jsonStatus;
     }
 
-    private void generateJsonData(List<HistoricProcessInstance> processHistoryList) {
+    private void generateJsonData(List<HistoricProcessInstance> processHistoryList,long count) {
         List<HistoricProcessInstanceDTO> historicProcessDTOList;
         Mapper mapper = new DozerBeanMapper();
         historicProcessDTOList = DozerHelper.map(mapper, processHistoryList, HistoricProcessInstanceDTO.class);
@@ -357,7 +368,7 @@ public class ProcessServiceImpl implements IProcessService {
                 dto.setDurationInMillis(DateUtil.formatDuring(Long.decode(dto.getDurationInMillis())));
             }
         }
-        long count = processHistoryList.size();
+        //long count = processHistoryList.size();
         jsonData.setTotalCount(count);
         jsonData.setData(historicProcessDTOList);
     }
