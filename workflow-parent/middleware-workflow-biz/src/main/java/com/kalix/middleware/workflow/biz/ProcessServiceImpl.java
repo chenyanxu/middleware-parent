@@ -329,7 +329,8 @@ public class ProcessServiceImpl implements IProcessService {
         //设置流程状态
         for (HistoricProcessInstanceDTO dto : historicProcessDTOList) {
             if (dto.getEndTime() != null) {
-                dto.setStatus("<a style='color:red'>结束</a>");
+//                dto.setStatus("<a style='color:red'>结束</a>");
+                dto.setStatus("结束");
             } else {
                 dto.setStatus("进行中");
             }
