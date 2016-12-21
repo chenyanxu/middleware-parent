@@ -202,6 +202,9 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
 //                String result = passed ? "审批通过" : currentTaskName + "不通过";
                 String result = "审批结果:" + currentTaskName + accepted;
                 bean.setAuditResult(result);
+
+                //用于子类调用该方法时判断流程是否结束
+                jsonStatus.setTag("流程结束:" + beanId);
             }
 
             this.updateEntity(bean);
