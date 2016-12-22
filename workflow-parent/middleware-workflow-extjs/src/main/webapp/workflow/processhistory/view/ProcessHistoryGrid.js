@@ -21,12 +21,7 @@ Ext.define('kalix.workflow.processhistory.view.ProcessHistoryGrid', {
     },
     columns: [
         {
-            xtype: "rownumberer",
-            text: "行号",
-            width: 50,
-            flex: 0,
-            align: 'center',
-            renderer: null
+            xtype: "rownumberer"
         },
         {
             text: '编号',
@@ -75,7 +70,8 @@ Ext.define('kalix.workflow.processhistory.view.ProcessHistoryGrid', {
         },
         {
             text: '状态',
-            dataIndex: 'status'
+            xtype: 'templatecolumn',
+            tpl: '<tpl if="status==\'结束\'"><span style="color:red"></tpl>{status}<tpl if="status==\'结束\'"></span></tpl>'
         },
         {
             xtype: "securityGridColumnCommon",
