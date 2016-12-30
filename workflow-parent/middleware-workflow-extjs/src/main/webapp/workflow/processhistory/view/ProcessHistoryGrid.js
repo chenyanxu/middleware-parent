@@ -21,12 +21,7 @@ Ext.define('kalix.workflow.processhistory.view.ProcessHistoryGrid', {
     },
     columns: [
         {
-            xtype: "rownumberer",
-            text: "行号",
-            width: 50,
-            flex: 0,
-            align: 'center',
-            renderer: null
+            xtype: "rownumberer"
         },
         {
             text: '编号',
@@ -48,7 +43,7 @@ Ext.define('kalix.workflow.processhistory.view.ProcessHistoryGrid', {
         },
         {
             text: '开始时间',
-            dataIndex: 'startTime',
+            dataIndex: 'startTime'
             /*xtype: 'datecolumn',
              format: 'Y-m-d H:i:s',
              renderer: null*/
@@ -59,7 +54,7 @@ Ext.define('kalix.workflow.processhistory.view.ProcessHistoryGrid', {
         },
         {
             text: '结束时间',
-            dataIndex: 'endTime',
+            dataIndex: 'endTime'
             /*renderer: function (value) {
              if (value != null && value != "") {
              var createDate = new Date(value);
@@ -75,7 +70,8 @@ Ext.define('kalix.workflow.processhistory.view.ProcessHistoryGrid', {
         },
         {
             text: '状态',
-            dataIndex: 'status'
+            xtype: 'templatecolumn',
+            tpl: '<tpl if="status==\'结束\'"><span style="color:red"></tpl>{status}<tpl if="status==\'结束\'"></span></tpl>'
         },
         {
             xtype: "securityGridColumnCommon",
