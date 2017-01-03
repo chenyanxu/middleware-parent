@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress ALL -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.kalix.middleware.statemachine</groupId>
+        <artifactId>statemachine-parent</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>middleware-statemachine-biz</artifactId>
+    <name>Kalix Middleware StateMachine Biz</name>
+    <packaging>bundle</packaging>
+
+    <properties>
+        <bundle.symbolicName>com.kalix.middleware.statemachine.biz</bundle.symbolicName>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.kalix.middleware.statemachine</groupId>
+            <artifactId>middleware-statemachine-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.kalix.middleware.statemachine</groupId>
+            <artifactId>middleware-statemachine-core</artifactId>
+        </dependency>
+    </dependencies>
+</project>

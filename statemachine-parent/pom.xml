@@ -13,12 +13,23 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>middleware-statemachine-api</module>
+        <module>middleware-statemachine-biz</module>
         <module>middleware-statemachine-core</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
-
+            <dependency>
+                <groupId>com.kalix.middleware.statemachine</groupId>
+                <artifactId>middleware-statemachine-api</artifactId>
+                <version>1.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kalix.middleware.statemachine</groupId>
+                <artifactId>middleware-statemachine-core</artifactId>
+                <version>1.0.1-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>
