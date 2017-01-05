@@ -63,6 +63,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
 
             //获得启动参数
             Map map = new HashMap<>();
+            map = getVariantMap(map,bean);
             getStartMap(map, bean);
             map.put(Const.VAR_INITIATOR, userName);
             //启动流程
