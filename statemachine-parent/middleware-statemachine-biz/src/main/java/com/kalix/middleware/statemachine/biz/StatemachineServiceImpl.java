@@ -3,6 +3,7 @@ package com.kalix.middleware.statemachine.biz;
 import com.kalix.middleware.statemachine.api.biz.IStatemachineService;
 import com.kalix.middleware.statemachine.core.action.FSMAction;
 import com.kalix.middleware.statemachine.core.fsm.FSM;
+import com.kalix.middleware.statemachine.core.states.FSMStateList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -26,10 +27,10 @@ public class StatemachineServiceImpl implements IStatemachineService {
     }
 
     @Override
-    public void initFSM(String fileName, String startState) {
+    public Object processFSM(InputStream is, String oldState, String newState) {
         OurFSMAction ourFSMAction = new OurFSMAction();
         try {
-            this.fsm = new FSM(fileName, startState, ourFSMAction);
+            this.fsm = new FSM(is, oldState, ourFSMAction);
         } catch (ParserConfigurationException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
@@ -37,38 +38,13 @@ public class StatemachineServiceImpl implements IStatemachineService {
         } catch (SAXException e) {
             e.printStackTrace();
         }
-    }
 
-    @Override
-    public void initFSM(InputStream is, String startState) {
-        OurFSMAction ourFSMAction = new OurFSMAction();
-        try {
-            this.fsm = new FSM(is, startState, ourFSMAction);
-        } catch (ParserConfigurationException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public Object processFSM(String nextState){
-        return this.fsm.ProcessFSM(nextState);
+        return this.fsm.ProcessFSM(newState);
     }
 
     @Override
     public String getCurrentState(){
         return this.fsm.getCurrentState();
-    }
-
-    public static void main(String args[]){
-        StatemachineServiceImpl statemachineService = new StatemachineServiceImpl();
-        statemachineService.initFSM("C://config.xml","START");
-        System.out.println(statemachineService.getCurrentState());
-        statemachineService.processFSM("MOVERIGHT");
-        System.out.println(statemachineService.getCurrentState());
     }
 }
 

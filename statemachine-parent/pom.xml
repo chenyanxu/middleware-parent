@@ -23,12 +23,12 @@
             <dependency>
                 <groupId>com.kalix.middleware.statemachine</groupId>
                 <artifactId>middleware-statemachine-api</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>${project.middleware.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.kalix.middleware.statemachine</groupId>
                 <artifactId>middleware-statemachine-core</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>${project.middleware.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
