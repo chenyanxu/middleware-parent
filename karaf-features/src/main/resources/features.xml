@@ -4,6 +4,7 @@
     <feature name="middleware-all" version="${project.middleware.version}">
         <feature>middleware-workflow</feature>
         <feature>middleware-attachment</feature>
+        <feature>middleware-statemachine</feature>
         <feature>middleware-couchdb</feature>
         <feature>middleware-excel</feature>
         <feature>middleware-xmpp</feature>
@@ -44,6 +45,13 @@
     <feature name="middleware-xmpp" version="${project.middleware.version}">
         <bundle>mvn:com.kalix.middleware.xmpp/middleware-xmpp-api/${project.middleware.version}</bundle>
         <bundle>mvn:com.kalix.middleware.xmpp/middleware-xmpp-biz/${project.middleware.version}</bundle>
+    </feature>
+
+    <feature name="middleware-statemachine" version="${project.middleware.version}">
+        <bundle>mvn:com.kalix.middleware.statemachine/middleware-statemachine-api/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.statemachine/middleware-statemachine-biz/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.statemachine/middleware-statemachine-core/${project.middleware.version}
+        </bundle>
     </feature>
 
 </features>
