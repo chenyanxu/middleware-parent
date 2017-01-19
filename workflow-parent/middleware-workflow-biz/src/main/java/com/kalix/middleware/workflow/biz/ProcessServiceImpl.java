@@ -15,6 +15,7 @@ import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.history.HistoricVariableInstance;
+import org.activiti.engine.impl.persistence.entity.CommentEntity;
 import org.activiti.engine.impl.persistence.entity.HistoricVariableInstanceEntity;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -264,9 +265,9 @@ public class ProcessServiceImpl implements IProcessService {
             historicActivityDTOList = DozerHelper.map(mapper, list, HistoricActivityInstanceDTO.class);
             for (HistoricActivityInstanceDTO historicActivityInstance : historicActivityDTOList) {
                 String str = "";
-                List<Comment> commentList = taskService.getTaskComments(historicActivityInstance.getTaskId());
+                List<Comment> commentList =taskService.getTaskComments(historicActivityInstance.getTaskId());
                 for (Comment comment : commentList) {
-                    str = comment.getFullMessage() + str + " ";
+                    str = ((CommentEntity)comment).getMessage() + str + " ";
                 }
                 List<HistoricVariableInstance> varList = historyService.createHistoricVariableInstanceQuery()
                         .processInstanceId(historyProcessId).taskId(historicActivityInstance.getTaskId()).list();
