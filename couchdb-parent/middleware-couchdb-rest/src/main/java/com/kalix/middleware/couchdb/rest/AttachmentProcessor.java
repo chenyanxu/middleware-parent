@@ -66,13 +66,13 @@ public class AttachmentProcessor implements Processor {
             exchange.getIn().setHeader("Content-Type", "text/html;charset=utf-8");
 
             if (fileItem != null) {
-                if(fileItem.getSize()>(10*1024*1024)){
-                    //jsonStatus = CouchdbJsonStatus.failureResult("文件过大（上限10MB）！");
-                    this.rtnMap.put("success", false);
-                    this.rtnMap.put("msg", "文件过大（上限10MB）！");
-                    //exchange.getIn().setBody(jsonStatus);
-                    //return;
-                } else {
+//                if(fileItem.getSize()>(10*1024*1024)){
+//                    //jsonStatus = CouchdbJsonStatus.failureResult("文件过大（上限10MB）！");
+//                    this.rtnMap.put("success", false);
+//                    this.rtnMap.put("msg", "文件过大（上限10MB）！");
+//                    //exchange.getIn().setBody(jsonStatus);
+//                    //return;
+//                } else {
                     try {
                         String fileName = fileItem.getName();
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -106,7 +106,7 @@ public class AttachmentProcessor implements Processor {
                         this.rtnMap.put("msg", "上传文件失败！异常为{" + e.toString() + "}");
                     }
                 }
-            }
+            //}
         } catch (Exception e) {
             //jsonStatus = CouchdbJsonStatus.failureResult("上传文件失败！异常为{" + e.toString() + "}");
             //exchange.getOut().setBody(jsonStatus);
