@@ -75,14 +75,14 @@ public class AttachmentProcessor implements Processor {
 //                } else {
                     try {
                         String fileName = fileItem.getName();
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        OutputStream out = new Base64OutputStream(stream);
-                        IOUtils.copy(fileItem.getInputStream(), out);
-                        String base64Str = stream.toString();
-                        fileItem.getInputStream().close();
-                        out.close();
+//                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                        OutputStream out = new Base64OutputStream(stream);
+//                        IOUtils.copy(fileItem.getInputStream(), out);
+//                        String base64Str = stream.toString();
+//                        fileItem.getInputStream().close();
+//                        out.close();
 
-                        response = couchdbService.addAttachment(base64Str,
+                        response = couchdbService.addAttachment(fileItem.getInputStream(),
                                 fileName, fileItem.getContentType());
                         //jsonStatus = CouchdbJsonStatus.successResult("上传文件成功!", response.getId(), response.getRev(), fileName, fileItem.getContentType(), fileItem.getSize());
                         //jsonStatus.setAttachmentPath(couchdbService.getDBUrl() + response.getId() + "/" + fileName);

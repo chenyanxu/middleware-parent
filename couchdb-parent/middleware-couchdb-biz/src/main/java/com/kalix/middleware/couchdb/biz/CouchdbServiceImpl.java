@@ -11,6 +11,9 @@ import org.lightcouch.Response;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Dictionary;
 import java.util.Map;
 
@@ -38,6 +41,7 @@ public class CouchdbServiceImpl implements ICouchdbService, ManagedService {
             if (dbClient == null) {
                 initDbclient();
             }
+
             attachment.setContentType(type);
             attachment.setData(value);
             document.addAttachment(key, attachment);
@@ -47,6 +51,15 @@ public class CouchdbServiceImpl implements ICouchdbService, ManagedService {
         }
 
         return response;
+    }
+
+    @Override
+    public Response addAttachment(InputStream stream, String key, String type){
+        if (dbClient == null) {
+            initDbclient();
+        }
+
+        return dbClient.saveAttachment(stream,key,type);
     }
 
     /**

@@ -24,10 +24,10 @@
             <artifactId>middleware-workflow-api</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.activiti</groupId>
-            <artifactId>activiti-osgi</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.activiti</groupId>-->
+            <!--<artifactId>activiti-osgi</artifactId>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>org.json</groupId>

@@ -2,8 +2,10 @@ package com.kalix.middleware.couchdb.api.biz;
 
 import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.api.system.IAttachmentService;
+import org.apache.tools.ant.taskdefs.Input;
 import org.lightcouch.Response;
 
+import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -19,6 +21,8 @@ public interface ICouchdbService extends IAttachmentService {
      * @return
      */
     Response addAttachment(String value, String key, String type);
+
+    Response addAttachment(InputStream stream,String key,String type);
 
     /**
      * 移除附件
