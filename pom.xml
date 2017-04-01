@@ -28,6 +28,7 @@
         <module>statemachine-parent</module>
         <module>karaf-features</module>
         <module>xmpp-parent</module>
+        <module>mail-parent</module>
     </modules>
     <build>
         <plugins>
