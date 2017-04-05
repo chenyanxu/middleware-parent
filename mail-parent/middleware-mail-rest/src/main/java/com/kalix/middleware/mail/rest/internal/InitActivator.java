@@ -1,4 +1,4 @@
-package com.kalix.middleware.excel.internal;
+package com.kalix.middleware.mail.rest.internal;
 
 import com.kalix.framework.core.api.osgi.BaseBundleActivator;
 

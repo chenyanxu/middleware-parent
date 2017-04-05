@@ -4,10 +4,20 @@
            xsi:schemaLocation="
        http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
        http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
-
+    <reference id="mailService" interface="com.kalix.middleware.mail.api.biz.IMailService"/>
     <camelContext id="mailCamel" xmlns="http://camel.apache.org/schema/blueprint">
         <restConfiguration component="servlet" bindingMode="json">
             <dataFormatProperty key="prettyPrint" value="${rest.pretty}"/>
         </restConfiguration>
+
+        <!-- defines the rest services using the context-path /mail -->
+        <rest path="/mail" consumes="application/json;charset=utf-8" produces="application/json;charset=utf-8">
+            <description>send mail rest service</description>
+            <post id="route-sendMail" type="com.kalix.middleware.mail.api.MailContent"
+                  outType="com.kalix.framework.core.api.persistence.JsonStatus">
+                <description>send a mail</description>
+                <to uri="bean:mailService?method=sendMail"/>
+            </post>
+        </rest>
     </camelContext>
 </blueprint>

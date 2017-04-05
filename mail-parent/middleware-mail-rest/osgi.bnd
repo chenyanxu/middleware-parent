@@ -2,4 +2,6 @@
 # Use this file to add customized Bnd instructions for the bundle
 #-----------------------------------------------------------------
 Bundle-Activator: ${bundle.namespace}.internal.InitActivator
+Import-Package: com.kalix.framework.core.api.persistence,\
+               com.kalix.middleware.mail.api,*
 Bundle-Category: Kalix Middleware Mail

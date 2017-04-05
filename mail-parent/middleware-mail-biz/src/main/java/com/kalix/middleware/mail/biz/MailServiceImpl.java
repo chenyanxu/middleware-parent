@@ -1,5 +1,6 @@
 package com.kalix.middleware.mail.biz;
 
+import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.util.ConfigUtil;
 import com.kalix.middleware.mail.api.MailConfig;
 import com.kalix.middleware.mail.api.MailContent;
@@ -74,7 +75,9 @@ public class MailServiceImpl implements IMailService {
 
 
     @Override
-    public void sendMail(MailContent content) {
+    public JsonStatus sendMail(MailContent content) {
+        JsonStatus jsonStatus = new JsonStatus();
+
         MailConfig config = getMailConfig();
         // 2. 根据配置创建会话对象, 用于和邮件服务器交互
         Session session = Session.getDefaultInstance(mailInit(config));
@@ -109,9 +112,16 @@ public class MailServiceImpl implements IMailService {
 
             // 7. 关闭连接
             transport.close();
+            jsonStatus.setSuccess(true);
+            jsonStatus.setMsg("发送成功！");
         } catch (Exception e) {
             e.printStackTrace();
+            jsonStatus.setSuccess(false);
+            jsonStatus.setFailure(true);
+            jsonStatus.setMsg("发送失败！");
+            jsonStatus.setTag(e.getMessage());
         }
+        return jsonStatus;
     }
 
     /**
