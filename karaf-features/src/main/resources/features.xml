@@ -8,6 +8,7 @@
         <feature>middleware-couchdb</feature>
         <feature>middleware-excel</feature>
         <feature>middleware-xmpp</feature>
+        <feature>middleware-mail</feature>
     </feature>
 
     <feature name="middleware-workflow" version="${project.middleware.version}">
@@ -52,6 +53,14 @@
         <bundle>mvn:com.kalix.middleware.statemachine/middleware-statemachine-biz/${project.middleware.version}</bundle>
         <bundle>mvn:com.kalix.middleware.statemachine/middleware-statemachine-core/${project.middleware.version}
         </bundle>
+    </feature>
+
+    <feature name="middleware-mail" version="${project.middleware.version}">
+        <bundle>mvn:com.kalix.middleware.mail/middleware-mail-api/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.mail/middleware-mail-biz/${project.middleware.version}</bundle>
+        <configfile finalname="/etc/config.middleware.mail.cfg" override="true">
+            mvn:com.kalix.middleware.mail/middleware-mail-etc/${project.middleware.version}/cfg/config.middleware.mail
+        </configfile>
     </feature>
 
 </features>

@@ -16,6 +16,7 @@
 
     <modules>
         <module>middleware-mail-api</module>
+        <module>middleware-mail-etc</module>
         <module>middleware-mail-biz</module>
         <module>middleware-mail-rest</module>
     </modules>
@@ -27,6 +28,11 @@
                 <groupId>com.kalix.middleware.mail</groupId>
                 <artifactId>middleware-mail-api</artifactId>
                 <version>${project.middleware.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.mail</groupId>
+                <artifactId>mail</artifactId>
+                <version>1.4.4</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
