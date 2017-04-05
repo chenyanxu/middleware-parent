@@ -11,7 +11,7 @@
 
     <groupId>com.kalix.middleware.mail</groupId>
     <artifactId>mail-parent</artifactId>
-    <name>Kalix Middleware mail Parent</name>
+    <name>Kalix Middleware Mail Parent</name>
     <packaging>pom</packaging>
 
     <modules>

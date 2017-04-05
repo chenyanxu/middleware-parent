@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>middleware-mail-rest</artifactId>
-    <name>Kalix Middleware mail REST</name>
+    <name>Kalix Middleware Mail REST</name>
     <packaging>bundle</packaging>
 
     <properties>
@@ -20,18 +20,6 @@
         <dependency>
             <groupId>com.kalix.middleware.mail</groupId>
             <artifactId>middleware-mail-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.kalix.framework.core</groupId>
-            <artifactId>framework-core-delegate</artifactId>
         </dependency>
     </dependencies>
 </project>

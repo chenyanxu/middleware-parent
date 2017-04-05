@@ -18,28 +18,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml-schemas</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.xmlbeans</groupId>
-            <artifactId>xmlbeans</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.kalix.middleware.mail</groupId>
             <artifactId>middleware-mail-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.kalix.middleware.couchdb</groupId>
-            <artifactId>middleware-couchdb-api</artifactId>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.4</version>
         </dependency>
     </dependencies>
 </project>
