@@ -3,7 +3,8 @@ package com.kalix.middleware.mail.api;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2017-04-05.
+ * Created by sunlf on 2017-04-05.
+ * 邮件的内容封装类
  */
 public class MailContent {
     private String subject;//邮件主题
