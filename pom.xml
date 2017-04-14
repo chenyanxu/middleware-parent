@@ -29,6 +29,7 @@
         <module>karaf-features</module>
         <module>xmpp-parent</module>
         <module>mail-parent</module>
+        <module>oauth-parent</module>
     </modules>
     <build>
         <plugins>

@@ -62,5 +62,17 @@
             mvn:com.kalix.middleware.mail/middleware-mail-etc/${project.middleware.version}/cfg/config.middleware.mail
         </configfile>
     </feature>
+    <feature name="apache-oltu" version="1.0.2">
+        <bundle>mvn:org.apache.oltu.oauth2/org.apache.oltu.oauth2.authzserver/1.0.2</bundle>
+        <bundle>mvn:org.apache.oltu.oauth2/org.apache.oltu.oauth2.resourceserver/1.0.2</bundle>
+    </feature>
+
+    <feature name="middleware-oauth" version="${project.middleware.version}">
+        <feature>apache-oltu</feature>
+        <bundle>mvn:com.kalix.middleware.oauth/middleware-oauth-entities/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.oauth/middleware-oauth-api/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.oauth/middleware-oauth-dao/${project.middleware.version}</bundle>
+        <bundle>mvn:com.kalix.middleware.oauth/middleware-oauth-biz/${project.middleware.version}</bundle>
+    </feature>
 
 </features>
