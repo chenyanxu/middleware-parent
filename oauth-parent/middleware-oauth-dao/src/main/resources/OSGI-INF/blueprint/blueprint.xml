@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- default-activation="lazy" -->
+<blueprint xmlns:jpa="http://aries.apache.org/xmlns/jpa/v2.0.0"
+           xmlns:tx="http://aries.apache.org/xmlns/transactions/v1.2.0"
+           default-activation="eager"
+           xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <jpa:enable/>
+    <tx:enable-annotations/>
+
+    <bean id="userBeanDaoImpl" class="com.kalix.middleware.oauth.dao.UserBeanDaoImpl">
+        <tx:transaction method="*" value="Required"/>
+    </bean>
+    <service interface="com.kalix.middleware.oauth.api.dao.IUserBeanDao" ref="userBeanDaoImpl"/>
+
+    <bean id="clientBeanDaoImpl" class="com.kalix.middleware.oauth.dao.ClientBeanDaoImpl">
+        <tx:transaction method="*" value="Required"/>
+    </bean>
+    <service interface="com.kalix.middleware.oauth.api.dao.IClientBeanDao" ref="clientBeanDaoImpl"/>
+</blueprint>
+
