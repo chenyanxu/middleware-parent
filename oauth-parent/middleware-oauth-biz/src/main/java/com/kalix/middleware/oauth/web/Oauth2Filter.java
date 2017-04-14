@@ -1,14 +1,27 @@
 package com.kalix.middleware.oauth.web;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.kalix.middleware.oauth.api.Constants;
 import com.kalix.middleware.oauth.api.Status;
+import org.apache.oltu.oauth2.common.OAuth;
+import org.apache.oltu.oauth2.common.error.OAuthError;
+import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
+import org.apache.oltu.oauth2.common.message.OAuthResponse;
+import org.apache.oltu.oauth2.common.message.types.ParameterStyle;
+import org.apache.oltu.oauth2.rs.request.OAuthAccessResourceRequest;
+import org.apache.oltu.oauth2.rs.response.OAuthRSResponse;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Oauth2Filter implements Filter {
 
@@ -19,7 +32,7 @@ public class Oauth2Filter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        /*HttpServletResponse res = (HttpServletResponse) response;
+        HttpServletResponse res = (HttpServletResponse) response;
         try {
             //构建OAuth资源请求
             OAuthAccessResourceRequest oauthRequest = new OAuthAccessResourceRequest((HttpServletRequest) request, ParameterStyle.QUERY); // queryString 方式获取参数
@@ -43,7 +56,7 @@ public class Oauth2Filter implements Filter {
         }
         catch (OAuthSystemException e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "error trying to access oauth server", e);
-        }*/
+        }
     }
 
     /**
@@ -54,7 +67,7 @@ public class Oauth2Filter implements Filter {
      * @throws IOException
      */
     private void oAuthFailResponse(HttpServletResponse res) throws OAuthSystemException, IOException {
-        /*OAuthResponse oauthResponse = OAuthRSResponse
+        OAuthResponse oauthResponse = OAuthRSResponse
                 .errorResponse(HttpServletResponse.SC_UNAUTHORIZED)
                 .setRealm(Constants.RESOURCE_SERVER_NAME)
                 .setError(OAuthError.ResourceResponse.INVALID_TOKEN)
@@ -65,7 +78,7 @@ public class Oauth2Filter implements Filter {
         PrintWriter writer = res.getWriter();
         writer.write(gson.toJson(getStatus(401,Constants.INVALID_ACCESS_TOKEN)));
         writer.flush();
-        writer.close();*/
+        writer.close();
     }
 
     /**

@@ -64,7 +64,7 @@ public class AuthorizeServlet extends HttpServlet {
         //构建OAuth 授权请求
         try {
             OAuthAuthzRequest oauthRequest = new OAuthAuthzRequest(req);
-            if (oAuthService.checkClientId(oauthRequest.getClientId())) {
+            if (!oAuthService.checkClientId(oauthRequest.getClientId())) {
                 OAuthResponse response =
                         OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
                                 .setError(OAuthError.TokenResponse.INVALID_CLIENT)

@@ -60,7 +60,7 @@ public class AccessTokenServlet extends HttpServlet {
             OAuthTokenRequest oauthRequest = new OAuthTokenRequest(request);
 
             //检查提交的客户端id是否正确
-            if (oAuthService.checkClientId(oauthRequest.getClientId())) {
+            if (!oAuthService.checkClientId(oauthRequest.getClientId())) {
 
                 OAuthResponse response =
                         OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
@@ -75,7 +75,7 @@ public class AccessTokenServlet extends HttpServlet {
             }
 
             // 检查客户端安全KEY是否正确
-            if (oAuthService.checkClientSecret(oauthRequest.getClientSecret())) {
+            if (!oAuthService.checkClientSecret(oauthRequest.getClientSecret())) {
                 OAuthResponse response =
                         OAuthASResponse.errorResponse(HttpServletResponse.SC_UNAUTHORIZED)
                                 .setError(OAuthError.TokenResponse.UNAUTHORIZED_CLIENT)
@@ -90,7 +90,7 @@ public class AccessTokenServlet extends HttpServlet {
             String authCode = oauthRequest.getParam(OAuth.OAUTH_CODE);
             // 检查验证类型，此处只检查AUTHORIZATION_CODE类型，其他的还有PASSWORD或REFRESH_TOKEN
             if (oauthRequest.getParam(OAuth.OAUTH_GRANT_TYPE).equals(GrantType.AUTHORIZATION_CODE.toString())) {
-                if (oAuthService.checkAuthCode(authCode)) {
+                if (!oAuthService.checkAuthCode(authCode)) {
                     OAuthResponse response = OAuthASResponse
                             .errorResponse(HttpServletResponse.SC_BAD_REQUEST)
                             .setError(OAuthError.TokenResponse.INVALID_GRANT)

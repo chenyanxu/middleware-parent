@@ -1,40 +1,52 @@
 package com.kalix.middleware.oauth.biz;
 
+import com.kalix.framework.core.api.cache.ICacheManager;
 import com.kalix.middleware.oauth.api.biz.IOauthService;
+import com.kalix.middleware.oauth.api.dao.IClientBeanDao;
 
 /**
  * @author sunlf
  */
 public class OauthServiceImpl implements IOauthService {
+    ICacheManager cacheManager;
+    IClientBeanDao clientBeanDao;
+
+    public void setCacheManager(ICacheManager cacheManager) {
+        this.cacheManager = cacheManager;
+    }
+
+    public void setClientBeanDao(IClientBeanDao clientBeanDao) {
+        this.clientBeanDao = clientBeanDao;
+    }
 
     @Override
     public void addAuthCode(String authCode, String username) {
-
+        cacheManager.save(authCode, username);
     }
 
     @Override
     public void addAccessToken(String accessToken, String username) {
-
+        cacheManager.save(accessToken, username);
     }
 
     @Override
     public boolean checkAuthCode(String authCode) {
-        return false;
+        return cacheManager.get(authCode) != null;
     }
 
     @Override
     public boolean checkAccessToken(String accessToken) {
-        return false;
+        return cacheManager.get(accessToken) != null;
     }
 
     @Override
     public String getUsernameByAuthCode(String authCode) {
-        return null;
+        return cacheManager.get(authCode);
     }
 
     @Override
     public String getUsernameByAccessToken(String accessToken) {
-        return null;
+        return cacheManager.get(accessToken);
     }
 
     @Override
@@ -44,11 +56,11 @@ public class OauthServiceImpl implements IOauthService {
 
     @Override
     public boolean checkClientId(String clientId) {
-        return false;
+        return clientBeanDao.findByClientId(clientId) != null;
     }
 
     @Override
     public boolean checkClientSecret(String clientSecret) {
-        return false;
+        return clientBeanDao.findByClientSecret(clientSecret) != null;
     }
 }

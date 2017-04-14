@@ -8,4 +8,7 @@ import com.kalix.middleware.oauth.entities.ClientBean;
  */
 public interface IClientBeanDao extends IGenericDao<ClientBean, Long> {
     //在此添加新的DAO方法
+    ClientBean findByClientId(String clientId);
+
+    ClientBean findByClientSecret(String clientSecret);
 }

@@ -4,6 +4,7 @@ import com.kalix.framework.core.api.persistence.PersistentEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.UUID;
 
 /**
  * Created by Administrator on 2017-04-13.
@@ -12,8 +13,8 @@ import javax.persistence.Table;
 @Table(name = "middleware_oauth_client")
 public class ClientBean extends PersistentEntity {
     private String clientName;
-    private String clientId;
-    private String clientSecret;
+    private String clientId = UUID.randomUUID().toString();
+    private String clientSecret = UUID.randomUUID().toString();
 
     public String getClientName() {
         return clientName;
