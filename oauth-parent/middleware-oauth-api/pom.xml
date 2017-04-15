@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>middleware-oauth-api</artifactId>
-    <name>Kalix Middleware Oauth API</name>
+    <name>Kalix Middleware OAuth API</name>
     <packaging>bundle</packaging>
 
     <properties>

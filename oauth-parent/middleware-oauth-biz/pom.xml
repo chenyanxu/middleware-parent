@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>middleware-oauth-biz</artifactId>
-    <name>Kalix Middleware Oauth Biz</name>
+    <name>Kalix Middleware OAuth Biz</name>
     <packaging>bundle</packaging>
 
     <properties>
@@ -21,18 +21,6 @@
             <groupId>com.kalix.middleware.oauth</groupId>
             <artifactId>middleware-oauth-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.oltu.oauth2</groupId>
-            <artifactId>org.apache.oltu.oauth2.authzserver</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.oltu.oauth2</groupId>
-            <artifactId>org.apache.oltu.oauth2.resourceserver</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.oltu.oauth2</groupId>
-            <artifactId>org.apache.oltu.oauth2.common</artifactId>
-            <version>1.0.2</version>
-        </dependency>
+
     </dependencies>
 </project>

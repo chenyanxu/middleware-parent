@@ -11,7 +11,7 @@
 
     <groupId>com.kalix.middleware.oauth</groupId>
     <artifactId>oauth-parent</artifactId>
-    <name>Kalix Middleware Oauth Parent</name>
+    <name>Kalix Middleware OAuth Parent</name>
     <packaging>pom</packaging>
 
     <modules>
@@ -19,6 +19,7 @@
         <module>middleware-oauth-api</module>
         <module>middleware-oauth-dao</module>
         <module>middleware-oauth-biz</module>
+        <module>middleware-oauth-web</module>
     </modules>
 
 

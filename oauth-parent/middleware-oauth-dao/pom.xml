@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>middleware-oauth-dao</artifactId>
-    <name>Kalix Middleware Oauth DAO</name>
+    <name>Kalix Middleware OAuth DAO</name>
     <description>Oauth JPA</description>
     <packaging>bundle</packaging>
 

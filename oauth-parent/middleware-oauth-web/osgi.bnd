@@ -1,0 +1,11 @@
+#-----------------------------------------------------------------
+# Use this file to add customized Bnd instructions for the bundle
+#-----------------------------------------------------------------
+
+Bundle-Activator: ${bundle.namespace}.internal.InitActivator
+Import-Package: com.kalix.framework.core.impl.web,\
+                org.apache.camel.component.servlet, \
+                javax.servlet.jsp,*
+Include-Resource: src/main/webapp,target/classes
+Web-ContextPath: /oauth2
+Bundle-Category: Kalix Middleware OAuth2

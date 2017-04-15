@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app
+        xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+        version="3.0"
+        metadata-complete="true">
+
+    <context-param>
+        <param-name>contextClass</param-name>
+        <param-value>org.springframework.osgi.web.context.support.OsgiBundleXmlWebApplicationContext</param-value>
+    </context-param>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            /WEB-INF/applicationContext.xml
+        </param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+        (3)
+    </listener>
+
+    <servlet>
+        <servlet-name>Berg</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextClass</param-name>
+            <param-value>org.springframework.osgi.web.context.support.OsgiBundleXmlWebApplicationContext</param-value>
+        </init-param>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>
+                /WEB-INF/applicationContext.xml
+            </param-value>
+        </init-param>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <!--
+        The web context being "rest-bundle" (check the POM),
+        the REST services will found under "rest-bundle/rest/".
+     -->
+
+    <servlet-mapping>
+        <servlet-name>Berg</servlet-name>
+        <url-pattern>/xxx/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AuthorizeServlet</servlet-name>
+        <servlet-class>com.kalix.middleware.oauth.web.AuthorizeServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AuthorizeServlet</servlet-name>
+        <url-pattern>/authorize</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AccessTokenServlet</servlet-name>
+        <servlet-class>com.kalix.middleware.oauth.web.AccessTokenServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AccessTokenServlet</servlet-name>
+        <url-pattern>/accessToken</url-pattern>
+    </servlet-mapping>
+
+
+    <!-- OAuth Server AccessToken 验证过滤器-->
+    <filter>
+        <filter-name>oauth2</filter-name>
+        <filter-class>com.kalix.middleware.oauth.web.Oauth2Filter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>oauth2</filter-name>
+        <url-pattern>/v1/openapi/*</url-pattern>
+    </filter-mapping>
+
+</web-app>

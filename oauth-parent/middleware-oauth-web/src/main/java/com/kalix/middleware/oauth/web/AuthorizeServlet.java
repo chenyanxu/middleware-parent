@@ -1,5 +1,6 @@
 package com.kalix.middleware.oauth.web;
 
+import com.kalix.framework.core.util.JNDIHelper;
 import com.kalix.middleware.oauth.api.Constants;
 import com.kalix.middleware.oauth.api.biz.IOauthService;
 import org.apache.oltu.oauth2.as.issuer.MD5Generator;
@@ -30,6 +31,14 @@ public class AuthorizeServlet extends HttpServlet {
     private static final String SERVLET_URL = "/authorize";
     private HttpService httpService;
     private IOauthService oAuthService;
+
+    public AuthorizeServlet() {
+        try {
+            this.oAuthService = JNDIHelper.getJNDIServiceForName(IOauthService.class.getName());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public void postConstruct() {

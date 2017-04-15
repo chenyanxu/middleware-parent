@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>middleware-oauth-entities</artifactId>
-    <name>Kalix Middleware Oauth Entities</name>
+    <name>Kalix Middleware OAuth Entities</name>
     <description>Oauth Entities</description>
     <packaging>bundle</packaging>
 
