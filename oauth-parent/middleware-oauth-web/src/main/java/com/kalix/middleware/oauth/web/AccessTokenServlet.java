@@ -76,9 +76,7 @@ public class AccessTokenServlet extends HttpServlet {
                                 .setError(OAuthError.TokenResponse.INVALID_CLIENT)
                                 .setErrorDescription(Constants.INVALID_CLIENT_ID)
                                 .buildJSONMessage();
-                resp.setHeader("Content-Type", "application/json; charset=utf-8");
-                resp.setStatus(response.getResponseStatus());
-                resp.getWriter().print(response.getBody());
+                Util.respWrite(resp, response);
                 return;
 
             }
@@ -90,9 +88,7 @@ public class AccessTokenServlet extends HttpServlet {
                                 .setError(OAuthError.TokenResponse.UNAUTHORIZED_CLIENT)
                                 .setErrorDescription(Constants.INVALID_CLIENT_ID)
                                 .buildJSONMessage();
-                resp.setHeader("Content-Type", "application/json; charset=utf-8");
-                resp.setStatus(response.getResponseStatus());
-                resp.getWriter().print(response.getBody());
+                Util.respWrite(resp, response);
                 return;
             }
 
@@ -105,9 +101,7 @@ public class AccessTokenServlet extends HttpServlet {
                             .setError(OAuthError.TokenResponse.INVALID_GRANT)
                             .setErrorDescription(Constants.INVALID_AUTH_CODE)
                             .buildJSONMessage();
-                    resp.setHeader("Content-Type", "application/json; charset=utf-8");
-                    resp.setStatus(response.getResponseStatus());
-                    resp.getWriter().print(response.getBody());
+                    Util.respWrite(resp, response);
                     return;
                 }
             }
@@ -124,9 +118,7 @@ public class AccessTokenServlet extends HttpServlet {
                     .setAccessToken(accessToken)
                     .setExpiresIn(String.valueOf(oAuthService.getExpireIn()))
                     .buildJSONMessage();
-            resp.setHeader("Content-Type", "application/json; charset=utf-8");
-            resp.setStatus(response.getResponseStatus());
-            resp.getWriter().print(response.getBody());
+            Util.respWrite(resp, response);
 
         } catch (OAuthSystemException e) {
             e.printStackTrace();
@@ -136,6 +128,7 @@ public class AccessTokenServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {

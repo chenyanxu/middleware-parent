@@ -6,47 +6,42 @@
         version="3.0"
         metadata-complete="true">
 
-    <context-param>
-        <param-name>contextClass</param-name>
-        <param-value>org.springframework.osgi.web.context.support.OsgiBundleXmlWebApplicationContext</param-value>
-    </context-param>
+
+    <!--<listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            /WEB-INF/applicationContext.xml
         </param-value>
     </context-param>
 
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-        (3)
-    </listener>
-
     <servlet>
-        <servlet-name>Berg</servlet-name>
+        <servlet-name>dispatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
-            <param-name>contextClass</param-name>
-            <param-value>org.springframework.osgi.web.context.support.OsgiBundleXmlWebApplicationContext</param-value>
-        </init-param>
-        <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>
-                /WEB-INF/applicationContext.xml
-            </param-value>
+            <param-value></param-value>
         </init-param>
-        <load-on-startup>2</load-on-startup>
+        <load-on-startup>1</load-on-startup>
     </servlet>
-
-    <!--
-        The web context being "rest-bundle" (check the POM),
-        the REST services will found under "rest-bundle/rest/".
-     -->
-
     <servlet-mapping>
-        <servlet-name>Berg</servlet-name>
-        <url-pattern>/xxx/*</url-pattern>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/*</url-pattern>
     </servlet-mapping>
+
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>-->
 
     <servlet>
         <servlet-name>AuthorizeServlet</servlet-name>
@@ -68,6 +63,17 @@
     <servlet-mapping>
         <servlet-name>AccessTokenServlet</servlet-name>
         <url-pattern>/accessToken</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CheckAccessTokenServlet</servlet-name>
+        <servlet-class>com.kalix.middleware.oauth.web.CheckAccessTokenServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>CheckAccessTokenServlet</servlet-name>
+        <url-pattern>/checkAccessToken</url-pattern>
     </servlet-mapping>
 
 

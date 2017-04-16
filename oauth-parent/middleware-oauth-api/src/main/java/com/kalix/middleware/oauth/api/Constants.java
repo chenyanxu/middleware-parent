@@ -7,6 +7,6 @@ public class Constants {
     public static final String INVALID_REDIRECT_URI = "缺少授权成功后的回调地址。";
     public static final String INVALID_AUTH_CODE = "错误的授权码。";
     // 验证accessToken
-    public static final String CHECK_ACCESS_CODE_URL = "http://localhost:8181/kalix-oauth2-server/checkAccessToken?accessToken=";
+    public static final String CHECK_ACCESS_CODE_URL = "http://localhost:8181/oauth2/checkAccessToken?accessToken=";
 
 }

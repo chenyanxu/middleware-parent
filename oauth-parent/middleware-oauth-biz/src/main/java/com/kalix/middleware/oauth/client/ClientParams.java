@@ -20,6 +20,6 @@ public class ClientParams {
 
     public static final String OAUTH_SERVER_REDIRECT_URI = "http://aimeizi.net"; // 回调地址
 
-    public static final String OAUTH_SERVICE_API = "http://localhost:8080/zetark-oauth2-server/v1/openapi/userInfo"; // 测试开放数据api
+    public static final String OAUTH_SERVICE_API = BASE_URL + "v1/openapi/userInfo"; // 测试开放数据api
 
 }

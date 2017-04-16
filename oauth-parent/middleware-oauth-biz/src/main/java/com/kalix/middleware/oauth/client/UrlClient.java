@@ -105,10 +105,34 @@ public class UrlClient {
         return accessToken;
     }
 
+    /**
+     * 获取accessToken
+     *
+     * @return
+     */
+    private static void getService(String accessToken) throws Exception {
+
+        URL url = new URL(ClientParams.OAUTH_SERVICE_API + "?access_token=" + accessToken);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod(OAuth.HttpMethod.GET);
+        connection.setDoInput(true);
+        connection.setDoOutput(true);
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        System.out.println(response.toString());
+    }
+
+
 
     public static void main(String[] args) throws Exception {
         String authCode = getAuthCode();
         String accessToken = getAccessToken(authCode);
-//        getService(accessToken);
+        getService(accessToken);
     }
 }
