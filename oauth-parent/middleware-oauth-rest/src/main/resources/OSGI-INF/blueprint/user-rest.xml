@@ -4,7 +4,7 @@
            xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
     <reference id="userService" interface="com.kalix.middleware.oauth.api.biz.IUserBeanService"/>
 
-    <camelContext id="clientCamel" xmlns="http://camel.apache.org/schema/blueprint">
+    <camelContext id="oauthUserCamel" xmlns="http://camel.apache.org/schema/blueprint">
 
         <restConfiguration component="servlet" bindingMode="json">
             <dataFormatProperty key="prettyPrint" value="${rest.pretty}"/>
