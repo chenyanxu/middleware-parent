@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+    <reference id="userService" interface="com.kalix.middleware.oauth.api.biz.IUserBeanService"/>
+
+    <camelContext id="clientCamel" xmlns="http://camel.apache.org/schema/blueprint">
+
+        <restConfiguration component="servlet" bindingMode="json">
+            <dataFormatProperty key="prettyPrint" value="${rest.pretty}"/>
+        </restConfiguration>
+
+        <!-- defines the rest services using the context-path /note -->
+        <rest path="/oauth/users" consumes="application/json;charset=utf-8" produces="application/json;charset=utf-8">
+            <description>oauth2 user rest service</description>
+
+            <!-- this is a rest GET to find all note -->
+            <get id="route-getAllOauth2User" outType="com.kalix.framework.core.api.persistence.JsonData">
+                <description>Find all Clients</description>
+                <param name="page" type="query" required="true" dataType="String" defaultValue="1"
+                       description="page number"/>
+                <param name="limit" type="query" required="true" dataType="String" defaultValue="10"
+                       description="record size"/>
+                <param name="jsonStr" type="query" required="false" dataType="String" description="query parameter"/>
+                <to uri="bean:userService?method=getAllEntityByQuery(${header.page},${header.limit},${header.jsonStr},${header.sort})"/>
+            </get>
+
+            <!-- this is a rest POST to create a note -->
+            <post id="route-addOAuth2User" type="com.kalix.middleware.oauth.entities.UserBean"
+                  outType="com.kalix.framework.core.api.persistence.JsonStatus">
+                <description>Create a OAuth2User</description>
+                <to uri="bean:userService?method=saveEntity"/>
+            </post>
+
+            <!-- this is a rest GET to view a note by the given id -->
+            <get uri="/{id}" id="route-getOAuth2User" outType="com.kalix.middleware.oauth.entities.UserBean">
+                <description>Find OAuth2User by id</description>
+                <to uri="bean:userService?method=getEntity(${header.id})"/>
+            </get>
+
+            <!-- this is a rest PUT to update a note -->
+            <put uri="/{id}" id="route-updateOAuth2User" type="com.kalix.middleware.oauth.entities.UserBean"
+                 outType="com.kalix.framework.core.api.persistence.JsonStatus">
+                <description>Updates a OAuth2User</description>
+                <to uri="bean:userService?method=updateEntity"/>
+            </put>
+
+            <!-- this is a rest DELETE to delete a note -->
+            <delete uri="/{id}" id="route-deleteOAuth2User"
+                    outType="com.kalix.framework.core.api.persistence.JsonStatus">
+                <description>Delete a OAuth2User</description>
+                <to uri="bean:userService?method=deleteEntity(${header.id})"/>
+            </delete>
+
+        </rest>
+    </camelContext>
+</blueprint>
