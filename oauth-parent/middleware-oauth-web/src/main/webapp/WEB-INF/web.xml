@@ -84,7 +84,7 @@
     </filter>
     <filter-mapping>
         <filter-name>oauth2</filter-name>
-        <url-pattern>/v1/openapi/*</url-pattern>
+        <url-pattern>/camel/rest/clients/*</url-pattern>
     </filter-mapping>
 
 </web-app>

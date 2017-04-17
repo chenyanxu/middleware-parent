@@ -1,13 +1,13 @@
 #-----------------------------------------------------------------
 # Use this file to add customized Bnd instructions for the bundle
+#                org.springframework.web.servlet, \
+#                org.springframework.web.filter, \
+#                org.springframework.web.context, \
 #-----------------------------------------------------------------
 
 Bundle-Activator: ${bundle.namespace}.internal.InitActivator
 Import-Package: com.kalix.framework.core.impl.web,\
                 org.apache.camel.component.servlet, \
-                org.springframework.web.servlet, \
-                org.springframework.web.filter, \
-                org.springframework.web.context, \
                 javax.servlet.jsp,*
 Include-Resource: src/main/webapp,target/classes
 Web-ContextPath: /oauth2

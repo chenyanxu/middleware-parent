@@ -1,0 +1,9 @@
+#-----------------------------------------------------------------
+# Use this file to add customized Bnd instructions for the bundle
+#-----------------------------------------------------------------
+
+Bundle-Activator: ${bundle.namespace}.internal.InitActivator
+Import-Package:com.kalix.middleware.oauth.api.biz,\
+               com.kalix.framework.core.api.persistence,\
+               com.kalix.middleware.oauth.entities,*
+Bundle-Category: Kalix Middleware Oauth

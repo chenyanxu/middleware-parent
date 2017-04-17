@@ -19,6 +19,7 @@
         <module>middleware-oauth-api</module>
         <module>middleware-oauth-dao</module>
         <module>middleware-oauth-biz</module>
+        <module>middleware-oauth-rest</module>
         <module>middleware-oauth-web</module>
     </modules>
 

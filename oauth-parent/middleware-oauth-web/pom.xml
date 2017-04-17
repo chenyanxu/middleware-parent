@@ -31,7 +31,7 @@
             <artifactId>org.apache.oltu.oauth2.resourceserver</artifactId>
         </dependency>
 
-        <dependency>
+        <!--<dependency>
             <groupId>org.apache.servicemix.bundles</groupId>
             <artifactId>org.apache.servicemix.bundles.spring-core</artifactId>
             <version>${spring.version}</version>
@@ -59,7 +59,7 @@
             <artifactId>org.apache.servicemix.bundles.spring-beans</artifactId>
             <version>${spring.version}</version>
             <scope>provided</scope>
-        </dependency>
+        </dependency>-->
 
         <!--<dependency>
             <groupId>org.apache.servicemix.bundles.osgi</groupId>
