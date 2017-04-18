@@ -67,10 +67,6 @@
             <version>1.2.1</version>
         </dependency>-->
 
-        <dependency>
-            <groupId>org.apache.servicemix.bundles</groupId>
-            <artifactId>org.apache.servicemix.bundles.jstl</artifactId>
-            <version>1.1.2_3</version>
-        </dependency>
+
     </dependencies>
 </project>

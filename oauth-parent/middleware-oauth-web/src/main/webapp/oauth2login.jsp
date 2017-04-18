@@ -24,8 +24,8 @@
 
     <div class="row marketing">
         <div class="col-lg-10">
-            <%--<form class="form-horizontal" method="post" action="${pageContext.request.contextPath}/authorize">--%>
-            <form class="form-horizontal" method="post" action="">
+            <form class="form-horizontal" method="post" action="${pageContext.request.contextPath}/authorize">
+                <%--<form class="form-horizontal" method="post" action="">--%>
                 <input type="hidden" name="client_id" value="${param.client_id}">
                 <input type="hidden" name="response_type" value="${param.response_type}">
                 <input type="hidden" name="redirect_uri" value="${param.redirect_uri}">
