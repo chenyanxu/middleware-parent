@@ -1,8 +1,12 @@
 package com.kalix.middleware.oauth.web;
 
 import com.kalix.framework.core.util.JNDIHelper;
+import com.kalix.framework.core.util.StringUtils;
 import com.kalix.middleware.oauth.api.Constants;
+import com.kalix.middleware.oauth.api.biz.IClientBeanService;
 import com.kalix.middleware.oauth.api.biz.IOauthService;
+import com.kalix.middleware.oauth.api.biz.IUserBeanService;
+import com.kalix.middleware.oauth.entities.UserBean;
 import org.apache.oltu.oauth2.as.issuer.MD5Generator;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuerImpl;
 import org.apache.oltu.oauth2.as.request.OAuthAuthzRequest;
@@ -16,6 +20,7 @@ import org.apache.oltu.oauth2.common.message.types.ResponseType;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,11 +35,15 @@ import java.net.URISyntaxException;
 public class AuthorizeServlet extends HttpServlet {
     private static final String SERVLET_URL = "/authorize";
     private HttpService httpService;
+    private IUserBeanService userService;
     private IOauthService oAuthService;
+    private IClientBeanService clientService;
 
     public AuthorizeServlet() {
         try {
             this.oAuthService = JNDIHelper.getJNDIServiceForName(IOauthService.class.getName());
+            this.userService = JNDIHelper.getJNDIServiceForName(IUserBeanService.class.getName());
+            this.clientService = JNDIHelper.getJNDIServiceForName(IClientBeanService.class.getName());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -85,6 +94,14 @@ public class AuthorizeServlet extends HttpServlet {
                 return;
             }
 
+            //如果用户没有登录，跳转到登陆页面
+            if (!login(req)) {//登录失败时跳转到登陆页面
+                req.setAttribute("client", clientService.findByClientId(oauthRequest.getClientId()));
+                RequestDispatcher requestDispatcher = req.getRequestDispatcher("/oauth2login.jsp");
+                requestDispatcher.forward(req, resp);
+                return;
+            }
+
             String username = req.getParameter("username"); //获取用户名
             //生成授权码
             String authorizationCode = null;
@@ -118,6 +135,40 @@ public class AuthorizeServlet extends HttpServlet {
             e.printStackTrace();
         } catch (URISyntaxException e) {
             e.printStackTrace();
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean login(HttpServletRequest request) {
+        if ("get".equalsIgnoreCase(request.getMethod())) {
+            request.setAttribute("error", "非法的请求");
+            return false;
+        }
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+            request.setAttribute("error", "登录失败:用户名或密码不能为空");
+            return false;
+        }
+        try {
+            // 写登录逻辑
+            UserBean user = userService.findByUsername(username);
+            if (user != null) {
+                if (!userService.checkUser(username, password, user.getSalt(), user.getPassword())) {
+                    request.setAttribute("error", "登录失败:密码不正确");
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                request.setAttribute("error", "登录失败:用户名不正确");
+                return false;
+            }
+        } catch (Exception e) {
+            request.setAttribute("error", "登录失败:" + e.getClass().getName());
+            return false;
         }
     }
 }

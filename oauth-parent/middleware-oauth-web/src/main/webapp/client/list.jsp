@@ -15,13 +15,11 @@
     String msg = "dfdfdf";
     request.setAttribute("msg", msg);
     request.setAttribute("clientList", clientList);
-
 %>
 
 </head>
 <body>
-<%--<div><c:out value="${clientList.get(0).getClientId()}"/></div>--%>
-<%--<div><c:out value="${clientList.get(0).getClientId()}"/></div>--%>
+
 <div class="container">
 
     <div class="header clearfix">

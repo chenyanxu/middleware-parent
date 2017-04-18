@@ -32,8 +32,8 @@
 <body>
 <h1>Oauth2 Server 端流程</h1>
 <div>
-    <a href="${pageContext.request.contextPath}/client">应用管理</a>
-    <a href="${pageContext.request.contextPath}/user">用户管理</a>
+    <a href="${pageContext.request.contextPath}/client/list.jsp">应用管理</a>
+    <a href="${pageContext.request.contextPath}/user/list.jsp">用户管理</a>
 </div>
 <pre>
 
@@ -48,7 +48,7 @@ client_secret           d8346ea2-6017-43ed-ad68-19c0f971738b    应用secret
 
 2. 请求授权码
 
-http://localhost:8080/zetark-oauth2-server/authorize?client_id=c1ebe466-1cdc-4bd3-ab69-77c3561b9dee&response_type=code&redirect_uri=http://aimeizi.net
+http://localhost:8181/oauth2/authorize?client_id=c1ebe466-1cdc-4bd3-ab69-77c3561b9dee&response_type=code&redirect_uri=http://aimeizi.net
 
 参数说明
 

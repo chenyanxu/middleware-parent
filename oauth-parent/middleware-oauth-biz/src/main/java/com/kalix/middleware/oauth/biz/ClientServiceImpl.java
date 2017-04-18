@@ -9,4 +9,8 @@ import com.kalix.middleware.oauth.entities.ClientBean;
  * Created by Administrator on 2017-04-17.
  */
 public class ClientServiceImpl extends GenericBizServiceImpl<IClientBeanDao, ClientBean> implements IClientBeanService {
+    @Override
+    public ClientBean findByClientId(String clientid) {
+        return dao.findByClientId(clientid);
+    }
 }

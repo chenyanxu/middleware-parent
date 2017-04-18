@@ -1,6 +1,21 @@
+<%@ page import="com.kalix.middleware.oauth.api.biz.IUserBeanService" %>
+<%@ page import="com.kalix.middleware.oauth.entities.UserBean" %>
+<%@ page import="org.osgi.framework.BundleContext" %>
+<%@ page import="org.osgi.framework.ServiceReference" %>
+<%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="../top.jsp"/>
+
+<%
+    BundleContext ctx = (BundleContext) getServletContext().getAttribute("osgi-bundlecontext");
+    ServiceReference ref = ctx.getServiceReference(IUserBeanService.class.getName());
+    IUserBeanService userBeanService = (IUserBeanService) ctx.getService(ref);
+    List<UserBean> userList = userBeanService.getAllEntity();
+    /*String msg = "dfdfdf";
+    request.setAttribute("msg", msg);*/
+    request.setAttribute("userList", userList);
+%>
 </head>
 <body>
 

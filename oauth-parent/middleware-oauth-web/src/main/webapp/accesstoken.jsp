@@ -40,14 +40,15 @@
                 <div class="form-group">
                     <label for="code" class="col-sm-4 control-label">授权码</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="code" name="code" placeholder="授权码">
+                        <input type="text" class="form-control" id="code" name="code" placeholder="授权码"
+                               value="${param.code}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="redirect_uri" class="col-sm-4 control-label">回调地址</label>
                     <div class="col-sm-8">
                         <input type="text" class="form-control" id="redirect_uri" name="redirect_uri"
-                               placeholder="回调地址">
+                               placeholder="回调地址" value="http://localhost:8181/oauth2/user/list.jsp">
                     </div>
                 </div>
                 <div class="form-group">

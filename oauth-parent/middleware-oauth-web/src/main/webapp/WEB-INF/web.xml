@@ -5,8 +5,6 @@
         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
         version="3.0"
         metadata-complete="true">
-
-
     <!--<listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
@@ -76,6 +74,16 @@
         <url-pattern>/checkAccessToken</url-pattern>
     </servlet-mapping>
 
+    <!--<servlet>
+        <servlet-name>ClientServlet</servlet-name>
+        <servlet-class>com.kalix.middleware.oauth.web.ClientServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ClientServlet</servlet-name>
+        <url-pattern>/client</url-pattern>
+    </servlet-mapping>
+-->
 
     <!-- OAuth Server AccessToken 验证过滤器-->
     <filter>
@@ -84,7 +92,7 @@
     </filter>
     <filter-mapping>
         <filter-name>oauth2</filter-name>
-        <url-pattern>/camel/rest/clients/*</url-pattern>
+        <url-pattern>/client/*</url-pattern>
     </filter-mapping>
 
 </web-app>
