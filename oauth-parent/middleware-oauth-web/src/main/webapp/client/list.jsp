@@ -12,8 +12,6 @@
     ServiceReference ref = ctx.getServiceReference(IClientBeanService.class.getName());
     IClientBeanService clientBeanService = (IClientBeanService) ctx.getService(ref);
     List<ClientBean> clientList = clientBeanService.getAllEntity();
-    String msg = "dfdfdf";
-    request.setAttribute("msg", msg);
     request.setAttribute("clientList", clientList);
 %>
 
@@ -28,14 +26,19 @@
             </ul>
         </nav>
         <h3 class="text-muted">OAuth2 Server 应用列表</h3>
+        <div>
+            <a href="${pageContext.request.contextPath}/client/list.jsp">应用管理</a>
+            <a href="${pageContext.request.contextPath}/user/list.jsp">用户管理</a>
+        </div>
     </div>
+
 
     <c:if test="${not empty msg}">
     <div class="alert alert-danger" role="alert">${msg}</div>
     </c:if>
 
     <div>
-        <h3><a href="${pageContext.request.contextPath}/client/create">应用新增</a></h3>
+        <h3><a href="${pageContext.request.contextPath}/client/add.jsp?op=add">应用新增</a></h3>
     </div>
 
     <table class="table table-bordered table-hover table-condensed">
@@ -54,8 +57,8 @@
                 <td>${client.clientId}</td>
                 <td>${client.clientSecret}</td>
                 <td>
-                    <a href="${pageContext.request.contextPath}/client/${client.id}/update">修改</a>
-                    <a href="${pageContext.request.contextPath}/client/${client.id}/delete">删除</a>
+                    <a href="${pageContext.request.contextPath}/client/edit.jsp?id=${client.id}">修改</a>
+                    <a href="${pageContext.request.contextPath}/client/add.jsp?op=delete&id=${client.id}">删除</a>
                 </td>
             </tr>
         </c:forEach>

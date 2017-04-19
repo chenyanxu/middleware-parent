@@ -10,18 +10,21 @@
     ServiceReference ref = ctx.getServiceReference(IClientBeanService.class.getName());
     IClientBeanService clientBeanService = (IClientBeanService) ctx.getService(ref);
 
-
-    if ((request.getMethod().equals("GET"))) {
-        ClientBean bean = clientBeanService.getEntity(Long.parseLong(request.getParameter("id")));
-        request.setAttribute("msg", "更新");
-        request.setAttribute("op", "更新");
+    if (request.getParameter("op").equals("delete")) {
+        request.setAttribute("msg", "删除成功");
+        clientBeanService.deleteEntity(Long.parseLong(request.getParameter("id")));
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/client/list.jsp");
+        requestDispatcher.forward(request, response);
+    }
+    if (request.getParameter("op").equals("add") && (request.getMethod().equals("GET"))) {
+        request.setAttribute("op", "新增");
+        ClientBean bean = new ClientBean();
         request.setAttribute("client", bean);
     }
-    if ((request.getMethod().equals("POST"))) {
-
-        ClientBean bean = clientBeanService.getEntity(Long.parseLong(request.getParameter("id")));
+    if (request.getParameter("op").equals("add") && (request.getMethod().equals("POST"))) {
+        ClientBean bean = new ClientBean();
         bean.setClientName(request.getParameter("clientName"));
-        request.setAttribute("msg", "更新成功");
+        request.setAttribute("msg", "新增成功");
         clientBeanService.saveEntity(bean);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/client/list.jsp");
         requestDispatcher.forward(request, response);
@@ -43,10 +46,6 @@
         <h3 class="text-muted">OAuth2 Server 应用</h3>
     </div>
 
-    <c:if test="${not empty msg}">
-    <div class="alert alert-danger" role="alert">${msg}</div>
-    </c:if>
-
     <form name="form" method="post" commandName="client" cssClass="form-inline">
         <input type="hidden" name="id" value="${client.id}"/>
         <input type="hidden" name="clientId" value="${client.clientId}"/>
@@ -54,7 +53,7 @@
 
         <div class="form-group">
             <label path="clientName">应用名：</label>
-            <input name="clientName" value="${client.clientName}"/>
+            <input name="clientName"/>
         </div>
 
         <%--<button>${op}</button>--%>

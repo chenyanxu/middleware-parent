@@ -1,5 +1,5 @@
 <footer class="footer">
-    <p>&copy; Company 2015</p>
+    <p>&copy; Company 2017 by Kalix Team</p>
 </footer>
 
 </div> <!-- /container -->

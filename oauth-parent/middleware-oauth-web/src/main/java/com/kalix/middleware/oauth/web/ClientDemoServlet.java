@@ -14,11 +14,11 @@ import java.io.PrintWriter;
 /**
  * Created by admin on 2017/4/18.
  */
-@WebServlet("/client")
-public class ClientServlet extends HttpServlet {
+@WebServlet("/clientdemo")
+public class ClientDemoServlet extends HttpServlet {
     private IClientBeanService clientService;
 
-    public ClientServlet() {
+    public ClientDemoServlet() {
         try {
             this.clientService = JNDIHelper.getJNDIServiceForName(IClientBeanService.class.getName());
         } catch (IOException e) {

@@ -12,6 +12,7 @@ Import-Package: com.kalix.framework.core.impl.web, \
                 com.kalix.middleware.oauth.api.biz, \
                 com.kalix.framework.core.api.biz, \
                 org.apache.camel.component.servlet, \
+                com.kalix.framework.core.util, \
                 javax.servlet.jsp,*
 Include-Resource: src/main/webapp,target/classes
 Web-ContextPath: /oauth2
