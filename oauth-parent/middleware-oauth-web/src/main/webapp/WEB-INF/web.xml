@@ -74,6 +74,17 @@
         <url-pattern>/checkAccessToken</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>ClientDemoServlet</servlet-name>
+        <servlet-class>com.kalix.middleware.oauth.web.ClientDemoServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ClientDemoServlet</servlet-name>
+        <url-pattern>/clientdemo</url-pattern>
+    </servlet-mapping>
+
     <!-- OAuth Server AccessToken 验证过滤器-->
     <filter>
         <filter-name>oauth2</filter-name>

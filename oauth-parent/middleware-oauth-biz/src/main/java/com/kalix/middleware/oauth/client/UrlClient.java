@@ -111,8 +111,10 @@ public class UrlClient {
      * @return
      */
     private static void getService(String accessToken) throws Exception {
+        String uri = ClientParams.OAUTH_SERVICE_API + "?access_token=" + accessToken;
+        System.out.println("demo address is :" + uri);
 
-        URL url = new URL(ClientParams.OAUTH_SERVICE_API + "?access_token=" + accessToken);
+        URL url = new URL(uri);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod(OAuth.HttpMethod.GET);
         connection.setDoInput(true);
