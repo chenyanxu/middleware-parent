@@ -74,17 +74,6 @@
         <url-pattern>/checkAccessToken</url-pattern>
     </servlet-mapping>
 
-    <!--<servlet>
-        <servlet-name>ClientServlet</servlet-name>
-        <servlet-class>com.kalix.middleware.oauth.web.ClientServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>ClientServlet</servlet-name>
-        <url-pattern>/client</url-pattern>
-    </servlet-mapping>
--->
-
     <!-- OAuth Server AccessToken 验证过滤器-->
     <filter>
         <filter-name>oauth2</filter-name>
@@ -92,7 +81,7 @@
     </filter>
     <filter-mapping>
         <filter-name>oauth2</filter-name>
-        <url-pattern>/client/*</url-pattern>
+        <url-pattern>/clientdemo/*</url-pattern>
     </filter-mapping>
 
 </web-app>
