@@ -5,10 +5,10 @@
 
     <reference id="couchdbService" interface="com.kalix.middleware.couchdb.api.biz.ICouchdbService"/>
 
-    <bean id="excelServiceImpl" class="MailServiceImpl">
+    <bean id="excelServiceImpl" class="com.kalix.middleware.excel.biz.ExcelServiceImpl">
         <property name="couchdbService" ref="couchdbService"/>
     </bean>
 
-    <service id="excelService" interface="IExcelService"
+    <service id="excelService" interface="com.kalix.middleware.excel.api.biz.IExcelService"
              ref="excelServiceImpl"/>
 </blueprint>
