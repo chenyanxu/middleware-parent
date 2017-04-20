@@ -5,6 +5,25 @@
         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
         version="3.0"
         metadata-complete="true">
+    <!--独立的camelServlet，与业务的分离-->
+    <servlet>
+        <servlet-name>OAuth2CamelServlet</servlet-name>
+        <servlet-class>com.kalix.framework.core.impl.web.KalixCamelHttpTransportServlet</servlet-class>
+        <init-param>
+            <param-name>matchOnUriPrefix</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>ignoreDuplicateServletName</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>OAuth2CamelServlet</servlet-name>
+        <url-pattern>/camel/rest/*</url-pattern>
+    </servlet-mapping>
     <!--<listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>

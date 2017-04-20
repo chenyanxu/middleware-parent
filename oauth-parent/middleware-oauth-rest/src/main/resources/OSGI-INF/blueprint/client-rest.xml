@@ -7,6 +7,7 @@
     <camelContext id="clientCamel" xmlns="http://camel.apache.org/schema/blueprint">
 
         <restConfiguration component="servlet" bindingMode="json">
+            <endpointProperty key="servletName" value="OAuth2CamelServlet"/>
             <dataFormatProperty key="prettyPrint" value="${rest.pretty}"/>
         </restConfiguration>
 
