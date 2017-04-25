@@ -83,6 +83,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>RefreshTokenServlet</servlet-name>
+        <servlet-class>com.kalix.middleware.oauth.web.RefreshTokenServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RefreshTokenServlet</servlet-name>
+        <url-pattern>/refreshToken</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>CheckAccessTokenServlet</servlet-name>
         <servlet-class>com.kalix.middleware.oauth.web.CheckAccessTokenServlet</servlet-class>
         <load-on-startup>1</load-on-startup>

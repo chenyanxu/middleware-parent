@@ -109,13 +109,15 @@ public class AccessTokenServlet extends HttpServlet {
             //生成Access Token
             OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
             final String accessToken = oauthIssuerImpl.accessToken();
+            final String refreshToken = oauthIssuerImpl.refreshToken();
             oAuthService.addAccessToken(accessToken, oAuthService.getUsernameByAuthCode(authCode));
-
+            oAuthService.addRefreshToken(refreshToken, oAuthService.getUsernameByAuthCode(authCode));
 
             //生成OAuth响应
             OAuthResponse response = OAuthASResponse
                     .tokenResponse(HttpServletResponse.SC_OK)
                     .setAccessToken(accessToken)
+                    .setRefreshToken(refreshToken)
                     .setExpiresIn(String.valueOf(oAuthService.getExpireIn()))
                     .buildJSONMessage();
             Util.respWrite(resp, response);

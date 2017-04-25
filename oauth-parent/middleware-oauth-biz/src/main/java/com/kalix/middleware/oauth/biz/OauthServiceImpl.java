@@ -30,8 +30,18 @@ public class OauthServiceImpl implements IOauthService {
     }
 
     @Override
+    public void addRefreshToken(String refreshToken, String username) {
+        cacheManager.save(refreshToken, username);
+    }
+
+    @Override
     public boolean checkAuthCode(String authCode) {
         return cacheManager.get(authCode) != null;
+    }
+
+    @Override
+    public boolean checkRefreshCode(String refreshCode) {
+        return cacheManager.get(refreshCode) != null;
     }
 
     @Override
