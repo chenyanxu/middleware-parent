@@ -1,0 +1,14 @@
+#-----------------------------------------------------------------
+# Use this file to add customized Bnd instructions for the bundle
+#                org.springframework.web.servlet, \
+#                org.springframework.web.filter, \
+#                org.springframework.web.context, \
+#-----------------------------------------------------------------
+
+Import-Package: org.springframework.osgi.web.context.support,\
+                org.springframework.web.servlet.view,\
+                org.springframework.web.servlet,\
+                javax.servlet.jsp,*
+Include-Resource: src/main/webapp,target/classes
+Web-ContextPath: /spring
+Bundle-Category: Kalix Middleware Spring

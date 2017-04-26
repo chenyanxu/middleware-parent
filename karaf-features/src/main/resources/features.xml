@@ -76,4 +76,43 @@
         <bundle>mvn:com.kalix.middleware.oauth/middleware-oauth-biz/${project.middleware.version}</bundle>
     </feature>
 
+    <feature name="spring-dm" description="Spring DM support" version="1.2.1">
+        <feature version="[2.5.6,4)" prerequisite="false" dependency="false">spring</feature>
+        <bundle start-level="30" dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/3.2.0_1</bundle>
+        <bundle start-level="30">mvn:org.springframework.osgi/spring-osgi-io/1.2.1</bundle>
+        <bundle start-level="30">mvn:org.springframework.osgi/spring-osgi-core/1.2.1</bundle>
+        <bundle start-level="30">mvn:org.springframework.osgi/spring-osgi-extender/1.2.1</bundle>
+        <bundle start-level="30">mvn:org.springframework.osgi/spring-osgi-annotation/1.2.1</bundle>
+        <conditional>
+            <condition>deployer</condition>
+            <bundle start-level="30">mvn:org.apache.karaf.deployer/org.apache.karaf.deployer.spring/4.0.4</bundle>
+        </conditional>
+        <conditional>
+            <condition>bundle</condition>
+            <bundle start-level="30">mvn:org.apache.karaf.bundle/org.apache.karaf.bundle.springstate/4.0.4</bundle>
+        </conditional>
+    </feature>
+    <feature name="spring-dm-web" description="Spring DM Web support" version="1.2.1">
+        <feature prerequisite="false" dependency="false">spring-dm</feature>
+        <feature version="[2.5.6,4)" prerequisite="false" dependency="false">spring-web</feature>
+        <feature prerequisite="false" dependency="false">http</feature>
+        <bundle start-level="30">mvn:org.springframework.osgi/spring-osgi-web/1.2.1</bundle>
+    </feature>
+    <feature name="spring" description="Spring 3.1.x support" version="3.1.4.RELEASE">
+        <bundle start-level="30" dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aopalliance/1.0_6</bundle>
+        <bundle start-level="30">mvn:org.springframework/spring-core/3.1.4.RELEASE</bundle>
+        <bundle start-level="30">mvn:org.springframework/spring-asm/3.1.4.RELEASE</bundle>
+        <bundle start-level="30">mvn:org.springframework/spring-expression/3.1.4.RELEASE</bundle>
+        <bundle start-level="30">mvn:org.springframework/spring-beans/3.1.4.RELEASE</bundle>
+        <bundle start-level="30">mvn:org.springframework/spring-aop/3.1.4.RELEASE</bundle>
+        <bundle start-level="30">mvn:org.springframework/spring-context/3.1.4.RELEASE</bundle>
+        <bundle start-level="30">mvn:org.springframework/spring-context-support/3.1.4.RELEASE</bundle>
+    </feature>
+    <feature name="spring-web" description="Spring 3.1.x Web support" version="3.1.4.RELEASE">
+        <feature version="[3.1.4.RELEASE,3.2)" prerequisite="false" dependency="false">spring</feature>
+        <feature prerequisite="false" dependency="false">http</feature>
+        <bundle start-level="30">mvn:org.springframework/spring-web/3.1.4.RELEASE</bundle>
+        <bundle start-level="30">mvn:org.springframework/spring-webmvc/3.1.4.RELEASE</bundle>
+    </feature>
+
 </features>
