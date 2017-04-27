@@ -10,6 +10,6 @@ Ext.define('kalix.workflow.task.store.TaskStore', {
     model: 'kalix.workflow.task.model.TaskModel',
     alias: 'store.taskStore',
     xtype: 'taskStore',
-    storeId: "taskStore",
-    proxyUrl: CONFIG.restRoot+'/camel/rest/workflow/tasks'
+    storeId: 'taskStore',
+    proxyUrl: CONFIG.restRoot + '/camel/rest/workflow/tasks'
 });

@@ -26,25 +26,25 @@ Ext.define('kalix.workflow.processhistory.view.ProcessHistorySearchForm', {
             name: 'startUser'
         },
         /*{
-            xtype: 'datefield',
-            format: 'Y-m-d',
+         xtype: 'datefield',
+         format: 'Y-m-d',
          fieldLabel: '开始时间:',
-            labelAlign: 'right',
-            labelWidth: 60,
-            width: 200,
+         labelAlign: 'right',
+         labelWidth: 60,
+         width: 200,
          name: 'startDate'
-        },
-        {
-            xtype: 'label',
-            text: '-',
-            margin: '5 5 0 5'
-        },
-        {
-            xtype: 'datefield',
-            format: 'Y-m-d',
-            headLabel: true,
-            labelAlign: 'right',
-            width: 140,
+         },
+         {
+         xtype: 'label',
+         text: '-',
+         margin: '5 5 0 5'
+         },
+         {
+         xtype: 'datefield',
+         format: 'Y-m-d',
+         headLabel: true,
+         labelAlign: 'right',
+         width: 140,
          name: 'endDate'
          }*/
     ]

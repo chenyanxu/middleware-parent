@@ -9,6 +9,6 @@ Ext.define('kalix.workflow.category.store.CategoryStore', {
     model: 'kalix.workflow.category.model.CategoryModel',
     alias: 'store.categoryStore',
     xtype: 'categoryStore',
-    storeId: "categoryStore",
+    storeId: 'categoryStore',
     proxyUrl: CONFIG.restRoot + '/camel/rest/categorys'
 });

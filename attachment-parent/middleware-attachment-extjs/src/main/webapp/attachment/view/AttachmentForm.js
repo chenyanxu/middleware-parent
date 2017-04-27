@@ -8,24 +8,24 @@ Ext.define('kalix.attachment.view.AttachmentForm', {
     xtype: 'attachmentForm',
     frame: true,
     timeout: 60,
-    height:20,
+    height: 20,
     items: [
         {
             xtype: 'attachmentFileField',
-            width:60,
-            buttonOnly:true,
+            width: 60,
+            buttonOnly: true,
             buttonText: '上传',
             name: 'attachment',
-            listeners:{
-                change:function(target,value, eOpts){
+            listeners: {
+                change: function (target, value, eOpts) {
                     target.findParentByType('grid').getController().onChange(target, value, eOpts);
                 }
             }
         }
     ],
-    listeners:{
+    listeners: {
         afterrender: function (target) {
-           target.ariaEl.dom.style.border='none';
+            target.ariaEl.dom.style.border = 'none';
         }
     }
 });

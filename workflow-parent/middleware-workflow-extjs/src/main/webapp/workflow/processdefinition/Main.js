@@ -11,14 +11,14 @@ Ext.define('kalix.workflow.processdefinition.Main', {
         'kalix.workflow.processdefinition.view.ProcessDefinitionGrid',
         'kalix.workflow.processdefinition.view.ProcessDefinitionSearchForm'
     ],
-    storeId:'processDefinitionStore',
+    storeId: 'processDefinitionStore',
     items: [
-    {
-        xtype: 'processDefinitionSearchForm',
-        title: '流程定义查询'
-    },
-    {
-        xtype: 'processDefinitionGrid',
-        title: '流程定义列表'
-    }]
+        {
+            xtype: 'processDefinitionSearchForm',
+            title: '流程定义查询'
+        },
+        {
+            xtype: 'processDefinitionGrid',
+            title: '流程定义列表'
+        }]
 });

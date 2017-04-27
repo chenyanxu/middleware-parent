@@ -19,20 +19,20 @@ Ext.define('kalix.workflow.mainWork.view.dashboard.DashBoardExtend', {
         Ext.Ajax.request({
             async: false,
             scope: scope,
-            url: CONFIG.restRoot + "/camel/rest/categorys/getAll",
+            url: CONFIG.restRoot + '/camel/rest/categorys/getAll',
             method: 'GET',
             success: function (response, opts) {
                 var obj = Ext.decode(response.responseText);
                 for (var i = 0; i < obj.length; i++) {
                     var name = obj[i].name;
                     var key = obj[i].key;
-                    var icon=obj[i].icon;
+                    var icon = obj[i].icon;
                     var newOjb = {
                         type: 'workflowCategory',
                         store: Ext.create('Ext.data.Store', {
                             storeId: 'workflowCategory_' + key,
                             autoLoad: true,
-                            fields: ['id', 'name', 'key', 'description','processId'],
+                            fields: ['id', 'name', 'key', 'description', 'processId'],
                             proxy: {
                                 type: 'ajax',
                                 url: CONFIG.restRoot + '/camel/rest/categorys/getType?category=' + key,

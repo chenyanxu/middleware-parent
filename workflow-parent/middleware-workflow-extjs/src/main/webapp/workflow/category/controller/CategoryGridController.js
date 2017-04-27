@@ -6,6 +6,5 @@
  */
 Ext.define('kalix.workflow.category.controller.CategoryGridController', {
     extend: 'kalix.controller.BaseGridController',
-    alias: 'controller.categoryGridController',
-
+    alias: 'controller.categoryGridController'
 });

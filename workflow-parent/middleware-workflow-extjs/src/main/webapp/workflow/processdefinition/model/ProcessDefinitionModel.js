@@ -12,6 +12,6 @@ Ext.define('kalix.workflow.processdefinition.model.ProcessDefinitionModel', {
         {name: 'key', type: 'string'},//关键字
         {name: 'description', type: 'string'},//描述
         {name: 'version', type: 'int'},//版本
-        {name: 'suspensionState', type: 'int'},//状态
+        {name: 'suspensionState', type: 'int'}//状态
     ]
 });

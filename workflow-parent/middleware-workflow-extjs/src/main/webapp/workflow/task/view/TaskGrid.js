@@ -29,8 +29,8 @@ Ext.define('kalix.workflow.task.view.TaskGrid', {
         },
         items: [
             {
-                xtype: "rownumberer",
-                text: "行号",
+                xtype: 'rownumberer',
+                text: '行号',
                 width: 50,
                 flex: 0,
                 align: 'center',
@@ -69,7 +69,7 @@ Ext.define('kalix.workflow.task.view.TaskGrid', {
             },
             {
                 header: '操作',
-                xtype: "actioncolumn",
+                xtype: 'actioncolumn',
                 flex: 1,
                 items: [
                     {
