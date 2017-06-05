@@ -119,7 +119,6 @@ public class AccessTokenServlet extends HttpServlet {
                     .setAccessToken(accessToken)
                     .setExpiresIn(oAuthService.getExpireIn().toString())
                     .setRefreshToken(refreshToken)
-                    .setExpiresIn(String.valueOf(oAuthService.getExpireIn()))
                     .buildJSONMessage();
             Util.respWrite(resp, response);
 
