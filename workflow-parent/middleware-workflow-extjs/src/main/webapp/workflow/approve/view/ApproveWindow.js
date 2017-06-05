@@ -15,7 +15,7 @@ Ext.define('kalix.workflow.approve.view.ApproveWindow', {
     viewModel: 'approveViewModel',
     iconCls: 'iconfont icon-workflow-approval',
     width: 900,
-    buttonAlign: "center",
+    buttonAlign: 'center',
     border: false,
     modal: true,
     bind: {
@@ -30,10 +30,10 @@ Ext.define('kalix.workflow.approve.view.ApproveWindow', {
             items: [
                 {
                     xtype: 'activityHistoryGrid',
-                    bind:{
-                        iconCls:'{xx}',
+                    bind: {
+                        iconCls: '{xx}',
                     },
-                    title:'',
+                    title: '',
                     height: 240
                 }
             ]

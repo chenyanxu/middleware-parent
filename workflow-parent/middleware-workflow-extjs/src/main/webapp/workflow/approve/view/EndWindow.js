@@ -14,7 +14,7 @@ Ext.define('kalix.workflow.approve.view.EndWindow', {
     controller: 'approveWindowController',
     viewModel: 'approveViewModel',
     width: 900,
-    buttonAlign: "center",
+    buttonAlign: 'center',
     border: false,
     modal: true,
     bind: {

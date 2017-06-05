@@ -10,6 +10,6 @@ Ext.define('kalix.workflow.processhistory.store.ProcessHistoryStore', {
     model: 'kalix.workflow.processhistory.model.ProcessHistoryModel',
     alias: 'store.processHistoryStore',
     xtype: 'processHistoryStore',
-    storeId: "processHistoryStore",
+    storeId: 'processHistoryStore',
     proxyUrl: CONFIG.restRoot + '/camel/rest/workflow/historys'
 });

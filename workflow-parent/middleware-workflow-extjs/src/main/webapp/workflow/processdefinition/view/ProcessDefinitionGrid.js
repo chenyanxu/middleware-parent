@@ -21,11 +21,11 @@ Ext.define('kalix.workflow.processdefinition.view.ProcessDefinitionGrid', {
     },
     columns: [
         {
-            xtype: "rownumberer",
+            xtype: 'rownumberer'
         },
         {
             text: '流程定义编号',
-            dataIndex: 'id',
+            dataIndex: 'id'
         },
         {
             text: '流程定义名称',
@@ -47,13 +47,13 @@ Ext.define('kalix.workflow.processdefinition.view.ProcessDefinitionGrid', {
             text: '状态', dataIndex: 'suspensionState',
             renderer: function (value) {
                 if (value == 1)
-                    return "有效";
+                    return '有效';
                 else
-                    return "无效";
+                    return '无效';
             }
         },
         {
-            xtype: "securityGridColumnCommon",
+            xtype: 'securityGridColumnCommon',
             verifyItems: [
                 /*{
                  iconCls: 'iconfont icon-edit-column',
@@ -65,13 +65,13 @@ Ext.define('kalix.workflow.processdefinition.view.ProcessDefinitionGrid', {
                     itemId: 'activateButton',
                     getClass: function (v, meta, record) {
                         if (record.data.suspensionState == 1) {
-                            return "iconfont icon-stop";
+                            return 'iconfont icon-stop';
                         }
-                        return "iconfont icon-start";
+                        return 'iconfont icon-start';
                     },
                     getTip: function (value, metadata, record, row, col, store) {
                         if (record.data.suspensionState == 1) {
-                            return "无效";
+                            return '无效';
                         }
                         return '有效';
                     },

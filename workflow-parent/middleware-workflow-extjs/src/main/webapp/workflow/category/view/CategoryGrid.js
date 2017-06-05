@@ -7,7 +7,7 @@ Ext.define('kalix.workflow.category.view.CategoryGrid', {
     extend: 'kalix.view.components.common.BaseGrid',
     requires: [
         'kalix.workflow.category.controller.CategoryGridController',
-        'kalix.workflow.category.store.CategoryStore',
+        'kalix.workflow.category.store.CategoryStore'
     ],
     alias: 'widget.categoryGrid',
     xtype: 'categoryGridPanel',
@@ -24,8 +24,8 @@ Ext.define('kalix.workflow.category.view.CategoryGrid', {
 
     columns: [
         {
-            xtype: "rownumberer",
-            text: "行号",
+            xtype: 'rownumberer',
+            text: '行号',
             width: 50,
             flex: 0,
             align: 'center',

@@ -29,6 +29,20 @@
         }
     </style>
 </head>
+<%
+
+    String Login = (String) session.getAttribute("Login");
+    if (Login != null && Login.equals("OK")) {
+%>
+登录成功</br>
+<input type=button value="退出" onclick="javascript:location.href='logout.jsp'">
+<%
+} else {
+%>
+<jsp:forward page="login.jsp"/>
+<%
+    }
+%>
 <body>
 <h1>Oauth2 Server 端流程</h1>
 <div>

@@ -19,9 +19,9 @@ Ext.define('kalix.workflow.processdefinition.controller.ProcessDefinitionGridCon
         var rec = grid.getStore().getAt(rowIndex);
         var postUrl;
         if (rec.data.suspensionState == 1) {
-            postUrl = this.getView().getViewModel().get("processUrl") + "/suspend?key=" + rec.data.key;
+            postUrl = this.getView().getViewModel().get('processUrl') + '/suspend?key=' + rec.data.key;
         } else {
-            postUrl = this.getView().getViewModel().get("processUrl") + "/activate?key=" + rec.data.key;
+            postUrl = this.getView().getViewModel().get('processUrl') + '/activate?key=' + rec.data.key;
         }
         Ext.Ajax.request({
             url: postUrl,
@@ -44,7 +44,7 @@ Ext.define('kalix.workflow.processdefinition.controller.ProcessDefinitionGridCon
      */
     onOpenProcessDefinition: function (grid, rowIndex, colIndex) {
         var rec = grid.getStore().getAt(rowIndex);
-        var imgUrl = "processDefinitionId=" + rec.data.id;
+        var imgUrl = 'processDefinitionId=' + rec.data.id;
         var win = Ext.create('kalix.workflow.components.ActivitiProcessImageWindow', {
             title: '流程定义查看 - ' + rec.data.name,
             imgUrl: imgUrl

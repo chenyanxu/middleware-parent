@@ -74,3 +74,9 @@ a91eae3db4241432cf4ff2ca9f96afd0
 demo address is :http://localhost:8181/oauth2/clientdemo?access_token=a91eae3db4241432cf4ff2ca9f96afd0
 [{"clientName":"chapter17-client","clientId":"c1ebe466-1cdc-4bd3-ab69-77c3561b9dee","clientSecret":"d8346ea2-6017-43ed-ad68-19c0f971738b","id":1,"version_":1},{"clientName":"hello1212","clientId":"684e6ebc-fb6b-4f1c-8897-75b094960062","clientSecret":"57da96d8-2d32-4e52-b271-957e450fc38a","id":5206,"version_":2,"creationDate":"Apr 19, 2017 12:50:47 PM","updateDate":"Apr 19, 2017 3:09:25 PM"},{"clientName":"hello","clientId":"8e0edce2-3cd7-486a-9341-ebe374301778","clientSecret":"f33a4607-6454-41af-8c10-acbc6b6aaa23","id":5208,"version_":1,"creationDate":"Apr 19, 2017 4:33:21 PM","updateDate":"Apr 19, 2017 4:33:21 PM"}]
 ```
+
+# oauth2 参考
+http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html
+
+# 备注
+本次实现缺少对scope，授权范围的支持。

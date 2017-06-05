@@ -8,7 +8,7 @@ Ext.define('kalix.workflow.mainWork.Main', {
         'kalix.workflow.mainWork.view.dashboard.DashBoardExtend',
         'kalix.workflow.processdefinition.viewModel.ProcessDefinitionViewModel'
     ],
-    viewModel:'processDefinitionViewModel',
+    viewModel: 'processDefinitionViewModel',
     items: [
         {
             xtype: 'dashboardextend'

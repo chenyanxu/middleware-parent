@@ -21,6 +21,7 @@
         <module>middleware-oauth-biz</module>
         <module>middleware-oauth-rest</module>
         <module>middleware-oauth-web</module>
+        <module>middleware-oauth-itest</module>
     </modules>
 
 
@@ -35,6 +36,11 @@
                 <groupId>com.kalix.middleware.oauth</groupId>
                 <artifactId>middleware-oauth-entities</artifactId>
                 <version>${project.middleware.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kalix.framework.core</groupId>
+                <artifactId>framework-core-restfultest</artifactId>
+                <version>${project.framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.oltu.oauth2</groupId>

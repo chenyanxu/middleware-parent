@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.kalix.middleware.oauth</groupId>
+        <artifactId>oauth-parent</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>middleware-oauth-itest</artifactId>
+    <name>Kalix Middleware OAuth ITest</name>
+    <description>OAuth2 Integrate Test</description>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.kalix.framework.core</groupId>
+            <artifactId>framework-core-restfultest</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.kalix.middleware.oauth</groupId>
+            <artifactId>middleware-oauth-entities</artifactId>
+        </dependency>
+    </dependencies>
+</project>

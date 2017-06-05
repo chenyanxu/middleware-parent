@@ -9,7 +9,7 @@ Ext.define('kalix.workflow.processhistory.Main', {
     extend: 'kalix.container.BaseContainer',
     requires: [
         'kalix.workflow.processhistory.view.ProcessHistorySearchForm',
-        'kalix.workflow.processhistory.view.ProcessHistoryGrid',
+        'kalix.workflow.processhistory.view.ProcessHistoryGrid'
     ],
     storeId: 'processHistoryStore',
     items: [{

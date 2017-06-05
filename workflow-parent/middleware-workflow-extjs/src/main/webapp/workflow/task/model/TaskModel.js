@@ -12,6 +12,6 @@ Ext.define('kalix.workflow.task.model.TaskModel', {
         {name: 'businessNo', type: 'string'},//流水号
         {name: 'title', type: 'string'},//业务名称
         {name: 'description', type: 'string'},//描述
-        {name: 'assignee', type: 'string'},//执行人
+        {name: 'assignee', type: 'string'}//执行人
     ]
 });

@@ -15,8 +15,8 @@ Ext.define('kalix.workflow.approve.controller.ApproveWindowController', {
         taskId = this.getViewModel().get('taskId');
 
         Ext.Ajax.request({
-            url: CONFIG.restRoot + '/camel/rest/' + businessKey + 's/workflow/completeTask?taskId=' + taskId + "&accepted=" + status + "&comment=" + approveOpinion,
-            method: "GET",
+            url: CONFIG.restRoot + '/camel/rest/' + businessKey + 's/workflow/completeTask?taskId=' + taskId + '&accepted=' + status + '&comment=' + approveOpinion,
+            method: 'GET',
             callback: function (options, success, response) {
                 var jsonStatus = Ext.JSON.decode(response.responseText);
                 if (jsonStatus.success) {
@@ -36,22 +36,22 @@ Ext.define('kalix.workflow.approve.controller.ApproveWindowController', {
     onModify: function () {
         //var sealModifyForm = this.getView().items.items[0];
         var businessKey;
-        var entity=this.getViewModel().get('rec');
+        var entity = this.getViewModel().get('rec');
         businessKey = this.getViewModel().get('businessKey');
 
         Ext.Ajax.request({
-            url: CONFIG.restRoot + '/camel/rest/'+businessKey+'s/'+entity.id,
+            url: CONFIG.restRoot + '/camel/rest/' + businessKey + 's/' + entity.id,
             scope: this,
-            defaultPostHeader : 'application/json;charset=utf-8',
+            defaultPostHeader: 'application/json;charset=utf-8',
             method: 'PUT',
-            params :Ext.encode(entity),
+            params: Ext.encode(entity),
             callback: function (options, success, response) {
                 var rtn = Ext.JSON.decode(response.responseText);
 
                 if (rtn.success) {
                     this.onApprove();
                 }
-                else{
+                else {
 
                 }
             }

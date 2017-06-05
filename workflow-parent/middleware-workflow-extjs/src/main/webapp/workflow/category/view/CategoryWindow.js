@@ -17,43 +17,42 @@ Ext.define('kalix.workflow.category.view.CategoryWindow', {
         type: 'baseWindowController',
         storeId: 'categoryStore'
     },
-    xtype: "categoryWindow",
+    xtype: 'categoryWindow',
     width: 400,
     //todo 在此修改表单
     items: [
-
         {
-        xtype: 'baseForm',
-        items: [
-            	{
-            		fieldLabel: '分类名称',
-            		allowBlank: false,
-            		bind: {
-            			value: '{rec.name}'
-            		}
-            	},
-            	{
-            		fieldLabel: '分类主键',
-            		allowBlank: false,
-            		bind: {
-            			value: '{rec.key}'
-            		}
-            	},
-            	{
-            		fieldLabel: '分类图标',
-            		allowBlank: false,
-            		bind: {
-            			value: '{rec.icon}'
-            		}
-            	},
-            	{
-            		fieldLabel: '分类描述',
-					xtype: 'textarea',
-            		bind: {
-            			value: '{rec.description}'
-            		}
-            	}
-        ]
+            xtype: 'baseForm',
+            items: [
+                {
+                    fieldLabel: '分类名称',
+                    allowBlank: false,
+                    bind: {
+                        value: '{rec.name}'
+                    }
+                },
+                {
+                    fieldLabel: '分类主键',
+                    allowBlank: false,
+                    bind: {
+                        value: '{rec.key}'
+                    }
+                },
+                {
+                    fieldLabel: '分类图标',
+                    allowBlank: false,
+                    bind: {
+                        value: '{rec.icon}'
+                    }
+                },
+                {
+                    fieldLabel: '分类描述',
+                    xtype: 'textarea',
+                    bind: {
+                        value: '{rec.description}'
+                    }
+                }
+            ]
         }
     ]
 });

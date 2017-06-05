@@ -9,13 +9,13 @@ Ext.define('kalix.workflow.task.view.TaskDelegateWindow', {
         'kalix.admin.user.component.UserComboBox'
     ],
     alias: 'widget.taskDelegateWindow',
-    xtype: "taskDelegateWindow",
+    xtype: 'taskDelegateWindow',
     controller: 'taskDelegateController',
     width: 400,
     border: false,
     modal: true,
     resizable: false,
-    title:'请选择委托人',
+    title: '请选择委托人',
     buttonAlign: 'center',
     iconCls: 'iconfont icon-workflow-delegate',
     layout: {
@@ -42,11 +42,11 @@ Ext.define('kalix.workflow.task.view.TaskDelegateWindow', {
     },
     buttons: [{
         text: '提交',
-        iconCls:'iconfont icon-save iconfont-btn-small',
+        iconCls: 'iconfont icon-save iconfont-btn-small',
         handler: 'onDelegateTask'
     }, {
         text: '重置',
-        iconCls:'iconfont icon-reset iconfont-btn-small',
+        iconCls: 'iconfont icon-reset iconfont-btn-small',
         handler: 'onReset'
     }]
 });

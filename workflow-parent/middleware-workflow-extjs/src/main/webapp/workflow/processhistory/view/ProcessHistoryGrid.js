@@ -21,7 +21,7 @@ Ext.define('kalix.workflow.processhistory.view.ProcessHistoryGrid', {
     },
     columns: [
         {
-            xtype: "rownumberer"
+            xtype: 'rownumberer'
         },
         {
             text: '编号',
@@ -36,7 +36,7 @@ Ext.define('kalix.workflow.processhistory.view.ProcessHistoryGrid', {
         {
             text: '业务名称',
             dataIndex: 'title'
-         },
+        },
         {
             text: '启动用户',
             dataIndex: 'startUserId'
@@ -49,18 +49,18 @@ Ext.define('kalix.workflow.processhistory.view.ProcessHistoryGrid', {
              renderer: null*/
             /*renderer: function (value) {
              var createDate = new Date(value);
-             return createDate.format("yyyy-MM-dd hh:mm:ss");
+             return createDate.format('yyyy-MM-dd hh:mm:ss');
              }*/
         },
         {
             text: '结束时间',
             dataIndex: 'endTime'
             /*renderer: function (value) {
-             if (value != null && value != "") {
+             if (value != null && value != '') {
              var createDate = new Date(value);
-             return createDate.format("yyyy-MM-dd hh:mm:ss");
+             return createDate.format('yyyy-MM-dd hh:mm:ss');
              } else {
-             return "";
+             return '';
              }
              }*/
         },
@@ -74,7 +74,7 @@ Ext.define('kalix.workflow.processhistory.view.ProcessHistoryGrid', {
             tpl: '<tpl if="status==\'结束\'"><span style="color:red"></tpl>{status}<tpl if="status==\'结束\'"></span></tpl>'
         },
         {
-            xtype: "securityGridColumnCommon",
+            xtype: 'securityGridColumnCommon',
             verifyItems: [{
                 iconCls: 'iconfont icon-history',
                 tooltip: '查看流程历史',
@@ -83,5 +83,5 @@ Ext.define('kalix.workflow.processhistory.view.ProcessHistoryGrid', {
             }]
         }
     ]
-    
+
 });

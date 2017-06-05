@@ -7,7 +7,7 @@ Ext.define('kalix.workflow.task.view.TaskSearchForm', {
     extend: 'kalix.view.components.common.BaseSearchForm',
     alias: 'widget.taskSearchForm',
     xtype: 'taskSearchForm',
-    storeId:'taskStore',
+    storeId: 'taskStore',
     items: [
         {
             xtype: 'textfield',
