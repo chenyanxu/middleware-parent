@@ -6,59 +6,24 @@
         version="3.0"
         metadata-complete="true">
     <!--独立的camelServlet，与业务的分离-->
-    <servlet>
-        <servlet-name>OAuth2CamelServlet</servlet-name>
-        <servlet-class>com.kalix.framework.core.impl.web.KalixCamelHttpTransportServlet</servlet-class>
-        <init-param>
-            <param-name>matchOnUriPrefix</param-name>
-            <param-value>true</param-value>
-        </init-param>
-        <init-param>
-            <param-name>ignoreDuplicateServletName</param-name>
-            <param-value>true</param-value>
-        </init-param>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
+    <!--<servlet>-->
+        <!--<servlet-name>CamelServlet</servlet-name>-->
+        <!--<servlet-class>com.kalix.framework.core.impl.web.KalixCamelHttpTransportServlet</servlet-class>-->
+        <!--<init-param>-->
+            <!--<param-name>matchOnUriPrefix</param-name>-->
+            <!--<param-value>true</param-value>-->
+        <!--</init-param>-->
+        <!--<init-param>-->
+            <!--<param-name>ignoreDuplicateServletName</param-name>-->
+            <!--<param-value>true</param-value>-->
+        <!--</init-param>-->
+        <!--<load-on-startup>1</load-on-startup>-->
+    <!--</servlet>-->
 
-    <servlet-mapping>
-        <servlet-name>OAuth2CamelServlet</servlet-name>
-        <url-pattern>/camel/rest/*</url-pattern>
-    </servlet-mapping>
-    <!--<listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>
-        </param-value>
-    </context-param>
-
-    <servlet>
-        <servlet-name>dispatcher</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <init-param>
-            <param-name>contextConfigLocation</param-name>
-            <param-value></param-value>
-        </init-param>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>dispatcher</servlet-name>
-        <url-pattern>/*</url-pattern>
-    </servlet-mapping>
-
-    <filter>
-        <filter-name>encodingFilter</filter-name>
-        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-        <init-param>
-            <param-name>encoding</param-name>
-            <param-value>UTF-8</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>encodingFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>CamelServlet</servlet-name>-->
+        <!--<url-pattern>/camel/rest/*</url-pattern>-->
+    <!--</servlet-mapping>-->
 
     <servlet>
         <servlet-name>AuthorizeServlet</servlet-name>
@@ -93,25 +58,24 @@
         <url-pattern>/checkAccessToken</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>ClientDemoServlet</servlet-name>
-        <servlet-class>com.kalix.middleware.oauth.web.ClientDemoServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
+    <!--<servlet>-->
+        <!--<servlet-name>ClientDemoServlet</servlet-name>-->
+        <!--<servlet-class>com.kalix.middleware.oauth.web.ClientDemoServlet</servlet-class>-->
+        <!--<load-on-startup>1</load-on-startup>-->
+    <!--</servlet>-->
 
-    <servlet-mapping>
-        <servlet-name>ClientDemoServlet</servlet-name>
-        <url-pattern>/clientdemo</url-pattern>
-    </servlet-mapping>
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>ClientDemoServlet</servlet-name>-->
+        <!--<url-pattern>/clientdemo</url-pattern>-->
+    <!--</servlet-mapping>-->
 
     <!-- OAuth Server AccessToken 验证过滤器-->
-    <filter>
-        <filter-name>oauth2</filter-name>
-        <filter-class>com.kalix.middleware.oauth.web.Oauth2Filter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>oauth2</filter-name>
-        <url-pattern>/clientdemo/*</url-pattern>
-    </filter-mapping>
-
+    <!--<filter>-->
+        <!--<filter-name>oauth2</filter-name>-->
+        <!--<filter-class>com.kalix.middleware.oauth.web.Oauth2Filter</filter-class>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>oauth2</filter-name>-->
+        <!--<url-pattern>/camel/rest/*</url-pattern>-->
+    <!--</filter-mapping>-->
 </web-app>

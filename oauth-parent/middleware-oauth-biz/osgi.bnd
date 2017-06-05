@@ -3,4 +3,3 @@
 #-----------------------------------------------------------------
 Bundle-Activator: ${bundle.namespace}.internal.InitActivator
 Bundle-Category: Kalix Middleware Oauth
-Import-Package: *

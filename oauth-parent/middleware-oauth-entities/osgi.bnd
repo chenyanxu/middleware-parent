@@ -4,6 +4,5 @@
 
 Bundle-Activator: ${bundle.namespace}.internal.InitActivator
 Meta-Persistence: META-INF/persistence-jpa.xml
-Import-Package:*
 JPA-PersistenceUnits: oauth-cm
 Bundle-Category: Kalix Middleware Oauth

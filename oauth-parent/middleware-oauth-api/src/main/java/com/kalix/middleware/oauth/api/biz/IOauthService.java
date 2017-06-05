@@ -21,8 +21,7 @@ public interface IOauthService {
     String getUsernameByAccessToken(String accessToken);
 
     //auth code / access token 过期时间
-    long getExpireIn();
-
+    Long getExpireIn();
 
     boolean checkClientId(String clientId);
 

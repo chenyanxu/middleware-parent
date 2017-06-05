@@ -116,7 +116,7 @@ public class AccessTokenServlet extends HttpServlet {
             OAuthResponse response = OAuthASResponse
                     .tokenResponse(HttpServletResponse.SC_OK)
                     .setAccessToken(accessToken)
-                    .setExpiresIn(String.valueOf(oAuthService.getExpireIn()))
+                    .setExpiresIn(oAuthService.getExpireIn().toString())
                     .buildJSONMessage();
             Util.respWrite(resp, response);
 

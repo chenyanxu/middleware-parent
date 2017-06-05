@@ -10,6 +10,8 @@
     <bean id="authServiceImpl" class="com.kalix.middleware.oauth.biz.OauthServiceImpl">
         <property name="cacheManager" ref="cacheService"/>
         <property name="clientBeanDao" ref="clientBeanDao"/>
+        <!--the access token default expire time is 3600L seconds-->
+        <property name="expireIn" value="1800"/>
     </bean>
     <service id="authService" interface="com.kalix.middleware.oauth.api.biz.IOauthService" ref="authServiceImpl"/>
 

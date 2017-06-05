@@ -8,8 +8,13 @@ import com.kalix.middleware.oauth.api.dao.IClientBeanDao;
  * @author sunlf
  */
 public class OauthServiceImpl implements IOauthService {
-    ICacheManager cacheManager;
-    IClientBeanDao clientBeanDao;
+    private ICacheManager cacheManager;
+    private IClientBeanDao clientBeanDao;
+    private Long expireIn;
+
+    public OauthServiceImpl(){
+        //this.expireIn=3600L;
+    }
 
     public void setCacheManager(ICacheManager cacheManager) {
         this.cacheManager = cacheManager;
@@ -21,12 +26,12 @@ public class OauthServiceImpl implements IOauthService {
 
     @Override
     public void addAuthCode(String authCode, String username) {
-        cacheManager.save(authCode, username);
+        cacheManager.save(authCode, username,getExpireIn().intValue());
     }
 
     @Override
     public void addAccessToken(String accessToken, String username) {
-        cacheManager.save(accessToken, username);
+        cacheManager.save(accessToken, username,getExpireIn().intValue());
     }
 
     @Override
@@ -50,8 +55,12 @@ public class OauthServiceImpl implements IOauthService {
     }
 
     @Override
-    public long getExpireIn() {
-        return 3600L;
+    public Long getExpireIn() {
+        return this.expireIn;
+    }
+
+    public void setExpireIn(Long expireIn){
+        this.expireIn=expireIn;
     }
 
     @Override
