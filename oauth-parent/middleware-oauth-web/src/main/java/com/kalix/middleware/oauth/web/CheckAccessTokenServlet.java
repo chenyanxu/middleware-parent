@@ -16,15 +16,16 @@ public class CheckAccessTokenServlet extends HttpServlet {
     private IOauthService oAuthService;
 
     public CheckAccessTokenServlet() {
+
+    }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
         try {
             this.oAuthService = JNDIHelper.getJNDIServiceForName(IOauthService.class.getName());
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
         String accessToken = request.getParameter("accessToken");
         boolean b = oAuthService.checkAccessToken(accessToken);
         if (b) {
