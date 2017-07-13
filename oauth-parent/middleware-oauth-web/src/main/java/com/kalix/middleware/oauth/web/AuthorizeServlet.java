@@ -1,6 +1,6 @@
 package com.kalix.middleware.oauth.web;
 
-import com.kalix.framework.core.util.JNDIHelper;
+import com.kalix.framework.core.util.OsgiUtil;
 import com.kalix.framework.core.util.StringUtils;
 import com.kalix.middleware.oauth.api.Constants;
 import com.kalix.middleware.oauth.api.biz.IClientBeanService;
@@ -41,10 +41,10 @@ public class AuthorizeServlet extends HttpServlet {
 
     public AuthorizeServlet() {
         try {
-            this.oAuthService = JNDIHelper.getJNDIServiceForName(IOauthService.class.getName());
-            this.userService = JNDIHelper.getJNDIServiceForName(IUserBeanService.class.getName());
-            this.clientService = JNDIHelper.getJNDIServiceForName(IClientBeanService.class.getName());
-        } catch (IOException e) {
+            this.oAuthService = OsgiUtil.waitForServices(IOauthService.class, null);
+            this.userService = OsgiUtil.waitForServices(IUserBeanService.class, null);
+            this.clientService = OsgiUtil.waitForServices(IClientBeanService.class, null);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
