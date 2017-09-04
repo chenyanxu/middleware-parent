@@ -13,6 +13,7 @@ Ext.define('kalix.workflow.processdefinition.viewModel.ProcessDefinitionViewMode
         icon: '',
         title: '',
         processShowUrl: '/image',
+        processUrl: CONFIG.restRoot + 'camel/rest/workflow',
         view_operation: false,
         view_title: '查看流程定义',
         add_title: '添加流程定义',

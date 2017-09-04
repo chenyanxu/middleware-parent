@@ -16,12 +16,13 @@ Ext.define('kalix.workflow.processdefinition.controller.ProcessDefinitionGridCon
      * @param colIndex
      */
     onIsActivate: function (grid, rowIndex, colIndex) {
+        var url = CONFIG.restRoot + 'camel/rest/workflow';
         var rec = grid.getStore().getAt(rowIndex);
         var postUrl;
         if (rec.data.suspensionState == 1) {
-            postUrl = this.getView().getViewModel().get('processUrl') + '/suspend?key=' + rec.data.key;
+            postUrl = url + '/suspend?key=' + rec.data.key;
         } else {
-            postUrl = this.getView().getViewModel().get('processUrl') + '/activate?key=' + rec.data.key;
+            postUrl = url + '/activate?key=' + rec.data.key;
         }
         Ext.Ajax.request({
             url: postUrl,
