@@ -51,7 +51,9 @@ public class TaskServiceImpl implements ITaskService {
         //该服务位于IDutyBeanService中的 getUserDutyNameList() 方法实现
         String rtnStr = null;
         try {
-            rtnStr = HttpClientUtil.shiroGet("/users/user/dutys/list", this.shiroService.getSession().getAttribute("access_token").toString());
+            String access_token = this.shiroService.getSession().getAttribute("access_token").toString();
+            String sessionId = this.shiroService.getSession().getId().toString();
+            rtnStr = HttpClientUtil.shiroGet("/users/user/dutys/list", sessionId, access_token);
         } catch (IOException e) {
             e.printStackTrace();
         }
