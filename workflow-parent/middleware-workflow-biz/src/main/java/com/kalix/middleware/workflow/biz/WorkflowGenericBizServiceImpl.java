@@ -245,12 +245,12 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             e.printStackTrace();
         }
         //false 只能查看自己的数据
-        Long userid = this.shiroService.getCurrentUserId();
+        /*Long userid = this.shiroService.getCurrentUserId();
         if (!dataAuthService.isAuth(this.entityClassName, userid)) {
             Map<String, String> map = SerializeUtil.json2Map(jsonStr);
             map.put("createById", String.valueOf(userid));
             jsonStr = new Gson().toJson(map);
-        }
+        }*/
 
         return super.getAllEntityByQuery(page, limit, jsonStr, sort);
     }
