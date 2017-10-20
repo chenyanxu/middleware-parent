@@ -1,6 +1,5 @@
 package com.kalix.middleware.workflow.biz;
 
-import com.google.gson.Gson;
 import com.kalix.framework.core.api.dao.IGenericDao;
 import com.kalix.framework.core.api.persistence.JsonData;
 import com.kalix.framework.core.api.persistence.JsonStatus;
@@ -8,7 +7,6 @@ import com.kalix.framework.core.api.security.IDataAuthService;
 import com.kalix.framework.core.impl.biz.ShiroGenericBizServiceImpl;
 import com.kalix.framework.core.util.DateUtil;
 import com.kalix.framework.core.util.JNDIHelper;
-import com.kalix.framework.core.util.SerializeUtil;
 import com.kalix.middleware.workflow.api.Const;
 import com.kalix.middleware.workflow.api.biz.IWorkflowBizService;
 import com.kalix.middleware.workflow.api.exception.NotSameStarterException;
@@ -79,6 +77,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             //设置实体状态
             bean.setProcessInstanceId(instance.getProcessInstanceId());
             bean.setCurrentNode(task.get(0).getName());
+            bean.setApplyDate(new Date());
             bean.setAuditResult("审批中...");
 
             bean.setBusinessNo(bizNo);
