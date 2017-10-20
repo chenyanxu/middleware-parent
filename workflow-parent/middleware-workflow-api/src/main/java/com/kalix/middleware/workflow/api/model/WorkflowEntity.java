@@ -2,11 +2,13 @@ package com.kalix.middleware.workflow.api.model;
 
 //import com.kalix.framework.core.api.persistence.PersistentEntity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kalix.framework.core.api.persistence.PersistentEntity;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.MappedSuperclass;
+import java.util.Date;
 
 /**
  * @类描述：工作流业务数据抽象基类
@@ -27,6 +29,8 @@ public abstract class WorkflowEntity extends PersistentEntity {
     private short status = WorkflowStaus.INACTIVE;
     private String auditResult="流程尚未启动";//审批最终结果
     private String businessNo = ""; //业务编号
+    @JsonFormat(shape= JsonFormat.Shape.STRING ,pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date applyDate; //工作流业务申请时间
 
     public String getProcessInstanceId() {
         return processInstanceId;
@@ -90,5 +94,13 @@ public abstract class WorkflowEntity extends PersistentEntity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Date getApplyDate() {
+        return applyDate;
+    }
+
+    public void setApplyDate(Date applyDate) {
+        this.applyDate = applyDate;
     }
 }
