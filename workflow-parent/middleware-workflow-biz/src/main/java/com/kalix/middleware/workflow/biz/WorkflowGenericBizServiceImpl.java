@@ -217,7 +217,8 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
     }
 
     /**
-     * 添加处理人的名字到实体中
+     * 添加处理人的名字到实体中,通过流程定义UserTask的id和业务实体对应来实现
+     * 例如业务实体depUser属性，在UserTAsk中id定义为depUser，这样处理人就可以通过反射写到实体中
      *
      * @param currentTaskId
      * @param bean
