@@ -24,6 +24,20 @@ public interface IWorkflowBizService<T extends PersistentEntity> extends IBizSer
      */
     JsonStatus startProcess(String id);
 
+    /**
+     * 用于流程启动前处理业务数据
+     *
+     * @param bean 业务实体
+     */
+    void beforeStartProcess(T bean);
+
+    /**
+     * 用于流程结束后处理业务数据
+     *
+     * @param bean   业务实体
+     * @param result 审批结果
+     */
+    void afterFinishProcess(T bean, String result);
     String createBusinessNo(T bean);
     JsonStatus completeTask(String taskId, String accepted, String comment);
 }

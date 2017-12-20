@@ -61,7 +61,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
 
             //获得启动参数
             Map map = new HashMap<>();
-            map = getVariantMap(map,bean);
+            map = getVariantMap(map, bean);
             getStartMap(map, bean);
             map.put(Const.VAR_INITIATOR, userName);
             //启动流程
@@ -82,6 +82,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
 
             bean.setBusinessNo(bizNo);
             bean.setStatus(WorkflowStaus.ACTIVE);
+            beforeStartProcess(bean);
             this.updateEntity(bean);
 
             runtimeService.setProcessInstanceName(instance.getId(), bizNo);
@@ -93,6 +94,16 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
         }
 
         return jsonStatus;
+    }
+
+    /**
+     * 用于流程启动前处理业务数据
+     *
+     * @param bean 业务实体
+     */
+    @Override
+    public void beforeStartProcess(TP bean) {
+
     }
 
     /**
@@ -202,7 +213,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
 //                String result = passed ? "审批通过" : currentTaskName + "不通过";
                 String result = "审批结果:" + currentTaskName + accepted;
                 bean.setAuditResult(result);
-
+                afterFinishProcess(bean, accepted);
                 //用于子类调用该方法时判断流程是否结束
                 jsonStatus.setTag("流程结束:" + beanId);
             }
@@ -214,6 +225,17 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             throw new TaskProcessException();
         }
         return jsonStatus;
+    }
+
+    /**
+     * 用于流程结束后处理业务数据
+     *
+     * @param bean   业务实体
+     * @param result 审批结果
+     */
+    @Override
+    public void afterFinishProcess(TP bean, String result) {
+
     }
 
     /**
