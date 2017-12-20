@@ -66,7 +66,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             map.put(Const.VAR_INITIATOR, userName);
             //启动流程
             //创建流程业务编号
-            String bizNo = createBusinessNo();
+            String bizNo = createBusinessNo(bean);
             map.put(Const.BUSINESS_NO, bizNo);
 
 
@@ -115,7 +115,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
      * @return
      */
     @Override
-    public String createBusinessNo() {
+    public synchronized String createBusinessNo(TP bean) {
         String no = "";
         Date dateNow = new Date();
         try {
