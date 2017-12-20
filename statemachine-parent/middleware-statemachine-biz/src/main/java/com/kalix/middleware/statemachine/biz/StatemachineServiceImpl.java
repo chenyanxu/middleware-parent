@@ -7,8 +7,7 @@ import com.kalix.middleware.statemachine.core.states.FSMStateList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * Created by zangyanming on 2016/12/29.
@@ -27,10 +26,10 @@ public class StatemachineServiceImpl implements IStatemachineService {
     }
 
     @Override
-    public Object processFSM(InputStream is, String oldState, String newState) {
+    public void initFSM(InputStream is, String initState) {
         OurFSMAction ourFSMAction = new OurFSMAction();
         try {
-            this.fsm = new FSM(is, oldState, ourFSMAction);
+            this.fsm = new FSM(is, initState, ourFSMAction);
         } catch (ParserConfigurationException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
@@ -38,7 +37,10 @@ public class StatemachineServiceImpl implements IStatemachineService {
         } catch (SAXException e) {
             e.printStackTrace();
         }
+    }
 
+    @Override
+    public Object processFSM(String newState) {
         return this.fsm.ProcessFSM(newState);
     }
 
@@ -46,5 +48,20 @@ public class StatemachineServiceImpl implements IStatemachineService {
     public String getCurrentState(){
         return this.fsm.getCurrentState();
     }
+
+    public static void main(String args[]){
+        StatemachineServiceImpl statemachineService = new StatemachineServiceImpl();
+        InputStream is = null;
+        try {
+            is = new FileInputStream(new File("C:/redhead-state.xml"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        statemachineService.initFSM(is,"新建");
+        System.out.println(statemachineService.getCurrentState());
+        statemachineService.processFSM("审批");
+        System.out.println(statemachineService.getCurrentState());
+    }
 }
+
 
