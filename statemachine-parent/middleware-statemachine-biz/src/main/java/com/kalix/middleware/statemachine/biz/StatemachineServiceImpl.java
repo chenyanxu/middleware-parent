@@ -3,7 +3,6 @@ package com.kalix.middleware.statemachine.biz;
 import com.kalix.middleware.statemachine.api.biz.IStatemachineService;
 import com.kalix.middleware.statemachine.core.action.FSMAction;
 import com.kalix.middleware.statemachine.core.fsm.FSM;
-import com.kalix.middleware.statemachine.core.states.FSMStateList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -43,14 +42,8 @@ public class StatemachineServiceImpl implements IStatemachineService {
     @Override
     public Object processFSM(String newState) {
         Object o = this.fsm.ProcessFSM(newState);
-        try {
             if(o == null)
-                throw new Exception("new state not found");
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
+                throw new RuntimeException("new state not found");
         return o;
     }
 

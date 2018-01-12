@@ -303,6 +303,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
 
             TP bean = this.getEntity(new Long(beanId));
             bean.setStatus(WorkflowStatus.DELETE);
+            bean.setAuditResult("业务中止");
             afterDeleteProcess(bean);
             this.updateEntity(bean);
             runtimeService.deleteProcessInstance(processInstanceId, reason);
