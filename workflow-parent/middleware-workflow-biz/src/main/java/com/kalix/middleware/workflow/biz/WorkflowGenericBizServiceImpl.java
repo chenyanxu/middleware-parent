@@ -12,7 +12,7 @@ import com.kalix.middleware.workflow.api.biz.IWorkflowBizService;
 import com.kalix.middleware.workflow.api.exception.NotSameStarterException;
 import com.kalix.middleware.workflow.api.exception.TaskProcessException;
 import com.kalix.middleware.workflow.api.model.WorkflowEntity;
-import com.kalix.middleware.workflow.api.model.WorkflowStaus;
+import com.kalix.middleware.workflow.api.model.WorkflowStatus;
 import com.kalix.middleware.workflow.api.util.WorkflowUtil;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.RepositoryService;
@@ -81,7 +81,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             bean.setAuditResult("审批中...");
 
             bean.setBusinessNo(bizNo);
-            bean.setStatus(WorkflowStaus.ACTIVE);
+            bean.setStatus(WorkflowStatus.ACTIVE);
             beforeStartProcess(bean);
             this.updateEntity(bean);
 
@@ -206,10 +206,10 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             //设置实体状态
             if (curTask.size() > 0) {//流程未结束
                 bean.setCurrentNode(curTask.get(0).getName());
-                bean.setStatus(WorkflowStaus.ACTIVE);
+                bean.setStatus(WorkflowStatus.ACTIVE);
             } else {//流程已结束
                 bean.setCurrentNode("");
-                bean.setStatus(WorkflowStaus.FINISH);
+                bean.setStatus(WorkflowStatus.FINISH);
 //                String result = passed ? "审批通过" : currentTaskName + "不通过";
                 String result = "审批结果:" + currentTaskName + accepted;
                 bean.setAuditResult(result);
@@ -275,6 +275,44 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
         }*/
 
         return super.getAllEntityByQuery(page, limit, jsonStr, sort);
+    }
+
+    @Override
+    public void afterDeleteProcess(TP bean) {
+
+    }
+
+    /**
+     * 流程中止服务
+     *
+     * @param processInstanceId 流程实例id
+     * @return
+     */
+    @Override
+    public JsonStatus deleteProcess(String processInstanceId, String reason) {
+        JsonStatus jsonStatus = new JsonStatus();
+        jsonStatus.setSuccess(true);
+        try {
+            //通过任务对象获取流程实例
+            ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+
+            //通过流程实例获取“业务键”
+            String businessKey = pi.getBusinessKey();
+            //拆分业务键，拆分成“业务对象名称”和“业务对象ID”的数组
+            String beanId = WorkflowUtil.getBizId(businessKey);
+
+            TP bean = this.getEntity(new Long(beanId));
+            bean.setStatus(WorkflowStatus.DELETE);
+            afterDeleteProcess(bean);
+            this.updateEntity(bean);
+            runtimeService.deleteProcessInstance(processInstanceId, reason);
+            jsonStatus.setMsg("流程中止成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            jsonStatus.setSuccess(false);
+            jsonStatus.setMsg("流程中止失败");
+        }
+        return jsonStatus;
     }
 
     public Map getVariantMap(Map map, T bean) {

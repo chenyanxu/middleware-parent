@@ -25,6 +25,21 @@ public interface IWorkflowBizService<T extends PersistentEntity> extends IBizSer
     JsonStatus startProcess(String id);
 
     /**
+     * 流程中止
+     *
+     * @param processInstanceId
+     * @return
+     */
+    JsonStatus deleteProcess(String processInstanceId, String reason);
+
+    /**
+     * 用于流程中止后处理业务数据
+     *
+     * @param bean 业务实体
+     */
+    void afterDeleteProcess(T bean);
+
+    /**
      * 用于流程启动前处理业务数据
      *
      * @param bean 业务实体
