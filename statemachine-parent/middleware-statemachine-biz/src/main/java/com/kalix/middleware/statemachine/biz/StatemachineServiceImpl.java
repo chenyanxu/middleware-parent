@@ -15,8 +15,8 @@ import java.util.Map;
 public class StatemachineServiceImpl implements IStatemachineService {
     private FSM fsm = null;
 
-    class OurFSMAction extends FSMAction{
-        OurFSMAction(){
+    class OurFSMAction extends FSMAction {
+        OurFSMAction() {
         }
 
         @Override
@@ -42,17 +42,17 @@ public class StatemachineServiceImpl implements IStatemachineService {
     @Override
     public Object processFSM(String newState) {
         Object o = this.fsm.ProcessFSM(newState);
-            if(o == null)
-                throw new RuntimeException("new state not found");
+        if (o == null)
+            throw new RuntimeException("new state not found");
         return o;
     }
 
     @Override
-    public String getCurrentState(){
+    public String getCurrentState() {
         return this.fsm.getCurrentState();
     }
 
-    public static void main(String args[]){
+    public static void main(String args[]) {
         StatemachineServiceImpl statemachineService = new StatemachineServiceImpl();
         InputStream is = null;
         try {
@@ -60,12 +60,12 @@ public class StatemachineServiceImpl implements IStatemachineService {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        statemachineService.initFSM(is,"START");
+        statemachineService.initFSM(is, "START");
         System.out.println(statemachineService.getCurrentState());
         statemachineService.processFSM("MOVELEFT");
         statemachineService.processFSM("START");
         System.out.println(statemachineService.getCurrentState());
-        Map  map = statemachineService.fsm.getCurrentFSMState().getNewTransitionMap();
+        Map map = statemachineService.fsm.getCurrentFSMState().getNewTransitionMap();
         System.out.println(map);
     }
 }
