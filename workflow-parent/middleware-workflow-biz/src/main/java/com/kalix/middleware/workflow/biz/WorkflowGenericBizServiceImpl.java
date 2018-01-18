@@ -340,22 +340,35 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
         this.repositoryService = repositoryService;
     }
 
+    /**
+     * 工作流统计
+     * @param jsonStr 包含sql 查询的参数，图表展现的参数
+     * @return
+     */
     public JsonData getWorkFlowStatistic(String jsonStr) {
-        Map<String, String> jsonMap = null;
+//        Map<String, String> jsonMap = null;
+        Map<String, Object> jsonMap = null;
         Map<String, String> barmap = new HashMap<>();
         String chartTitle = "";
         String groupSelectValue = "";
+        List<Map<String,String>> statusMap = null;
         if (jsonStr != null && !jsonStr.isEmpty()) {
-            jsonMap = SerializeUtil.json2Map(jsonStr);
-            for (Map.Entry<String, String> entry : jsonMap.entrySet()) {
+            jsonMap = SerializeUtil.jsonToMap(jsonStr);
+            for (Map.Entry<String, Object> entry : jsonMap.entrySet()) {
                 if ("groupSelectValue".equals(entry.getKey())) {
-                    groupSelectValue = entry.getValue();
+                    groupSelectValue = (String)entry.getValue();
                     break;
                 }
             }
-            for (Map.Entry<String, String> entry : jsonMap.entrySet()) {
+            for (Map.Entry<String, Object> entry : jsonMap.entrySet()) {
                 if ("chartTitle".equals(entry.getKey())) {
-                    chartTitle = entry.getValue();
+                    chartTitle = (String)entry.getValue();
+                    break;
+                }
+            }
+            for (Map.Entry<String, Object> entry : jsonMap.entrySet()) {
+                if ("workflowStatus".equals(entry.getKey())) {
+                    statusMap = (List<Map<String, String>>)entry.getValue();
                     break;
                 }
             }
@@ -385,34 +398,42 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
         jpaStatistic.setStatisticTypes(new JpaStatistic.Statistic[]{JpaStatistic.Statistic.COUNT});
         Map<String, String> params = jpaStatistic.getStatisticParam();
         if (jsonMap != null && !jsonMap.isEmpty()) {
-            for (Map.Entry<String, String> entry : jsonMap.entrySet()) {
-                if (!"groupSelectValue".equals(entry.getKey())
-                        && !"chartTitle".equals(entry.getKey()) && !"selectValue".equals(entry.getKey())) {
-                    params.put(entry.getKey(),entry.getValue());
+            for (Map.Entry<String, Object> entry : jsonMap.entrySet()) {
+                if (!"groupSelectValue".equals(entry.getKey()) && !"chartTitle".equals(entry.getKey())
+                        && !"selectValue".equals(entry.getKey()) && !"workflowStatus".equals(entry.getKey())) {
+                    params.put(entry.getKey(), (String)entry.getValue());
                 }
             }
         }
         dto.setJsonMap(params);
         JsonData data = dao.getAllByStatistic(dto);
         List<Tuple> list = data.getData();
-
         JsonData d1 = new JsonData();
         List<Map<String, String>> dataList = new ArrayList<>();
-//        String barData = testBar(true);
-        String barData = barChart(list, chartTitle);
+        String[] types = new String[list.size()];
+        int[] datas = new int[list.size()];
+        for (int i=0; i<list.size(); i++) {
+            if ("1".equals(groupSelectValue)) {
+                //types[i] = statusMap.get(list.get(i).get(0));
+                for (Map<String,String> stMap : statusMap) {
+                    if (stMap.get("value").equals(String.valueOf(list.get(i).get(0)))) {
+                        types[i] = stMap.get("label");
+                    }
+                }
+//                types[i] = String.valueOf(list.get(i).get(0));
+            } else {
+                types[i] = String.valueOf(list.get(i).get(0));
+            }
+            datas[i] = Integer.parseInt(list.get(i).get(1).toString());
+        }
+        String barData = barChart(types, datas, chartTitle);
 
         barmap.put("option", barData);
         dataList.add(barmap);
         d1.setData(dataList);
         return d1;
     }
-    private String barChart(List<Tuple> list, String chartTitle){
-        String[] types = new String[list.size()];
-        int[] datas = new int[list.size()];
-        for (int i=0; i<list.size(); i++) {
-            types[i] = String.valueOf(list.get(i).get(0));
-            datas[i] = Integer.parseInt(list.get(i).get(1).toString());
-        }
+    private String barChart(String[] types, int[] datas, String chartTitle){
         String title = chartTitle;
         GsonOption option = new GsonOption();
         option.title(title); // 标题
