@@ -348,7 +348,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
     public JsonData getWorkFlowStatistic(String jsonStr) {
 //        Map<String, String> jsonMap = null;
         Map<String, Object> jsonMap = null;
-        Map<String, String> barmap = new HashMap<>();
+        Map<String, String> barMap = new HashMap<>();
         String chartTitle = "";
         String groupSelectValue = "";
         List<Map<String,String>> statusMap = null;
@@ -420,7 +420,6 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
                         types[i] = stMap.get("label");
                     }
                 }
-//                types[i] = String.valueOf(list.get(i).get(0));
             } else {
                 types[i] = String.valueOf(list.get(i).get(0));
             }
@@ -428,8 +427,8 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
         }
         String barData = barChart(types, datas, chartTitle);
 
-        barmap.put("option", barData);
-        dataList.add(barmap);
+        barMap.put("option", barData);
+        dataList.add(barMap);
         d1.setData(dataList);
         return d1;
     }
