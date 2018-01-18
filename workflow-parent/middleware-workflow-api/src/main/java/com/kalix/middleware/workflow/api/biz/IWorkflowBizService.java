@@ -1,6 +1,7 @@
 package com.kalix.middleware.workflow.api.biz;
 
 import com.kalix.framework.core.api.biz.IBizService;
+import com.kalix.framework.core.api.persistence.JsonData;
 import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.api.persistence.PersistentEntity;
 
@@ -40,4 +41,5 @@ public interface IWorkflowBizService<T extends PersistentEntity> extends IBizSer
     void afterFinishProcess(T bean, String result);
     String createBusinessNo(T bean);
     JsonStatus completeTask(String taskId, String accepted, String comment);
+    JsonData getWorkFlowStatistic(String jsonStr);
 }

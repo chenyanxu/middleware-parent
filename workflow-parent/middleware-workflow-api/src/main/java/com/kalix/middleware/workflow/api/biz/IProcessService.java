@@ -23,4 +23,6 @@ public interface IProcessService extends IService {
     JsonData getMyInvolvedProcessHistory(int page, int limit, String jsonStr);
 
     JsonData getHistoricActivity(String historyProcessId);
+
+    JsonData getAllProcessNameAndKey();
 }

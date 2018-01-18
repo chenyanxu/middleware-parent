@@ -24,10 +24,8 @@ import org.activiti.engine.task.IdentityLink;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by sunlf on 2015/7/30.
@@ -397,5 +395,23 @@ public class ProcessServiceImpl implements IProcessService {
 
     public void setProcessEngine(ProcessEngine processEngine) {
         this.processEngine = processEngine;
+    }
+    public JsonData getAllProcessNameAndKey() {
+        List<ProcessDefinition> processDefinitionList = repositoryService.createProcessDefinitionQuery().latestVersion().list();
+        List<Map<String,String>> list = new ArrayList<>();
+        if (processDefinitionList != null && !processDefinitionList.isEmpty()) {
+            // 去掉集合中重复name的数据
+            List<ProcessDefinition> uniqueDefinitionList = processDefinitionList.stream().collect(
+                    Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(ProcessDefinition::getKey))), ArrayList::new)
+            );
+            for (ProcessDefinition definition : uniqueDefinitionList) {
+                Map<String, String> nameAndKey = new HashMap<>();
+                nameAndKey.put("label", definition.getName());
+                nameAndKey.put("value", definition.getKey());
+                list.add(nameAndKey);
+            }
+        }
+        jsonData.setData(list);
+        return jsonData;
     }
 }

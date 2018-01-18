@@ -1,12 +1,18 @@
 package com.kalix.middleware.workflow.biz;
 
+import com.github.abel533.echarts.axis.CategoryAxis;
+import com.github.abel533.echarts.json.GsonOption;
+import com.github.abel533.echarts.series.Bar;
 import com.kalix.framework.core.api.dao.IGenericDao;
+import com.kalix.framework.core.api.persistence.JpaStatistic;
 import com.kalix.framework.core.api.persistence.JsonData;
 import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.api.security.IDataAuthService;
+import com.kalix.framework.core.api.web.model.QueryDTO;
 import com.kalix.framework.core.impl.biz.ShiroGenericBizServiceImpl;
 import com.kalix.framework.core.util.DateUtil;
 import com.kalix.framework.core.util.JNDIHelper;
+import com.kalix.framework.core.util.SerializeUtil;
 import com.kalix.middleware.workflow.api.Const;
 import com.kalix.middleware.workflow.api.biz.IWorkflowBizService;
 import com.kalix.middleware.workflow.api.exception.NotSameStarterException;
@@ -23,14 +29,12 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.DelegationState;
 import org.activiti.engine.task.Task;
 
+import javax.persistence.Tuple;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by sunlf on 2016-03-03.
@@ -295,5 +299,105 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
 
     public void setRepositoryService(RepositoryService repositoryService) {
         this.repositoryService = repositoryService;
+    }
+
+    public JsonData getWorkFlowStatistic(String jsonStr) {
+        Map<String, String> jsonMap = null;
+        Map<String, String> barmap = new HashMap<>();
+        String chartTitle = "";
+        String groupSelectValue = "";
+        if (jsonStr != null && !jsonStr.isEmpty()) {
+            jsonMap = SerializeUtil.json2Map(jsonStr);
+            for (Map.Entry<String, String> entry : jsonMap.entrySet()) {
+                if ("groupSelectValue".equals(entry.getKey())) {
+                    groupSelectValue = entry.getValue();
+                    break;
+                }
+            }
+            for (Map.Entry<String, String> entry : jsonMap.entrySet()) {
+                if ("chartTitle".equals(entry.getKey())) {
+                    chartTitle = entry.getValue();
+                    break;
+                }
+            }
+        }
+        String[] groupbys = null;
+        String[] selectNotStatistics = null;
+        String[] selectStatistics = null;
+        if ("2".equals(groupSelectValue)) {
+            groupbys = new String[]{"auditResult"};
+            selectNotStatistics = new String[]{"auditResult"};
+            selectStatistics = new String[]{"auditResult"};
+        } else if ("1".equals(groupSelectValue)) {
+            groupbys = new String[]{"status"};
+            selectNotStatistics = new String[]{"status"};
+            selectStatistics = new String[]{"status"};
+        } else {
+            groupbys = new String[]{"orgName"};
+            selectNotStatistics = new String[]{"orgName"};
+            selectStatistics = new String[]{"orgId"};
+        }
+        QueryDTO dto = new QueryDTO();
+        // select orgName,count(orgId) from oa_workflow_redheadapply group by orgName;
+        JpaStatistic jpaStatistic = new JpaStatistic();
+        jpaStatistic.setGroupBys(groupbys);
+        jpaStatistic.setSelectNotStatistics(selectNotStatistics);
+        jpaStatistic.setSelectStatistics(selectStatistics);
+        jpaStatistic.setStatisticTypes(new JpaStatistic.Statistic[]{JpaStatistic.Statistic.COUNT});
+        Map<String, String> params = jpaStatistic.getStatisticParam();
+        if (jsonMap != null && !jsonMap.isEmpty()) {
+            for (Map.Entry<String, String> entry : jsonMap.entrySet()) {
+                if (!"groupSelectValue".equals(entry.getKey())
+                        && !"chartTitle".equals(entry.getKey()) && !"selectValue".equals(entry.getKey())) {
+                    params.put(entry.getKey(),entry.getValue());
+                }
+            }
+        }
+        dto.setJsonMap(params);
+        JsonData data = dao.getAllByStatistic(dto);
+        List<Tuple> list = data.getData();
+
+        JsonData d1 = new JsonData();
+        List<Map<String, String>> dataList = new ArrayList<>();
+//        String barData = testBar(true);
+        String barData = barChart(list, chartTitle);
+
+        barmap.put("option", barData);
+        dataList.add(barmap);
+        d1.setData(dataList);
+        return d1;
+    }
+    private String barChart(List<Tuple> list, String chartTitle){
+        String[] types = new String[list.size()];
+        int[] datas = new int[list.size()];
+        for (int i=0; i<list.size(); i++) {
+            types[i] = String.valueOf(list.get(i).get(0));
+            datas[i] = Integer.parseInt(list.get(i).get(1).toString());
+        }
+        String title = chartTitle;
+        GsonOption option = new GsonOption();
+        option.title(title); // 标题
+        // 工具栏
+//        option.toolbox().show(true).feature(Tool.mark, // 辅助线
+//                Tool.dataView, // 数据视图
+//                new MagicType(Magic.line, Magic.bar),// 线图、柱状图切换
+//                Tool.restore,// 还原
+//                Tool.saveAsImage);// 保存为图片
+        option.tooltip().show(true).formatter("{a} <br/>{b} : {c}");//显示工具提示,设置提示格式
+        option.legend(title);// 图例
+        Bar bar = new Bar(title);// 图类别(柱状图)
+        CategoryAxis category = new CategoryAxis();// 轴分类
+        category.data(types);// 轴数据类别
+        // 循环数据
+        for (int i = 0; i < datas.length; i++) {
+            int data = datas[i];
+            Map<String, Object> map = new HashMap<>();
+            map.put("value", data);
+            bar.data(map);
+        }
+        option.xAxis(category);// x轴
+        option.yAxis(new com.github.abel533.echarts.axis.ValueAxis());// y轴
+        option.series(bar);
+        return option.toString();
     }
 }

@@ -37,6 +37,10 @@
                        defaultValue="{&quot;name&quot;:&quot;&quot;}" dataType="string" required="false"/>
                 <to uri="bean:processService?method=getProcessDefinition(${header.page},${header.limit},${header.jsonStr})"/>
             </get>
+            <get id="route-getAllProcessDefine" uri="/defines" outType="com.kalix.framework.core.api.persistence.JsonData">
+                <description>Find All Process</description>
+                <to uri="bean:processService?method=getAllProcessNameAndKey()"/>
+            </get>
 
             <get id="route-getHistoryProcess" uri="/historys" outType="com.kalix.framework.core.api.persistence.JsonData">
                 <description>Find All History Process</description>
