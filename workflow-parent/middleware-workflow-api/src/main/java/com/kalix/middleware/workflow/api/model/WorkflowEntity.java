@@ -26,7 +26,7 @@ public abstract class WorkflowEntity extends PersistentEntity {
     private String orgName; //组织结构名称
     private String processInstanceId;//流程实例id
     private String currentNode;//当前环节
-    private short status = WorkflowStaus.INACTIVE;
+    private short status = WorkflowStatus.INACTIVE;
     private String auditResult="流程尚未启动";//审批最终结果
     private String businessNo = ""; //业务编号
     @JsonFormat(shape= JsonFormat.Shape.STRING ,pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
