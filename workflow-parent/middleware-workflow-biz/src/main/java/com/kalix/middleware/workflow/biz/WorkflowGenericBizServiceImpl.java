@@ -467,7 +467,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
         option.calculable(true);// 拖动进行计算
         Pie pie = new Pie();
         // 标题、半径、位置
-        pie.name(chartTitle).radius("55%").center("50%", "60%");
+        pie.name(chartTitle).radius("80%").center("50%", "60%");
         // 循环数据
         for (int i = 0; i < types.length; i++) {
             Map<String, Object> map = new HashMap<>(2);
