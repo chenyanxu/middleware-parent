@@ -1,8 +1,12 @@
 package com.kalix.middleware.workflow.biz;
 
 import com.github.abel533.echarts.axis.CategoryAxis;
+import com.github.abel533.echarts.code.Orient;
+import com.github.abel533.echarts.code.Trigger;
 import com.github.abel533.echarts.json.GsonOption;
 import com.github.abel533.echarts.series.Bar;
+import com.github.abel533.echarts.series.Line;
+import com.github.abel533.echarts.series.Pie;
 import com.kalix.framework.core.api.dao.IGenericDao;
 import com.kalix.framework.core.api.persistence.JpaStatistic;
 import com.kalix.framework.core.api.persistence.JsonData;
@@ -351,12 +355,19 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
         Map<String, String> barMap = new HashMap<>();
         String chartTitle = "";
         String groupSelectValue = "";
+        String chartSelectValue = "";
         List<Map<String,String>> statusMap = null;
         if (jsonStr != null && !jsonStr.isEmpty()) {
             jsonMap = SerializeUtil.jsonToMap(jsonStr);
             for (Map.Entry<String, Object> entry : jsonMap.entrySet()) {
                 if ("groupSelectValue".equals(entry.getKey())) {
                     groupSelectValue = (String)entry.getValue();
+                    break;
+                }
+            }
+            for (Map.Entry<String, Object> entry : jsonMap.entrySet()) {
+                if ("chartSelectValue".equals(entry.getKey())) {
+                    chartSelectValue = (String)entry.getValue();
                     break;
                 }
             }
@@ -400,7 +411,8 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
         if (jsonMap != null && !jsonMap.isEmpty()) {
             for (Map.Entry<String, Object> entry : jsonMap.entrySet()) {
                 if (!"groupSelectValue".equals(entry.getKey()) && !"chartTitle".equals(entry.getKey())
-                        && !"selectValue".equals(entry.getKey()) && !"workflowStatus".equals(entry.getKey())) {
+                        && !"selectValue".equals(entry.getKey()) && !"workflowStatus".equals(entry.getKey())
+                        && !"chartSelectValue".equals(entry.getKey())) {
                     params.put(entry.getKey(), (String)entry.getValue());
                 }
             }
@@ -425,13 +437,82 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             }
             datas[i] = Integer.parseInt(list.get(i).get(1).toString());
         }
-        String barData = barChart(types, datas, chartTitle);
-
-        barMap.put("option", barData);
+        String chartData = "";
+        if ("2".equals(chartSelectValue)) {
+            chartData = pieChart(types, datas, chartTitle);
+        } else if ("1".equals(chartSelectValue)) {
+            chartData = lineChart(types, datas, chartTitle);
+        } else {
+            chartData = barChart(types, datas, chartTitle);
+        }
+        barMap.put("option", chartData);
         dataList.add(barMap);
         d1.setData(dataList);
         return d1;
     }
+
+    /**
+     * 饼图Options
+     * @param types
+     * @param datas
+     * @param chartTitle
+     * @return
+     */
+    private String pieChart(String[] types, int[] datas, String chartTitle) {
+        GsonOption option = new GsonOption();
+        option.title().text(chartTitle).x("center");// 大标题、标题位置
+        // 提示工具 鼠标在每一个数据项上，触发显示提示数据
+        option.tooltip().trigger(Trigger.item).formatter("{a} <br/>{b} : {c} ({d}%)");
+        option.legend().orient(Orient.horizontal).x("left").data(types);// 图例及位置
+        option.calculable(true);// 拖动进行计算
+        Pie pie = new Pie();
+        // 标题、半径、位置
+        pie.name(chartTitle).radius("55%").center("50%", "60%");
+        // 循环数据
+        for (int i = 0; i < types.length; i++) {
+            Map<String, Object> map = new HashMap<>(2);
+            map.put("value", datas[i]);
+            map.put("name", types[i]);
+            pie.data(map);
+        }
+        option.series(pie);
+        return option.toString();
+    }
+
+    /**
+     * 折线图Options
+     * @param types
+     * @param datas
+     * @param chartTitle
+     * @return
+     */
+    private String lineChart(String[] types, int[] datas, String chartTitle) {
+        GsonOption option = new GsonOption();
+        option.title(chartTitle); // 标题
+        option.tooltip().show(true).formatter("{a} <br/>{b} : {c}");//显示工具提示,设置提示格式
+        option.legend(chartTitle);// 图例
+        Line line = new Line();
+        CategoryAxis category = new CategoryAxis();// 轴分类
+        category.data(types);// 轴数据类别
+        // 循环数据
+        for (int i = 0; i < datas.length; i++) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("value", datas[i]);
+            line.data(map);
+        }
+        option.xAxis(category);// x轴
+        option.yAxis(new com.github.abel533.echarts.axis.ValueAxis());// y轴
+        option.series(line);
+        return option.toString();
+    }
+
+    /**
+     * 柱状图Options
+     * @param types
+     * @param datas
+     * @param chartTitle
+     * @return
+     */
     private String barChart(String[] types, int[] datas, String chartTitle){
         String title = chartTitle;
         GsonOption option = new GsonOption();
