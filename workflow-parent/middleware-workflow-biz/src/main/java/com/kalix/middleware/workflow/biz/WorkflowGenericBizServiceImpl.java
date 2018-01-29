@@ -320,7 +320,8 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
         return jsonStatus;
     }
 
-    public Map getVariantMap(Map map, T bean) {
+    public Map getVariantMap(Map map, TP bean) {
+        map.put(Const.VAR_TITLE, bean.getTitle());
         return map;
     }
 
