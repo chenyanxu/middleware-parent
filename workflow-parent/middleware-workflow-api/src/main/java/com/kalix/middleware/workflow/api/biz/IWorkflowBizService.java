@@ -1,6 +1,7 @@
 package com.kalix.middleware.workflow.api.biz;
 
 import com.kalix.framework.core.api.biz.IBizService;
+import com.kalix.framework.core.api.persistence.JsonData;
 import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.api.persistence.PersistentEntity;
 
@@ -24,6 +25,36 @@ public interface IWorkflowBizService<T extends PersistentEntity> extends IBizSer
      */
     JsonStatus startProcess(String id);
 
-    String createBusinessNo();
+    /**
+     * 流程中止
+     *
+     * @param processInstanceId
+     * @return
+     */
+    JsonStatus deleteProcess(String processInstanceId, String reason);
+
+    /**
+     * 用于流程中止后处理业务数据
+     *
+     * @param bean 业务实体
+     */
+    void afterDeleteProcess(T bean);
+
+    /**
+     * 用于流程启动前处理业务数据
+     *
+     * @param bean 业务实体
+     */
+    void beforeStartProcess(T bean);
+
+    /**
+     * 用于流程结束后处理业务数据
+     *
+     * @param bean   业务实体
+     * @param result 审批结果
+     */
+    void afterFinishProcess(T bean, String result);
+    String createBusinessNo(T bean);
     JsonStatus completeTask(String taskId, String accepted, String comment);
+    JsonData getWorkFlowStatistic(String jsonStr);
 }

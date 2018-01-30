@@ -2,6 +2,7 @@ package com.kalix.middleware.workflow.biz;
 
 import com.kalix.middleware.workflow.api.biz.IFormHandler;
 import com.kalix.middleware.workflow.api.biz.IWorkflowCommon;
+import com.kalix.middleware.workflow.api.exception.FormProcessException;
 import com.kalix.middleware.workflow.api.model.FormDTO;
 import com.kalix.middleware.workflow.engine.manager.FormManager;
 import org.activiti.engine.FormService;
@@ -46,11 +47,9 @@ public class WorkflowCommonImpl implements IWorkflowCommon {
         if (formHandler != null) {
             Mapper mapper = new DozerBeanMapper();
             FormDTO formDTO = mapper.map(formHandler, FormDTO.class);
-
             return formDTO;
-        }
-
-        return null;
+        } else
+            throw new FormProcessException();
     }
 
     @Override

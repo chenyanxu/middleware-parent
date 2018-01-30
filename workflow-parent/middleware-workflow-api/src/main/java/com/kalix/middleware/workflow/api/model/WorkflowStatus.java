@@ -8,8 +8,9 @@ package com.kalix.middleware.workflow.api.model;
  * @修改时间：
  * @修改备注：
  */
-public interface WorkflowStaus {
+public interface WorkflowStatus {
     public static short INACTIVE = 0;//未申请
     public static short ACTIVE = 1;//处理中
     public static short FINISH = 2;//结束
+    public static short DELETE = 3;//中止
 }
