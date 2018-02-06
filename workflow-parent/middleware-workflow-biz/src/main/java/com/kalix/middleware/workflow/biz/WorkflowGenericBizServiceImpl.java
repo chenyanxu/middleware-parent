@@ -17,6 +17,7 @@ import com.kalix.framework.core.impl.biz.ShiroGenericBizServiceImpl;
 import com.kalix.framework.core.util.DateUtil;
 import com.kalix.framework.core.util.JNDIHelper;
 import com.kalix.framework.core.util.SerializeUtil;
+import com.kalix.framework.core.util.StringUtils;
 import com.kalix.middleware.workflow.api.Const;
 import com.kalix.middleware.workflow.api.biz.IWorkflowBizService;
 import com.kalix.middleware.workflow.api.exception.NotSameStarterException;
@@ -195,6 +196,9 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             } else {
                 taskService.claim(task.getId(), currentUserId);
             }
+            //判断当前是否是驳回
+            boolean passed = accepted.equals("同意") ? true : false;
+            bean.setReject(!passed);
 
             writeClaimResult(task.getTaskDefinitionKey(), userName, bean);
 
@@ -202,7 +206,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             identityService.setAuthenticatedUserId(userName);
             taskService.addComment(task.getId(), processInstanceId, comment);
             Map<String, Object> submitMap = new HashMap<String, Object>();
-//            boolean passed = accepted.equals("同意") ? true : false;
+
             //完成任务
             submitMap.put(Const.VAR_ACCEPTED, accepted);
             Map vars = getVariantMap(submitMap, bean);
@@ -258,8 +262,21 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
         try {
             // 将属性的首字符大写，方便构造get，set
             String name = currentTaskId.substring(0, 1).toUpperCase() + currentTaskId.substring(1);
-            Method method = bean.getClass().getDeclaredMethod("set" + name, String.class);
-            method.invoke(bean, userName);
+            if (bean.getReject()) { // 判断是驳回状态,审批人设置为空
+                // 将属性的首字符大写，方便构造get，set
+                Method method = bean.getClass().getDeclaredMethod("set" + name, String.class);
+                method.invoke(bean, "");
+            } else {
+                Method method = bean.getClass().getDeclaredMethod("get" + name, String.class);
+                String str = (String) method.invoke(bean);
+                Method method1 = bean.getClass().getDeclaredMethod("set" + name, String.class);
+                if (StringUtils.isEmpty(str)) {
+                    method1.invoke(bean, userName);
+                } else {
+                    method1.invoke(bean, str + "," + userName); //会签环节，附加审批人
+                }
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
 //            throw new TaskProcessException();
