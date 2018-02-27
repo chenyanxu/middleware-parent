@@ -267,7 +267,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
                 Method method = bean.getClass().getDeclaredMethod("set" + name, String.class);
                 method.invoke(bean, "");
             } else {
-                Method method = bean.getClass().getDeclaredMethod("get" + name, String.class);
+                Method method = bean.getClass().getDeclaredMethod("get" + name);
                 String str = (String) method.invoke(bean);
                 Method method1 = bean.getClass().getDeclaredMethod("set" + name, String.class);
                 if (StringUtils.isEmpty(str)) {
@@ -279,7 +279,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
 
         } catch (Exception e) {
             e.printStackTrace();
-//            throw new TaskProcessException();
+            throw new TaskProcessException();
         }
     }
 
