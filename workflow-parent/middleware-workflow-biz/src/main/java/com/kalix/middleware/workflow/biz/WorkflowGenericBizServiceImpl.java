@@ -262,21 +262,23 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
         try {
             // 将属性的首字符大写，方便构造get，set
             String name = currentTaskId.substring(0, 1).toUpperCase() + currentTaskId.substring(1);
-            if (bean.getReject()) { // 判断是驳回状态,审批人设置为空
-                // 将属性的首字符大写，方便构造get，set
-                Method method = bean.getClass().getDeclaredMethod("set" + name, String.class);
-                method.invoke(bean, "");
-            } else {
-                Method method = bean.getClass().getDeclaredMethod("get" + name);
-                String str = (String) method.invoke(bean);
-                Method method1 = bean.getClass().getDeclaredMethod("set" + name, String.class);
-                if (StringUtils.isEmpty(str)) {
-                    method1.invoke(bean, userName);
+            // 判断是否是修改状态，非修改处理审批人，修改不处理
+            if (!name.toLowerCase().equals("modify")) {
+                if (bean.getReject()) { // 判断是驳回状态,审批人设置为空
+                    // 将属性的首字符大写，方便构造get，set
+                    Method method = bean.getClass().getDeclaredMethod("set" + name, String.class);
+                    method.invoke(bean, "");
                 } else {
-                    method1.invoke(bean, str + "," + userName); //会签环节，附加审批人
+                    Method method = bean.getClass().getDeclaredMethod("get" + name);
+                    String str = (String) method.invoke(bean);
+                    Method method1 = bean.getClass().getDeclaredMethod("set" + name, String.class);
+                    if (StringUtils.isEmpty(str)) {
+                        method1.invoke(bean, userName);
+                    } else {
+                        method1.invoke(bean, str + "," + userName); //会签环节，附加审批人
+                    }
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             throw new TaskProcessException();
