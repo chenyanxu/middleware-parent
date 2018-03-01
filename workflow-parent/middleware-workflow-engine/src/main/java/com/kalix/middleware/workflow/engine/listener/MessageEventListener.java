@@ -52,6 +52,7 @@ public class MessageEventListener implements ActivitiEventListener {
 
     /**
      * 发送任务完成事件给工作流的发起人
+     *
      * @param event
      */
     private void postCompleteEvent(ActivitiEvent event) {
@@ -61,13 +62,13 @@ public class MessageEventListener implements ActivitiEventListener {
             e.printStackTrace();
         }
         String processInstanceId = event.getProcessInstanceId();
-        JSONObject taskJson=new JSONObject();
-        HistoricProcessInstance historicProcessInstance=historyService.createHistoricProcessInstanceQuery()
+        JSONObject taskJson = new JSONObject();
+        HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery()
                 .processInstanceId(processInstanceId).singleResult();
-        String startUserId=historicProcessInstance.getStartUserId();
+        String startUserId = historicProcessInstance.getStartUserId();
         Dictionary properties = new Hashtable();
 
-        taskJson.put("startUserId",startUserId);
+        taskJson.put("startUserId", startUserId);
         taskJson.put("businessNo", historicProcessInstance.getName());
 
         properties.put("body", taskJson.toString());
@@ -83,6 +84,7 @@ public class MessageEventListener implements ActivitiEventListener {
 
     /**
      * 发送 osgi event 给相应的group,具体的实现在common-parent消息中
+     *
      * @param event
      */
     private void postCreateEvent(ActivitiEvent event) {
@@ -93,11 +95,11 @@ public class MessageEventListener implements ActivitiEventListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        JSONObject taskJson=new JSONObject();
+        JSONObject taskJson = new JSONObject();
         String processInstanceId = event.getProcessInstanceId();
-        ActivitiEntityEventImpl entityEvent= (ActivitiEntityEventImpl) event;
-        TaskEntity task= (TaskEntity) entityEvent.getEntity();
-        List<IdentityLinkEntity> idList=task.getIdentityLinks();
+        ActivitiEntityEventImpl entityEvent = (ActivitiEntityEventImpl) event;
+        TaskEntity task = (TaskEntity) entityEvent.getEntity();
+        List<IdentityLinkEntity> idList = task.getIdentityLinks();
 
         //如果group为一个人，则直接签收任务
         if (task.getAssignee() == null && task.getCandidates().size() == 1) {
@@ -112,20 +114,27 @@ public class MessageEventListener implements ActivitiEventListener {
                         .processInstanceId(processInstanceId).singleResult();
 
                 if (historicProcessInstance != null) {
-                    taskJson.put("group", id.getGroupId());
+                    if (id.getGroupId() != null) {
+                        taskJson.put("group", id.getGroupId()); // 按group分配
+                        taskJson.put("userId", "");
+                        System.out.println("A task group of " + id.getGroupId() + " is assigned!");
+                    } else if (id.getUserId() != null) {
+                        taskJson.put("userId", id.getUserId()); // 按确定的用户分配
+                        taskJson.put("group", "");
+                        System.out.println("A task user of " + id.getUserId() + " is assigned!");
+                    }
                     taskJson.put("businessNo", historicProcessInstance.getName());
-                    System.out.println("A task group of " + id.getGroupId() + " is assigned!");
                     //添加相关内容到消息体
                     Dictionary properties = new Hashtable();
                     properties.put("body", taskJson.toString());
                     Event osgi_event = new Event(WORKFLOW_MESSAGE_TOPIC, properties);
                     eventAdmin.postEvent(osgi_event);
                 } else {
-                    System.out.println("No find a historicProcessInstance!");
+                    System.out.println("Not find a historicProcessInstance!");
                 }
             }
         } else {
-            System.out.println("No find a IdentityLinkEntity!");
+            System.out.println("Not find a IdentityLinkEntity!");
         }
 
     }
