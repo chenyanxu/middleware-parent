@@ -114,33 +114,34 @@ public class ProcessServiceImpl implements IProcessService {
         String loginUser = this.shiroService.getCurrentUserLoginName();
         List<HistoricProcessInstanceDTO> historicProcessDTOList;
         List<HistoricProcessInstance> processHistoryList;
-        HistoricProcessInstanceQuery query=null;
+        HistoricProcessInstanceQuery query = null;
         long count = 0;
+        // orderByProcessInstanceEndTime().desc() 默认按照流程状态排序（无结束时间代表进行中在前，结束的流程放后面）
+        // 然后按照流程开始时间再次排序
         if (StringUtils.isNotEmpty(jsonStr)) {
             Map map = SerializeUtil.json2Map(jsonStr);
             //流程编号查询
             String processInstanceName = (String) map.get("name");
 
             if (StringUtils.isNotEmpty(processInstanceName)) {
-                query=historyService.createHistoricProcessInstanceQuery().processInstanceNameLike("%" + processInstanceName + "%")
-                        .startedBy(loginUser).orderByProcessInstanceStartTime().desc();
-            }
-            else {
-                query=historyService.createHistoricProcessInstanceQuery().startedBy(loginUser).
-                        orderByProcessInstanceStartTime().desc();
+                query = historyService.createHistoricProcessInstanceQuery().processInstanceNameLike("%" + processInstanceName + "%")
+                        .startedBy(loginUser)
+                        .orderByProcessInstanceEndTime().desc().orderByProcessInstanceStartTime().desc();
+            } else {
+                query = historyService.createHistoricProcessInstanceQuery().startedBy(loginUser)
+                        .orderByProcessInstanceEndTime().desc().orderByProcessInstanceStartTime().desc();
             }
         } else {
-            query=historyService.createHistoricProcessInstanceQuery().startedBy(loginUser)
-                    .orderByProcessInstanceStartTime().desc();
+            query = historyService.createHistoricProcessInstanceQuery().startedBy(loginUser)
+                    .orderByProcessInstanceEndTime().desc().orderByProcessInstanceStartTime().desc();
         }
 
-        processHistoryList=query.listPage((page - 1) * limit, limit);
+        processHistoryList = query.listPage((page - 1) * limit, limit);
 
         if (processHistoryList != null) {
-            generateJsonData(processHistoryList,query.count());
+            generateJsonData(processHistoryList, query.count());
         }
         return jsonData;
-
     }
 
     /**
@@ -153,7 +154,9 @@ public class ProcessServiceImpl implements IProcessService {
         String loginUser = this.shiroService.getCurrentUserLoginName();
         List<HistoricProcessInstanceDTO> historicProcessDTOList;
         List<HistoricProcessInstance> processHistoryList;
-        HistoricProcessInstanceQuery query=null;
+        HistoricProcessInstanceQuery query = null;
+        // orderByProcessInstanceEndTime().desc() 默认按照流程状态排序（无结束时间代表进行中在前，结束的流程放后面）
+        // 然后按照流程开始时间再次排序
         if (StringUtils.isNotEmpty(jsonStr)) {
             Map map = SerializeUtil.json2Map(jsonStr);
             //流程编号查询
@@ -163,31 +166,30 @@ public class ProcessServiceImpl implements IProcessService {
             if (StringUtils.isNotEmpty(processInstanceName) && StringUtils.isNotEmpty(startUser)) {
                 query = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
                         .processInstanceNameLike("%" + processInstanceName + "%").startedBy(startUser)
-                        .orderByProcessInstanceStartTime().desc();
+                        .orderByProcessInstanceEndTime().desc().orderByProcessInstanceStartTime().desc();
             } else if (StringUtils.isNotEmpty(processInstanceName) && !StringUtils.isNotEmpty(startUser)) {
                 query = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
                         .processInstanceNameLike("%" + processInstanceName + "%")
-                        .orderByProcessInstanceStartTime().desc();
+                        .orderByProcessInstanceEndTime().desc().orderByProcessInstanceStartTime().desc();
             } else if (!StringUtils.isNotEmpty(processInstanceName) && StringUtils.isNotEmpty(startUser)) {
                 query = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
-                        .startedBy(startUser).orderByProcessInstanceStartTime().desc();
+                        .startedBy(startUser)
+                        .orderByProcessInstanceEndTime().desc().orderByProcessInstanceStartTime().desc();
             } else {
                 query = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
-                        .orderByProcessInstanceStartTime().desc();
+                        .orderByProcessInstanceEndTime().desc().orderByProcessInstanceStartTime().desc();
             }
         } else {
             query = historyService.createHistoricProcessInstanceQuery().involvedUser(loginUser)
-                    .orderByProcessInstanceStartTime().desc();
+                    .orderByProcessInstanceEndTime().desc().orderByProcessInstanceStartTime().desc();
         }
         processHistoryList = query.listPage((page - 1) * limit, limit);
         if (processHistoryList != null) {
-            generateJsonData(processHistoryList,query.count());
+            generateJsonData(processHistoryList, query.count());
         }
 
         return jsonData;
-
     }
-
 
     /**
      * 获得流程历史列表
@@ -198,7 +200,7 @@ public class ProcessServiceImpl implements IProcessService {
     public JsonData getProcessHistory(int page, int limit, String jsonStr) {
 //        List<HistoricProcessInstanceDTO> historicProcessDTOList;
         List<HistoricProcessInstance> processHistoryList = null;
-        HistoricProcessInstanceQuery query=null;
+        HistoricProcessInstanceQuery query = null;
         if (StringUtils.isNotEmpty(jsonStr)) {
             Map map = SerializeUtil.json2Map(jsonStr);
             //流程编号查询
@@ -236,7 +238,7 @@ public class ProcessServiceImpl implements IProcessService {
 
         processHistoryList = query.listPage((page - 1) * limit, limit);
         if (processHistoryList != null) {
-            generateJsonData(processHistoryList,query.count());
+            generateJsonData(processHistoryList, query.count());
         }
         return jsonData;
 
@@ -263,9 +265,9 @@ public class ProcessServiceImpl implements IProcessService {
             historicActivityDTOList = DozerHelper.map(mapper, list, HistoricActivityInstanceDTO.class);
             for (HistoricActivityInstanceDTO historicActivityInstance : historicActivityDTOList) {
                 String str = "";
-                List<Comment> commentList =taskService.getTaskComments(historicActivityInstance.getTaskId());
+                List<Comment> commentList = taskService.getTaskComments(historicActivityInstance.getTaskId());
                 for (Comment comment : commentList) {
-                    str = ((CommentEntity)comment).getMessage() + str + " ";
+                    str = ((CommentEntity) comment).getMessage() + str + " ";
                 }
                 List<HistoricVariableInstance> varList = historyService.createHistoricVariableInstanceQuery()
                         .processInstanceId(historyProcessId).taskId(historicActivityInstance.getTaskId()).list();
@@ -332,7 +334,7 @@ public class ProcessServiceImpl implements IProcessService {
         return jsonStatus;
     }
 
-    private void generateJsonData(List<HistoricProcessInstance> processHistoryList,long count) {
+    private void generateJsonData(List<HistoricProcessInstance> processHistoryList, long count) {
         List<HistoricProcessInstanceDTO> historicProcessDTOList;
         Mapper mapper = new DozerBeanMapper();
         historicProcessDTOList = DozerHelper.map(mapper, processHistoryList, HistoricProcessInstanceDTO.class);
@@ -396,9 +398,10 @@ public class ProcessServiceImpl implements IProcessService {
     public void setProcessEngine(ProcessEngine processEngine) {
         this.processEngine = processEngine;
     }
+
     public JsonData getAllProcessNameAndKey() {
         List<ProcessDefinition> processDefinitionList = repositoryService.createProcessDefinitionQuery().latestVersion().list();
-        List<Map<String,String>> list = new ArrayList<>();
+        List<Map<String, String>> list = new ArrayList<>();
         if (processDefinitionList != null && !processDefinitionList.isEmpty()) {
             // 去掉集合中重复name的数据
             List<ProcessDefinition> uniqueDefinitionList = processDefinitionList.stream().collect(
