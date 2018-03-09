@@ -11,12 +11,11 @@ import com.kalix.framework.core.api.dao.IGenericDao;
 import com.kalix.framework.core.api.persistence.JpaStatistic;
 import com.kalix.framework.core.api.persistence.JsonData;
 import com.kalix.framework.core.api.persistence.JsonStatus;
-import com.kalix.framework.core.api.security.IDataAuthService;
 import com.kalix.framework.core.api.web.model.QueryDTO;
 import com.kalix.framework.core.impl.biz.ShiroGenericBizServiceImpl;
 import com.kalix.framework.core.util.DateUtil;
-import com.kalix.framework.core.util.JNDIHelper;
 import com.kalix.framework.core.util.SerializeUtil;
+import com.kalix.framework.core.util.StringUtils;
 import com.kalix.middleware.workflow.api.Const;
 import com.kalix.middleware.workflow.api.biz.IWorkflowBizService;
 import com.kalix.middleware.workflow.api.exception.NotSameStarterException;
@@ -35,7 +34,6 @@ import org.activiti.engine.task.Task;
 
 import javax.persistence.Tuple;
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -195,6 +193,9 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             } else {
                 taskService.claim(task.getId(), currentUserId);
             }
+            //判断当前是否是驳回
+            boolean passed = accepted.equals("同意") ? true : false;
+            bean.setReject(!passed);
 
             writeClaimResult(task.getTaskDefinitionKey(), userName, bean);
 
@@ -202,7 +203,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             identityService.setAuthenticatedUserId(userName);
             taskService.addComment(task.getId(), processInstanceId, comment);
             Map<String, Object> submitMap = new HashMap<String, Object>();
-//            boolean passed = accepted.equals("同意") ? true : false;
+
             //完成任务
             submitMap.put(Const.VAR_ACCEPTED, accepted);
             Map vars = getVariantMap(submitMap, bean);
@@ -258,22 +259,37 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
         try {
             // 将属性的首字符大写，方便构造get，set
             String name = currentTaskId.substring(0, 1).toUpperCase() + currentTaskId.substring(1);
-            Method method = bean.getClass().getDeclaredMethod("set" + name, String.class);
-            method.invoke(bean, userName);
+            // 判断是否是修改状态，非修改处理审批人，修改不处理
+            if (!name.toLowerCase().equals("modify")) {
+                if (bean.getReject()) { // 判断是驳回状态,审批人设置为空
+                    // 将属性的首字符大写，方便构造get，set
+                    Method method = bean.getClass().getDeclaredMethod("set" + name, String.class);
+                    method.invoke(bean, "");
+                } else {
+                    Method method = bean.getClass().getDeclaredMethod("get" + name);
+                    String str = (String) method.invoke(bean);
+                    Method method1 = bean.getClass().getDeclaredMethod("set" + name, String.class);
+                    if (StringUtils.isEmpty(str)) {
+                        method1.invoke(bean, userName);
+                    } else {
+                        method1.invoke(bean, str + "," + userName); //会签环节，附加审批人
+                    }
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
-//            throw new TaskProcessException();
+            throw new TaskProcessException();
         }
     }
 
     @Override
     public JsonData getAllEntityByQuery(Integer page, Integer limit, String jsonStr, String sort) {
-        IDataAuthService dataAuthService = null;
+        /*IDataAuthService dataAuthService = null;
         try {
             dataAuthService = JNDIHelper.getJNDIServiceForName(IDataAuthService.class.getName());
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         //false 只能查看自己的数据
         /*Long userid = this.shiroService.getCurrentUserId();
         if (!dataAuthService.isAuth(this.entityClassName, userid)) {
@@ -281,7 +297,6 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             map.put("createById", String.valueOf(userid));
             jsonStr = new Gson().toJson(map);
         }*/
-
         return super.getAllEntityByQuery(page, limit, jsonStr, sort);
     }
 

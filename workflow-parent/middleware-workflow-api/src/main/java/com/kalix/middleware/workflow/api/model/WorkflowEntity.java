@@ -22,6 +22,7 @@ import java.util.Date;
 @Access(AccessType.FIELD)
 public abstract class WorkflowEntity extends PersistentEntity {
     private String title; //流程名称
+    private Boolean reject; //是否驳回
     private Long orgId; //组织结构id
     private String orgName; //组织结构名称
     private String processInstanceId;//流程实例id
@@ -102,5 +103,13 @@ public abstract class WorkflowEntity extends PersistentEntity {
 
     public void setApplyDate(Date applyDate) {
         this.applyDate = applyDate;
+    }
+
+    public Boolean getReject() {
+        return reject;
+    }
+
+    public void setReject(Boolean reject) {
+        this.reject = reject;
     }
 }
