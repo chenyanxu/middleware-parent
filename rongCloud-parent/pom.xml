@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>middleware-parent</artifactId>
+        <groupId>com.kalix.middleware</groupId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>rongCloud-parent</artifactId>
+    <groupId>com.kalix.middleware.rongCloud</groupId>
+    <name>Kalix Middleware Rongcloud Parent</name>
+    <packaging>pom</packaging>
+    <modules>
+        <module>middleware-rongcloud-api</module>
+        <module>middleware-rongcloud-entities</module>
+        <module>middleware-rongcloud-dao</module>
+        <module>middleware-rongcloud-biz</module>
+        <module>middleware-rongcloud-rest</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.kalix.middleware.rongCloud</groupId>
+                <artifactId>middleware-rongcloud-api</artifactId>
+                <version>${project.middleware.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kalix.middleware.rongCloud</groupId>
+                <artifactId>middleware-rongcloud-entities</artifactId>
+                <version>${project.middleware.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kalix.admin.core</groupId>
+                <artifactId>admin-core-api</artifactId>
+                <version>${project.admin.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
