@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="1.0">
+    <persistence-unit transaction-type="JTA" name="middleware-rongcloud-unit">
+        <class>com.kalix.framework.core.api.persistence.PersistentEntity</class>
+    </persistence-unit>
+</persistence>
