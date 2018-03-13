@@ -53,8 +53,8 @@ public class LeaderListener implements TaskListener {
 
         //发送消息
         String businessNo = (String) delegateTask.getVariable(Const.BUSINESS_NO);
-        ;
         taskJson.put("group", group);
+        taskJson.put("userId", "");
         taskJson.put("businessNo", businessNo);
         System.out.println("A task group of " + group + " is assigned!");
         //添加相关内容到消息体
