@@ -30,7 +30,6 @@
         <module>xmpp-parent</module>
         <module>mail-parent</module>
         <module>oauth-parent</module>
-        <module>rongCloud-parent</module>
         <!--<module>spring-parent</module>-->
     </modules>
     <build>
