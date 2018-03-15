@@ -272,7 +272,9 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
                     if (StringUtils.isEmpty(str)) {
                         method1.invoke(bean, userName);
                     } else {
-                        method1.invoke(bean, str + "," + userName); //会签环节，附加审批人
+                        // 判断审批人之前是否签字，如果已经签字，再次同意后不需签字（同时包括会签和单个人员签字）
+                        if (!str.contains(userName))
+                            method1.invoke(bean, str + "," + userName); //会签环节，附加审批人
                     }
                 }
             }
@@ -362,6 +364,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
 
     /**
      * 工作流统计
+     *
      * @param jsonStr 包含sql 查询的参数，图表展现的参数
      * @return
      */
@@ -372,30 +375,30 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
         String chartTitle = "";
         String groupSelectValue = "";
         String chartSelectValue = "";
-        List<Map<String,String>> statusMap = null;
+        List<Map<String, String>> statusMap = null;
         if (jsonStr != null && !jsonStr.isEmpty()) {
             jsonMap = SerializeUtil.jsonToMap(jsonStr);
             for (Map.Entry<String, Object> entry : jsonMap.entrySet()) {
                 if ("groupSelectValue".equals(entry.getKey())) {
-                    groupSelectValue = (String)entry.getValue();
+                    groupSelectValue = (String) entry.getValue();
                     break;
                 }
             }
             for (Map.Entry<String, Object> entry : jsonMap.entrySet()) {
                 if ("chartSelectValue".equals(entry.getKey())) {
-                    chartSelectValue = (String)entry.getValue();
+                    chartSelectValue = (String) entry.getValue();
                     break;
                 }
             }
             for (Map.Entry<String, Object> entry : jsonMap.entrySet()) {
                 if ("chartTitle".equals(entry.getKey())) {
-                    chartTitle = (String)entry.getValue();
+                    chartTitle = (String) entry.getValue();
                     break;
                 }
             }
             for (Map.Entry<String, Object> entry : jsonMap.entrySet()) {
                 if ("workflowStatus".equals(entry.getKey())) {
-                    statusMap = (List<Map<String, String>>)entry.getValue();
+                    statusMap = (List<Map<String, String>>) entry.getValue();
                     break;
                 }
             }
@@ -429,7 +432,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
                 if (!"groupSelectValue".equals(entry.getKey()) && !"chartTitle".equals(entry.getKey())
                         && !"selectValue".equals(entry.getKey()) && !"workflowStatus".equals(entry.getKey())
                         && !"chartSelectValue".equals(entry.getKey())) {
-                    params.put(entry.getKey(), (String)entry.getValue());
+                    params.put(entry.getKey(), (String) entry.getValue());
                 }
             }
         }
@@ -440,10 +443,10 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
         List<Map<String, String>> dataList = new ArrayList<>();
         String[] types = new String[list.size()];
         int[] datas = new int[list.size()];
-        for (int i=0; i<list.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
             if ("1".equals(groupSelectValue)) {
                 //types[i] = statusMap.get(list.get(i).get(0));
-                for (Map<String,String> stMap : statusMap) {
+                for (Map<String, String> stMap : statusMap) {
                     if (stMap.get("value").equals(String.valueOf(list.get(i).get(0)))) {
                         types[i] = stMap.get("label");
                     }
@@ -469,6 +472,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
 
     /**
      * 饼图Options
+     *
      * @param types
      * @param datas
      * @param chartTitle
@@ -497,6 +501,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
 
     /**
      * 折线图Options
+     *
      * @param types
      * @param datas
      * @param chartTitle
@@ -524,12 +529,13 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
 
     /**
      * 柱状图Options
+     *
      * @param types
      * @param datas
      * @param chartTitle
      * @return
      */
-    private String barChart(String[] types, int[] datas, String chartTitle){
+    private String barChart(String[] types, int[] datas, String chartTitle) {
         String title = chartTitle;
         GsonOption option = new GsonOption();
         option.title(title); // 标题
