@@ -3,7 +3,7 @@
            xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
     <ext:property-placeholder/>
-    <reference id="dataSource" interface="javax.sql.DataSource" filter="(osgi.jndi.service.name=jdbc/ds)"/>
+    <reference id="dataSource" interface="javax.sql.DataSource" filter="(osgi.jndi.service.name=jdbc/ds)" availability="optional"/>
 
     <!--用于activiti JavaDelegate-->
     <reference-list id="blueprintListener" availability="optional" interface="org.activiti.engine.delegate.JavaDelegate"
