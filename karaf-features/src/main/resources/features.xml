@@ -18,7 +18,7 @@
         <bundle>mvn:com.kalix.middleware.workflow/middleware-workflow-api/${project.middleware.version}</bundle>
         <bundle>mvn:com.kalix.middleware.workflow/middleware-workflow-biz/${project.middleware.version}</bundle>
         <bundle>mvn:com.kalix.middleware.workflow/middleware-workflow-rest/${project.middleware.version}</bundle>
-        <bundle>mvn:com.kalix.middleware.workflow/middleware-workflow-extjs/${project.middleware.version}</bundle>
+        <!--<bundle>mvn:com.kalix.middleware.workflow/middleware-workflow-extjs/${project.middleware.version}</bundle>-->
     </feature>
 
     <feature name="middleware-attachment" version="${project.middleware.version}">
@@ -28,7 +28,7 @@
         </bundle>
         <bundle>mvn:com.kalix.middleware.attachment/middleware-attachment-dao/${project.middleware.version}</bundle>
         <bundle>mvn:com.kalix.middleware.attachment/middleware-attachment-rest/${project.middleware.version}</bundle>
-        <bundle>mvn:com.kalix.middleware.attachment/middleware-attachment-extjs/${project.middleware.version}</bundle>
+        <!--<bundle>mvn:com.kalix.middleware.attachment/middleware-attachment-extjs/${project.middleware.version}</bundle>-->
     </feature>
 
     <feature name="middleware-couchdb" version="${project.middleware.version}">
