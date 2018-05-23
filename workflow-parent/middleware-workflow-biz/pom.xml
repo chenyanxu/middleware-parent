@@ -45,8 +45,8 @@
             <artifactId>activiti-bpmn-converter</artifactId>
         </dependency>
         <dependency>
-            <groupId>net.sf.dozer</groupId>
-            <artifactId>dozer-osgi</artifactId>
+            <groupId>com.github.dozermapper</groupId>
+            <artifactId>dozer-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.abel533</groupId>
