@@ -19,7 +19,7 @@
         <module>middleware-workflow-engine</module>
         <module>middleware-workflow-biz</module>
         <module>middleware-workflow-rest</module>
-        <module>middleware-workflow-extjs</module>
+        <!--<module>middleware-workflow-extjs</module>-->
     </modules>
 
     <dependencyManagement>

@@ -20,7 +20,7 @@
         <module>middleware-attachment-dao</module>
         <module>middleware-attachment-biz</module>
         <module>middleware-attachment-rest</module>
-        <module>middleware-attachment-extjs</module>
+        <!--<module>middleware-attachment-extjs</module>-->
     </modules>
 
     <dependencyManagement>
