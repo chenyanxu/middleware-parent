@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>middleware-parent</artifactId>
+        <groupId>com.kalix.middleware</groupId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>jwt-parent</artifactId>
+    <groupId>com.kalix.middleware.jwt</groupId>
+    <name>Kalix Middleware Jwt Parent</name>
+    <packaging>pom</packaging>
+    <modules>
+        <module>middleware-jwt-api</module>
+        <module>middleware-jwt-biz</module>
+        <module>middleware-jwt-dto</module>
+        <module>middleware-jwt-rest</module>
+        <module>middleware-jwt-etc</module>
+    </modules>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.kalix.middleware.jwt</groupId>
+                <artifactId>middleware-jwt-dto</artifactId>
+                <version>${project.middleware.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kalix.middleware.jwt</groupId>
+                <artifactId>middleware-jwt-api</artifactId>
+                <version>${project.middleware.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>0.9.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>
