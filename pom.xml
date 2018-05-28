@@ -27,7 +27,7 @@
         <module>workflow-parent</module>
         <module>statemachine-parent</module>
         <module>karaf-features</module>
-        <module>xmpp-parent</module>
+        <!--<module>xmpp-parent</module>-->
         <module>mail-parent</module>
         <module>oauth-parent</module>
         <module>jwt-parent</module>
