@@ -28,11 +28,6 @@
                 <version>${project.middleware.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.kalix.middleware.jwt</groupId>
-                <artifactId>middleware-jwt-api</artifactId>
-                <version>${project.middleware.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
                 <version>0.9.0</version>

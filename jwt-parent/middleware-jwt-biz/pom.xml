@@ -16,11 +16,5 @@
     <properties>
         <bundle.symbolicName>com.kalix.middleware.jwt.biz</bundle.symbolicName>
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>com.kalix.middleware.jwt</groupId>
-            <artifactId>middleware-jwt-api</artifactId>
-        </dependency>
-    </dependencies>
 
 </project>
