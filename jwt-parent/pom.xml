@@ -14,10 +14,10 @@
     <name>Kalix Middleware Jwt Parent</name>
     <packaging>pom</packaging>
     <modules>
-        <module>middleware-jwt-api</module>
+        <!--<module>middleware-jwt-api</module>-->
         <module>middleware-jwt-biz</module>
         <module>middleware-jwt-dto</module>
-        <module>middleware-jwt-rest</module>
+        <!--<module>middleware-jwt-rest</module>-->
         <module>middleware-jwt-etc</module>
     </modules>
     <dependencyManagement>
