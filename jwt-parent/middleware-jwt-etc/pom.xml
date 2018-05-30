@@ -9,8 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.kalix.middleware.jwt</groupId>
     <artifactId>middleware-jwt-etc</artifactId>
     <name>Kalix Middleware Jwt ETC</name>
+    <description>ETC</description>
     <packaging>bundle</packaging>
 
 
@@ -48,7 +50,7 @@
                                 <artifact>
                                     <file>target/classes/config.middleware.jwt.etc.cfg</file>
                                     <type>cfg</type>
-                                    <classifier>config.middleware.jwt</classifier>
+                                    <classifier>config.middleware.jwt.etc</classifier>
                                 </artifact>
                             </artifacts>
                         </configuration>
