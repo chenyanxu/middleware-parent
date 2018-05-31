@@ -1,5 +1,8 @@
 package com.kalix.middleware.oauth.web;
 
+import com.kalix.framework.core.api.dto.AudienceBean;
+import com.kalix.framework.core.api.jwt.IJwtService;
+import com.kalix.framework.core.util.JNDIHelper;
 import com.kalix.framework.core.util.OsgiUtil;
 import com.kalix.middleware.oauth.api.Constants;
 import com.kalix.middleware.oauth.api.biz.IOauthService;
@@ -14,6 +17,7 @@ import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.OAuthResponse;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
+import org.apache.oltu.oauth2.jwt.JWT;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 
@@ -27,6 +31,7 @@ import java.io.IOException;
  * Created by Administrator on 2017-04-13.
  */
 public class AccessTokenServlet extends HttpServlet {
+    private IJwtService jwtService;
     private HttpService httpService;
     private IOauthService oAuthService;
     private static final String SERVLET_URL = "/accessToken";
@@ -60,11 +65,21 @@ public class AccessTokenServlet extends HttpServlet {
     public void setoAuthService(IOauthService oAuthService) {
         this.oAuthService = oAuthService;
     }
+    public void setJwtService(IJwtService jwtService) {
+        this.jwtService = jwtService;
+    }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse resp) {
 
         try {
+            if(jwtService==null) {
+               if(JNDIHelper.getJNDIServiceForNameJwt(IJwtService.class.getName()))
+               {
+                   jwtService = JNDIHelper.getJNDIServiceForName(IJwtService.class.getName());
+               }
+
+            }
             //构建OAuth请求
             OAuthTokenRequest oauthRequest = new OAuthTokenRequest(request);
 
@@ -106,13 +121,27 @@ public class AccessTokenServlet extends HttpServlet {
                 }
             }
 
-            //生成Access Token
-            OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
-            final String accessToken = oauthIssuerImpl.accessToken();
-            final String refreshToken = oauthIssuerImpl.refreshToken();
+            String accessToken = "";
+            String refreshToken = "";
+            if(jwtService!=null)
+            {
+                AudienceBean audienceEntity = jwtService.getAudien();
+                accessToken = jwtService.createJWT( oAuthService.getUsernameByAuthCode(authCode),  oAuthService.getUsernameByAuthCode(authCode),
+                        "", audienceEntity.getClientId(), audienceEntity.getName(),
+                        audienceEntity.getExpiresSecond() * 1000, audienceEntity.getBase64Secret());
+                refreshToken = jwtService.createJWT( oAuthService.getUsernameByAuthCode(authCode),  oAuthService.getUsernameByAuthCode(authCode),
+                        "", audienceEntity.getClientId(), audienceEntity.getName(),
+                        audienceEntity.getRefresh_expiresSecond()* 1000, audienceEntity.getBase64Secret());
+            }else {
+                //生成Access Token
+                OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
+                accessToken = oauthIssuerImpl.accessToken();
+                refreshToken = oauthIssuerImpl.refreshToken();
+
+            }
+
             oAuthService.addAccessToken(accessToken, oAuthService.getUsernameByAuthCode(authCode));
             oAuthService.addRefreshToken(refreshToken, oAuthService.getUsernameByAuthCode(authCode));
-
             //生成OAuth响应
             OAuthResponse response = OAuthASResponse
                     .tokenResponse(HttpServletResponse.SC_OK)
@@ -127,7 +156,6 @@ public class AccessTokenServlet extends HttpServlet {
         } catch (OAuthProblemException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
