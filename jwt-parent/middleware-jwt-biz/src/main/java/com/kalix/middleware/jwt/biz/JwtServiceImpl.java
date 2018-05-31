@@ -88,6 +88,9 @@ public class JwtServiceImpl implements IJwtService {
                 if ("expiresSecond".equals(value)) {
                     audience.setExpiresSecond(Integer.parseInt(config.get(keyName).toString()));
                 }
+                if ("refresh_expiresSecond".equals(value)) {
+                    audience.setRefresh_expiresSecond(Integer.parseInt(config.get(keyName).toString()));
+                }
             }
         }
         return  audience;
