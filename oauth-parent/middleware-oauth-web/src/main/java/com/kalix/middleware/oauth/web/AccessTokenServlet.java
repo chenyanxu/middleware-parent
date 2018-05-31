@@ -17,7 +17,6 @@ import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.OAuthResponse;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
-import org.apache.oltu.oauth2.jwt.JWT;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
 
@@ -74,7 +73,7 @@ public class AccessTokenServlet extends HttpServlet {
 
         try {
             if(jwtService==null) {
-               if(JNDIHelper.getJNDIServiceForNameJwt(IJwtService.class.getName()))
+               if(JNDIHelper.getJNDIServiceForNameNoCatch(IJwtService.class.getName()))
                {
                    jwtService = JNDIHelper.getJNDIServiceForName(IJwtService.class.getName());
                }
