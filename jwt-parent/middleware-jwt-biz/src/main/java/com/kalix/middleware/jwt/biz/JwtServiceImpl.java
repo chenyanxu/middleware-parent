@@ -88,9 +88,26 @@ public class JwtServiceImpl implements IJwtService {
                 if ("expiresSecond".equals(value)) {
                     audience.setExpiresSecond(Integer.parseInt(config.get(keyName).toString()));
                 }
+                if ("refresh_expiresSecond".equals(value)) {
+                    audience.setRefresh_expiresSecond(Integer.parseInt(config.get(keyName).toString()));
+                }
             }
         }
         return  audience;
+    }
+
+    public String refreshToken(String jsonWebToken)
+    {
+        AudienceBean audienceBean=this.getAudien();
+        Claims claims= parseJWT(jsonWebToken,audienceBean.getBase64Secret());
+        String role=(String)claims.get("role");
+        String unique_name=(String)claims.get("unique_name");
+        String userid=(String)claims.get("userid");
+
+        String token=createJWT(unique_name,userid,role,audienceBean.getClientId(), audienceBean.getName(),
+                audienceBean.getExpiresSecond() * 1000, audienceBean.getBase64Secret());
+
+        return token;
     }
 
 }  
