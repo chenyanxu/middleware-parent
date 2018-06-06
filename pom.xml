@@ -31,6 +31,7 @@
         <module>mail-parent</module>
         <module>oauth-parent</module>
         <module>jwt-parent</module>
+        <module>websocket-parent</module>
         <!--<module>spring-parent</module>-->
     </modules>
     <build>

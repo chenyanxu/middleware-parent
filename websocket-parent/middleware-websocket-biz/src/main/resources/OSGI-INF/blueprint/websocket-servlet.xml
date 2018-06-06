@@ -1,0 +1,20 @@
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="
+       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <bean id="websocketServlet" class="com.kalix.middleware.websocket.biz.servlet.KarafWebSocketServlet">
+    </bean>
+    <service interface="javax.servlet.Servlet" ref="websocketServlet">
+        <service-properties>
+            <entry key="alias" value="/websocket" />
+            <entry key="matchOnUriPrefix" value="true" />
+            <entry key="servlet-name" value="WebsocketServlet"/>
+        </service-properties>
+    </service>
+
+    <bean id="timeJob" class="com.kalix.middleware.websocket.biz.quartz.TimeJob">
+    </bean>
+
+</blueprint>
+
