@@ -3,6 +3,7 @@ package com.kalix.middleware.websocket.biz.quartz;
 import com.kalix.framework.core.util.JNDIHelper;
 import com.kalix.middleware.websocket.api.biz.IWebsocketService;
 import com.kalix.middleware.websocket.biz.servlet.KarafWebSocketActivator;
+import org.apache.camel.Handler;
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
 
@@ -19,6 +20,7 @@ public class TimeJob {
     /**
      * 获取消息并推送消息
      */
+    @Handler
     public void pushData() {
         Map<String, Set<Session>> maps = KarafWebSocketActivator.getClientSessions();
         Iterator<Map.Entry<String, Set<Session>>> entries = maps.entrySet().iterator();
@@ -60,5 +62,10 @@ public class TimeJob {
                 continue;
             }
         }
+    }
+
+    // @Handler
+    public void test() {
+        System.out.println("hello test!");
     }
 }
