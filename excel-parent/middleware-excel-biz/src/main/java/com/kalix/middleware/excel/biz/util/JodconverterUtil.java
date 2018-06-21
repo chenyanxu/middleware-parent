@@ -27,11 +27,13 @@ public class JodconverterUtil {
         String docfile = "E:/test.docx";
         //docurl = "http://47.92.53.234:5984/kalix/38667ba15b6944519020175a4ff69d26/行政执法评议考核制度.doc";
         docfile = "E:/test.doc";
+        docfile = "E:/test.docx";
         //docfile = "/root/test.doc";
         //JacobUtil.downloadFile(docurl, docfile);
         String pdffile = "E:/test.pdf";
         //pdffile = "/root/test.pdf";
         word2pdf(docfile, pdffile);
+        pdf2Image(pdffile, 96);
     }
 
     public static void downloadFile(String fileUrl, String localFile) {
@@ -73,34 +75,34 @@ public class JodconverterUtil {
         System.out.println("word文档转换pdf开始...");
         long start = System.currentTimeMillis();
         // 启动服务
-        // 这里是OpenOffice的安装目录
-        /*String OpenOffice_HOME = "";
+        // 这里是OpenOffice_EXE的安装路径
+        String OpenOffice_EXE = "";
         String OS = System.getProperty("os.name").toLowerCase();
         if (OS.indexOf("linux") >= 0) {
-            OpenOffice_HOME = (String) ConfigUtil.getConfigProp("linux.openoffice.home", "ConfigOpenOffice");
+            OpenOffice_EXE = (String) ConfigUtil.getConfigProp("linux.openoffice.exe", "ConfigOpenOffice");
         } else if (OS.indexOf("windows") >= 0) {
-            OpenOffice_HOME = (String) ConfigUtil.getConfigProp("windows.openoffice.home", "ConfigOpenOffice");
+            OpenOffice_EXE = (String) ConfigUtil.getConfigProp("windows.openoffice.exe", "ConfigOpenOffice");
         } else {
-            System.out.println("未找到openoffice安装目录，无法进行转换");
+            System.out.println("未找到openoffice应用soffice.exe安装路径，无法进行转换");
             return;
         }
-        if (OpenOffice_HOME.charAt(OpenOffice_HOME.length() - 1) != '/') {
-            OpenOffice_HOME += "/";
+        if (OS.indexOf("windows") >= 0) {
+            OpenOffice_EXE = "\"" + OpenOffice_EXE + "\"";
         }
-        Process pro = null;*/
+        Process pro = null;
         String openofficePort = (String) ConfigUtil.getConfigProp("openoffice.port", "ConfigOpenOffice");
         int port = Integer.valueOf(openofficePort);
         //int port = 8200;
         // 启动OpenOffice的服务
-        /*String command = OpenOffice_HOME + "program/soffice -headless -accept=\"socket,host=127.0.0.1,port="
-                + openofficePort + ";urp;\" -nofirststartwizard";*/
+        String params = " -headless -accept=\"socket,host=127.0.0.1,port=" + openofficePort + ";urp;\" -nofirststartwizard";
+        String command = OpenOffice_EXE + params;
         // connect to an OpenOffice.org instance running on port 8100
         OpenOfficeConnection connection = null;
         try {
             // liunx系统测试未通过，需要代码外启动
-            /*if (OS.indexOf("windows") >= 0) {
-                // pro = Runtime.getRuntime().exec(command);
-            }*/
+            if (OS.indexOf("windows") >= 0) {
+                pro = Runtime.getRuntime().exec(command);
+            }
             connection = new SocketOpenOfficeConnection("127.0.0.1", port);
             connection.connect();
             // convert
@@ -120,7 +122,7 @@ public class JodconverterUtil {
         } finally {
             // close the connection
             if (connection != null) connection.disconnect();
-//            if (pro != null) pro.destroy();
+            if (pro != null) pro.destroy();
         }
         System.out.println("word文档转换pdf完毕！");
     }

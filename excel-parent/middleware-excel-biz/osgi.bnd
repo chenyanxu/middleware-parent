@@ -14,4 +14,5 @@ Import-Package: com.kalix.framework.core.util,\
                 org.apache.commons.codec.binary,\
                 com.kalix.framework.core.api.osgi,\
                 com.kalix.framework.core.api.persistence,\
-                org.osgi.service.http, javax.imageio.*
+                org.osgi.service.http, javax.imageio.*,\
+                org.w3c.dom.*
