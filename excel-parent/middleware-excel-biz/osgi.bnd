@@ -2,6 +2,7 @@
 # Use this file to add customized Bnd instructions for the bundle
 #-----------------------------------------------------------------
 Bundle-Activator: ${bundle.namespace}.internal.InitActivator
+Include-Resource: target/classes
 Bundle-Category: Kalix Middleware Excel
 Embed-Dependency:*; artifactId=!middleware-excel-api|framework-core-util|middleware-couchdb-api|framework-core-api|framework-poms-dm
 Import-Package: com.kalix.framework.core.util,\
@@ -11,4 +12,7 @@ Import-Package: com.kalix.framework.core.util,\
                 org.osgi.framework,\
                 org.osgi.service.blueprint,\
                 org.apache.commons.codec.binary,\
-                com.kalix.framework.core.api.osgi
+                com.kalix.framework.core.api.osgi,\
+                com.kalix.framework.core.api.persistence,\
+                org.osgi.service.http, javax.imageio.*,\
+                org.w3c.dom.*
