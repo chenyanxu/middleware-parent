@@ -1,0 +1,7 @@
+#-----------------------------------------------------------------
+# Use this file to add customized Bnd instructions for the bundle
+#-----------------------------------------------------------------
+Bundle-Activator: ${bundle.namespace}.internal.InitActivator
+Bundle-Category: Kalix Middleware Microservice Kong Client
+#Embed-Dependency:*;artifactId=!middleware-kongclient-api|framework-core-util|middleware-couchdb-api|framework-core-api|framework-poms-dm
+Import-Package: *

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.kalix.middleware.microservice</groupId>
+        <artifactId>microservice-parent</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.kalix.middleware.microservice</groupId>
+    <artifactId>kongclient-parent</artifactId>
+    <name>Kalix Middleware Microservice Kong Client Parent</name>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>kongclient-api</module>
+        <module>kongclient-biz</module>
+        <module>kongclient-rest</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.kalix.middleware.microservice</groupId>
+                <artifactId>middleware-kongclient-api</artifactId>
+                <version>${project.middleware.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kalix.middleware.microservice</groupId>
+                <artifactId>middleware-kongclient-biz</artifactId>
+                <version>${project.middleware.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kalix.middleware.microservice</groupId>
+                <artifactId>middleware-kongclient-rest</artifactId>
+                <version>${project.middleware.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
+</project>

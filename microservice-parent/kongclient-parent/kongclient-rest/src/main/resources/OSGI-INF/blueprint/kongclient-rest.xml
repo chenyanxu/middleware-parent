@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xsi:schemaLocation="
+       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+    <reference id="kongJwtService" interface="com.kalix.middleware.kongclient.api.biz.IKongJwtService"/>
+
+    <camelContext id="kongJwtCamel" xmlns="http://camel.apache.org/schema/blueprint">
+
+        <restConfiguration component="servlet" bindingMode="json">
+            <dataFormatProperty key="prettyPrint" value="${rest.pretty}"/>
+        </restConfiguration>
+
+        <!-- defines the rest services using the context-path /function -->
+        <rest path="/kongJwts" consumes="application/json;charset=utf-8" produces="application/json;charset=utf-8">
+            <description>Kong jwt rest service</description>
+
+            <get uri="/create_HS256" id="route-getkongJwtTestHS256" outType="com.kalix.framework.core.api.persistence.JsonStatus">
+                <description>createAPIGateWayHS256</description>
+                <to uri="bean:kongJwtService?method=createAPIGateWayHS256()"/>
+            </get>
+
+            <get uri="/create_RS256" id="route-getkongJwtTestRS256" outType="com.kalix.framework.core.api.persistence.JsonStatus">
+                <description>createAPIGateWayRS256</description>
+                <to uri="bean:kongJwtService?method=createAPIGateWayRS256()"/>
+            </get>
+
+            <get uri="/token_HS256" id="route-getJwtTokenTestHS256" outType="java.lang.String">
+                <description>getJwtTokenHS256</description>
+                <to uri="bean:kongJwtService?method=getJwtTokenHS256()"/>
+            </get>
+
+            <get uri="/token_RS256" id="route-getJwtTokenTestRS256" outType="java.lang.String">
+                <description>getJwtTokenRS256</description>
+                <to uri="bean:kongJwtService?method=getJwtTokenRS256()"/>
+            </get>
+
+            <get uri="/clear_HS256" id="route-clearKongJwtTestHS256" outType="com.kalix.framework.core.api.persistence.JsonStatus">
+                <description>getJwtTokenHS256</description>
+                <to uri="bean:kongJwtService?method=clearAPIGateWayHS256()"/>
+            </get>
+
+            <get uri="/clear_RS256" id="route-clearKongJwtTestRS256" outType="com.kalix.framework.core.api.persistence.JsonStatus">
+                <description>getJwtTokenHS256</description>
+                <to uri="bean:kongJwtService?method=clearAPIGateWayRS256()"/>
+            </get>
+
+        </rest>
+
+    </camelContext>
+</blueprint>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.kalix.middleware.microservice</groupId>
+        <artifactId>kongclient-parent</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>middleware-kongclient-biz</artifactId>
+    <name>kongclient-biz</name>
+    <packaging>bundle</packaging>
+
+    <properties>
+        <bundle.symbolicName>com.kalix.middleware.kongclient.biz</bundle.symbolicName>
+        <!--<retrofit.version>2.3.0</retrofit.version>-->
+        <!--<lombok.version>1.16.16</lombok.version>-->
+        <!--<slf4j.version>1.6.2</slf4j.version>-->
+        <!--<jcl.version>1.1</jcl.version>-->
+        <!--<log4j.version>1.2.16</log4j.version>-->
+        <!--<logback.version>1.0.6</logback.version>-->
+        <!--<junit.version>4.12</junit.version>-->
+        <!--<squareup-okio-bundle-version>1.14.0_1</squareup-okio-bundle-version>-->
+        <!--<squareup-retrofit-bundle-version>1.9.0_1</squareup-retrofit-bundle-version>-->
+        <!--<squareup-retrofit2-bundle-version>2.4.0_1</squareup-retrofit2-bundle-version>-->
+        <!--<okclient-bundle-version>3.10.0_2<client-bundle-version>-->
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.kalix.middleware.microservice</groupId>
+            <artifactId>middleware-kongclient-api</artifactId>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.squareup.okhttp3</groupId>-->
+            <!--<artifactId>okhttp</artifactId>-->
+            <!--<version>3.8.0</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.google.android</groupId>-->
+            <!--<artifactId>android</artifactId>-->
+            <!--<version>4.1.1.4</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.squareup.okio</groupId>-->
+            <!--<artifactId>okio</artifactId>-->
+            <!--<version>1.14.1</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.squareup.retrofit2</groupId>-->
+            <!--<artifactId>retrofit</artifactId>-->
+            <!--<version>2.3.0</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.squareup.retrofit2</groupId>-->
+            <!--<artifactId>converter-gson</artifactId>-->
+            <!--<version>2.3.0</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.retrofit</artifactId>
+            <version>2.4.0_1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.okio</artifactId>
+            <version>1.14.0_1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.okhttp</artifactId>
+            <version>3.10.0_2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.0</version>
+        </dependency>
+    </dependencies>
+</project>

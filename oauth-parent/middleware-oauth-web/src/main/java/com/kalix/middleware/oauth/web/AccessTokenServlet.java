@@ -122,22 +122,22 @@ public class AccessTokenServlet extends HttpServlet {
 
             String accessToken = "";
             String refreshToken = "";
-            if(jwtService!=null)
-            {
-                AudienceBean audienceEntity = jwtService.getAudien();
-                accessToken = jwtService.createJWT( oAuthService.getUsernameByAuthCode(authCode),  oAuthService.getUsernameByAuthCode(authCode),
-                        "", audienceEntity.getClientId(), audienceEntity.getName(),
-                        audienceEntity.getExpiresSecond() * 1000, audienceEntity.getBase64Secret());
-                refreshToken = jwtService.createJWT( oAuthService.getUsernameByAuthCode(authCode),  oAuthService.getUsernameByAuthCode(authCode),
-                        "", audienceEntity.getClientId(), audienceEntity.getName(),
-                        audienceEntity.getRefresh_expiresSecond()* 1000, audienceEntity.getBase64Secret());
-            }else {
+//            if(jwtService!=null)
+//            {
+//                AudienceBean audienceEntity = jwtService.getAudien();
+//                accessToken = jwtService.createJWT( oAuthService.getUsernameByAuthCode(authCode),  oAuthService.getUsernameByAuthCode(authCode),
+//                        "", audienceEntity.getClientId(), audienceEntity.getName(),
+//                        audienceEntity.getExpiresSecond() * 1000, audienceEntity.getBase64Secret());
+//                refreshToken = jwtService.createJWT( oAuthService.getUsernameByAuthCode(authCode),  oAuthService.getUsernameByAuthCode(authCode),
+//                        "", audienceEntity.getClientId(), audienceEntity.getName(),
+//                        audienceEntity.getRefresh_expiresSecond()* 1000, audienceEntity.getBase64Secret());
+//            }else {
                 //生成Access Token
                 OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
                 accessToken = oauthIssuerImpl.accessToken();
                 refreshToken = oauthIssuerImpl.refreshToken();
 
-            }
+//            }
 
             oAuthService.addAccessToken(accessToken, oAuthService.getUsernameByAuthCode(authCode));
             oAuthService.addRefreshToken(refreshToken, oAuthService.getUsernameByAuthCode(authCode));
