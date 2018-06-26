@@ -18,6 +18,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 public class JwtServiceImpl implements IJwtService {
+    private final String PrivateKey_File = "jwtRS256.key";
+    private final String PublicKey_File = "jwtRS256.key.pub";
     public Claims parseJWT(String jsonWebToken, String base64Security){
         try
         {
@@ -108,6 +110,16 @@ public class JwtServiceImpl implements IJwtService {
                 audienceBean.getExpiresSecond() * 1000, audienceBean.getBase64Secret());
 
         return token;
+    }
+
+    @Override
+    public String getPrivateKeyString() {
+        return FileUtil.loadFile(PrivateKey_File);
+    }
+
+    @Override
+    public String getPublicKeyString() {
+        return FileUtil.loadFile(PublicKey_File);
     }
 
 }  

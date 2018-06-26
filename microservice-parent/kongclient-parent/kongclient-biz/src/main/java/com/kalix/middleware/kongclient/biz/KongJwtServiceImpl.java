@@ -1,5 +1,6 @@
 package com.kalix.middleware.kongclient.biz;
 
+import com.kalix.framework.core.api.jwt.IJwtService;
 import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.util.ConfigUtil;
 import com.kalix.middleware.kongclient.api.biz.IKongJwtService;
@@ -25,7 +26,6 @@ import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
-import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.RSAPrivateCrtKeySpec;
 import java.util.*;
 
@@ -39,6 +39,7 @@ public class KongJwtServiceImpl implements IKongJwtService {
     private String API_NAME = null;
     private String API_METHODS = null;
     private String CONSUMER_NAME = null;
+    private IJwtService jwtService;
     private String PUBLIC_KEY_START = "-----BEGIN PUBLIC KEY-----\n";
     private String PUBLIC_KEY_END = "-----END PUBLIC KEY-----";
     private String PUBLIC_KEY =
@@ -129,8 +130,6 @@ public class KongJwtServiceImpl implements IKongJwtService {
         API_URIS = (String) ConfigUtil.getConfigProp("API_URIS", kongConfigName);
         API_METHODS = (String) ConfigUtil.getConfigProp("API_METHODS", kongConfigName);
         CONSUMER_NAME = (String) ConfigUtil.getConfigProp("CONSUMER_NAME", kongConfigName);
-//        PUBLIC_KEY = (String)ConfigUtil.getConfigProp("PUBLIC_KEY", kongConfigName);
-//        PRIVATE_KEY = (String)ConfigUtil.getConfigProp("PRIVATE_KEY", kongConfigName);
         if (KONG_AUTH2_API_URL != null && !KONG_AUTH2_API_URL.isEmpty()) {
             needOauth2 = true;
         }
@@ -140,7 +139,7 @@ public class KongJwtServiceImpl implements IKongJwtService {
         try {
             return kongClient.getApiService().getApi(API_NAME);
         } catch (Exception e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         return null;
     }
@@ -149,7 +148,7 @@ public class KongJwtServiceImpl implements IKongJwtService {
         try {
             return kongClient.getConsumerService().getConsumer(CONSUMER_NAME);
         } catch (Exception e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         return null;
     }
@@ -170,7 +169,7 @@ public class KongJwtServiceImpl implements IKongJwtService {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            e.getMessage();
         }
         return null;
     }
@@ -279,16 +278,12 @@ public class KongJwtServiceImpl implements IKongJwtService {
     }
 
     private JwtCredential createJwtCredentialRS256() {
-//        JwtCredential jc = new JwtCredential();
-//        jc.setId(UUID.randomUUID().toString());
-//        jc.setKey(UUID.randomUUID().toString());
-//        jc.setSecret(UUID.randomUUID().toString());
-//        jc.setCreatedAt(System.currentTimeMillis());
-//        jc.setAlgorithm("RS256");
-//        jc.setRsaPublicKey(PUBLIC_KEY);
-//        String pubkey = PUBLIC_KEY_START + PUBLIC_KEY.replaceAll("\n", "") + PUBLIC_KEY_END;
-        String pubkey = PUBLIC_KEY_START + PUBLIC_KEY + PUBLIC_KEY_END;
-        return kongClient.getJwtService().addCredentials(consumer.getId(), new JwtCredential(pubkey, "RS256"));
+        String pubkey1 = PUBLIC_KEY_START + PUBLIC_KEY + PUBLIC_KEY_END;
+//        return kongClient.getJwtService().addCredentials(consumer.getId(), new JwtCredential(pubkey, "RS256"));
+        String pubKey = getPublicKey();
+        System.out.println("pubkey equal:");
+        System.out.println(pubkey1 == pubKey);
+        return kongClient.getJwtService().addCredentials(consumer.getId(), new JwtCredential(pubKey, "RS256"));
     }
 
     private JwtCredential getJwtCredential(String algorithm) {
@@ -377,7 +372,11 @@ public class KongJwtServiceImpl implements IKongJwtService {
             if (jwtCredentials != null && !jwtCredentials.isEmpty()) {
                 for (JwtCredential jwtCredential : jwtCredentials) {
                     if ("RS256".equals(jwtCredential.getAlgorithm())) {
-                        return generateJwtStringRS256(jwtCredential, PRIVATE_KEY);
+//                        return generateJwtStringRS256(jwtCredential, PRIVATE_KEY);
+                        String privateKey = getPrivateKey();
+                        System.out.println("privatekey equal:");
+                        System.out.println(PRIVATE_KEY == privateKey);
+                        return generateJwtStringRS256(jwtCredential, privateKey);
                     }
                 }
             }
@@ -385,6 +384,24 @@ public class KongJwtServiceImpl implements IKongJwtService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private String getPrivateKey() {
+        String privateKey = this.jwtService.getPrivateKeyString();
+        if (privateKey != null) {
+            privateKey = privateKey.replaceAll("\r", "");
+            privateKey = privateKey.trim();
+        }
+        return privateKey;
+    }
+
+    private String getPublicKey() {
+        String pubKey = this.jwtService.getPublicKeyString();
+        if (pubKey != null) {
+            pubKey = pubKey.replaceAll("\r", "");
+            pubKey = pubKey.trim();
+        }
+        return pubKey;
     }
 
     private String generateJwtStringHS256(JwtCredential jwtCredential) {
@@ -466,5 +483,9 @@ public class KongJwtServiceImpl implements IKongJwtService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void setJwtService(IJwtService jwtService) {
+        this.jwtService = jwtService;
     }
 }

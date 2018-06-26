@@ -8,6 +8,7 @@ import retrofit2.Retrofit;
 //import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.lang.reflect.Proxy;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by vaibhav on 13/06/17.
@@ -51,7 +52,7 @@ public class RetrofitServiceCreator {
     // -------------------------------------------------------------------
 
     private OkHttpClient initOkHttpClient(boolean supportHttps) {
-
+	    int DEFAULT_TIMEOUT = 3000;
         if(supportHttps) {
             HttpsUtil.SSLParams sslParams = HttpsUtil.getSslSocketFactory(null, null, null);
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
@@ -60,6 +61,9 @@ public class RetrofitServiceCreator {
             return okHttpClient;
         }
 
-        return new OkHttpClient.Builder().build();
+        return new OkHttpClient.Builder()
+                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+                .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS).build();
     }
 }
