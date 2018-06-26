@@ -40,6 +40,7 @@ public class KongJwtServiceImpl implements IKongJwtService {
     private String API_METHODS = null;
     private String CONSUMER_NAME = null;
     private IJwtService jwtService;
+    /**
     private String PUBLIC_KEY_START = "-----BEGIN PUBLIC KEY-----\n";
     private String PUBLIC_KEY_END = "-----END PUBLIC KEY-----";
     private String PUBLIC_KEY =
@@ -107,6 +108,7 @@ public class KongJwtServiceImpl implements IKongJwtService {
             "bFnlpBWLX5FI5NgPV1pmxJw9qiBUItfk+Z3xPnC6cr47u1MtFF6hQfX2RmxHUV/M\n" +
             "ycs2vQxOSITuOTZmUzwvZgk4xi4F/Cv4vTnto2dB1HqwiHAeqiu9lGbn8Zio\n" +
             "-----END RSA PRIVATE KEY-----\n";
+     **/
     private Boolean needOauth2 = false;
     private final String kongConfigName = "ConfigKong";
     private final String PLUGIN_NAME = "jwt";
@@ -278,11 +280,11 @@ public class KongJwtServiceImpl implements IKongJwtService {
     }
 
     private JwtCredential createJwtCredentialRS256() {
-        String pubkey1 = PUBLIC_KEY_START + PUBLIC_KEY + PUBLIC_KEY_END;
+//        String pubkey1 = PUBLIC_KEY_START + PUBLIC_KEY + PUBLIC_KEY_END;
 //        return kongClient.getJwtService().addCredentials(consumer.getId(), new JwtCredential(pubkey, "RS256"));
         String pubKey = getPublicKey();
-        System.out.println("pubkey equal:");
-        System.out.println(pubkey1 == pubKey);
+//        System.out.println("pubkey equal:");
+//        System.out.println(pubkey1 == pubKey);
         return kongClient.getJwtService().addCredentials(consumer.getId(), new JwtCredential(pubKey, "RS256"));
     }
 
@@ -374,8 +376,8 @@ public class KongJwtServiceImpl implements IKongJwtService {
                     if ("RS256".equals(jwtCredential.getAlgorithm())) {
 //                        return generateJwtStringRS256(jwtCredential, PRIVATE_KEY);
                         String privateKey = getPrivateKey();
-                        System.out.println("privatekey equal:");
-                        System.out.println(PRIVATE_KEY == privateKey);
+//                        System.out.println("privatekey equal:");
+//                        System.out.println(PRIVATE_KEY == privateKey);
                         return generateJwtStringRS256(jwtCredential, privateKey);
                     }
                 }
