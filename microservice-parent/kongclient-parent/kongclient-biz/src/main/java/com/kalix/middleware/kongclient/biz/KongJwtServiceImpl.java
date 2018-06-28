@@ -12,21 +12,6 @@ import com.kalix.middleware.kongclient.biz.kong.model.admin.plugin.PluginList;
 import com.kalix.middleware.kongclient.biz.kong.model.plugin.authentication.jwt.JwtConfig;
 import com.kalix.middleware.kongclient.biz.kong.model.plugin.authentication.jwt.JwtCredential;
 import com.kalix.middleware.kongclient.biz.kong.model.plugin.authentication.jwt.JwtCredentialList;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import sun.security.util.DerInputStream;
-import sun.security.util.DerValue;
-
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.security.GeneralSecurityException;
-import java.security.Key;
-import java.security.KeyFactory;
-import java.security.PrivateKey;
-import java.security.spec.RSAPrivateCrtKeySpec;
 import java.util.*;
 
 public class KongJwtServiceImpl implements IKongJwtService {
@@ -374,10 +359,7 @@ public class KongJwtServiceImpl implements IKongJwtService {
             if (jwtCredentials != null && !jwtCredentials.isEmpty()) {
                 for (JwtCredential jwtCredential : jwtCredentials) {
                     if ("RS256".equals(jwtCredential.getAlgorithm())) {
-//                        return generateJwtStringRS256(jwtCredential, PRIVATE_KEY);
                         String privateKey = getPrivateKey();
-//                        System.out.println("privatekey equal:");
-//                        System.out.println(PRIVATE_KEY == privateKey);
                         return generateJwtStringRS256(jwtCredential, privateKey);
                     }
                 }
@@ -389,46 +371,19 @@ public class KongJwtServiceImpl implements IKongJwtService {
     }
 
     private String getPrivateKey() {
-        String privateKey = this.jwtService.getPrivateKeyString();
-        if (privateKey != null) {
-            privateKey = privateKey.replaceAll("\r", "");
-            privateKey = privateKey.trim();
-        }
-        return privateKey;
+        return this.jwtService.getPrivateKeyString();
     }
 
     private String getPublicKey() {
-        String pubKey = this.jwtService.getPublicKeyString();
-        if (pubKey != null) {
-            pubKey = pubKey.replaceAll("\r", "");
-            pubKey = pubKey.trim();
-        }
-        return pubKey;
+        return this.jwtService.getPublicKeyString();
     }
 
     private String generateJwtStringHS256(JwtCredential jwtCredential) {
-        // 签名加密base64
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(jwtCredential.getSecret());
-        Key signingKey = new SecretKeySpec(apiKeySecretBytes, SignatureAlgorithm.HS256.getJcaName());
-        JwtBuilder builder = Jwts.builder()
-                .setHeaderParam("alg", "HS256")
-                .setHeaderParam("typ", "JWT")
-                .claim("iss", jwtCredential.getKey())
-                .claim("name", CONSUMER_NAME)
-                .claim("iat", jwtCredential.getCreatedAt())
-                .signWith(SignatureAlgorithm.HS256, signingKey);
-        return builder.compact();
+        return this.jwtService.createJwt_HS256(jwtCredential.getSecret(), true, jwtCredential.getKey(), CONSUMER_NAME, jwtCredential.getCreatedAt());
     }
 
     private String generateJwtStringRS256(JwtCredential jwtCredential, String privateKey) {
-        JwtBuilder builder = Jwts.builder()
-                .setHeaderParam("alg", "RS256")
-                .setHeaderParam("typ", "JWT")
-                .claim("iss", jwtCredential.getKey())
-                .claim("name", CONSUMER_NAME)
-                .claim("iat", jwtCredential.getCreatedAt())
-                .signWith(SignatureAlgorithm.RS256, getPrivateKey(privateKey));
-        return builder.compact();
+        return this.jwtService.createJwt_RS256(jwtCredential.getKey(), CONSUMER_NAME, jwtCredential.getCreatedAt());
     }
 
     public Api getApi() {
@@ -441,50 +396,6 @@ public class KongJwtServiceImpl implements IKongJwtService {
 
     public Plugin getPlugin() {
         return plugin;
-    }
-
-    /**
-     * 获取PrivateKey对象
-     * @param privateKeyBase64
-     * @return
-     */
-    private PrivateKey getPrivateKey(String privateKeyBase64) {
-//        String privKeyPEM = privateKeyBase64
-//                .replaceAll("\\-*BEGIN.*KEY\\-*", "")
-//                .replaceAll("\\-*END.*KEY\\-*", "");
-        String privKeyPEM = privateKeyBase64.replaceAll("-----END RSA PRIVATE KEY-----", "")
-                .replaceAll("-----BEGIN RSA PRIVATE KEY-----", "")
-                .replaceAll("\n", "");
-        // Base64 decode the data
-        byte[] encoded = org.apache.commons.codec.binary.Base64.decodeBase64(privKeyPEM);
-
-        try {
-            DerInputStream derReader = new DerInputStream(encoded);
-            DerValue[] seq = derReader.getSequence(0);
-
-            if (seq.length < 9) {
-                throw new GeneralSecurityException("Could not read private key");
-            }
-
-            // skip version seq[0];
-            BigInteger modulus = seq[1].getBigInteger();
-            BigInteger publicExp = seq[2].getBigInteger();
-            BigInteger privateExp = seq[3].getBigInteger();
-            BigInteger primeP = seq[4].getBigInteger();
-            BigInteger primeQ = seq[5].getBigInteger();
-            BigInteger expP = seq[6].getBigInteger();
-            BigInteger expQ = seq[7].getBigInteger();
-            BigInteger crtCoeff = seq[8].getBigInteger();
-
-            RSAPrivateCrtKeySpec keySpec = new RSAPrivateCrtKeySpec(modulus, publicExp, privateExp,
-                    primeP, primeQ, expP, expQ, crtCoeff);
-
-            KeyFactory factory = KeyFactory.getInstance("RSA");
-            return factory.generatePrivate(keySpec);
-        } catch (IOException | GeneralSecurityException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public void setJwtService(IJwtService jwtService) {
