@@ -1,7 +1,7 @@
 package com.kalix.middleware.kongclient.biz.kong.api.admin;
 
-import com.kalix.middleware.kongclient.biz.kong.model.admin.target.Target;
-import com.kalix.middleware.kongclient.biz.kong.model.admin.target.TargetList;
+import com.kalix.middleware.kongclient.biz.kong.model.admin.aim.Target;
+import com.kalix.middleware.kongclient.biz.kong.model.admin.aim.TargetList;
 
 /**
  * Created by vaibhav on 13/06/17.

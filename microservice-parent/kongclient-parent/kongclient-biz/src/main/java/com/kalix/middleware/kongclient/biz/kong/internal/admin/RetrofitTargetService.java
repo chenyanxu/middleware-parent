@@ -1,7 +1,7 @@
 package com.kalix.middleware.kongclient.biz.kong.internal.admin;
 
-import com.kalix.middleware.kongclient.biz.kong.model.admin.target.Target;
-import com.kalix.middleware.kongclient.biz.kong.model.admin.target.TargetList;
+import com.kalix.middleware.kongclient.biz.kong.model.admin.aim.Target;
+import com.kalix.middleware.kongclient.biz.kong.model.admin.aim.TargetList;
 import retrofit2.Call;
 import retrofit2.http.*;
 
