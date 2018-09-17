@@ -1,9 +1,15 @@
 package com.kalix.middleware.excel.biz;
 
+import com.google.common.collect.Lists;
+import com.kalix.framework.core.api.system.IDictBeanService;
+import com.kalix.framework.core.util.JNDIHelper;
 import com.kalix.framework.core.util.SerializeUtil;
 import com.kalix.middleware.couchdb.api.biz.ICouchdbService;
+import com.kalix.middleware.excel.api.annotation.ExcelField;
 import com.kalix.middleware.excel.api.biz.IExcelService;
+import com.kalix.middleware.excel.biz.util.Reflections;
 import org.apache.commons.codec.binary.Base64OutputStream;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
@@ -13,12 +19,23 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.lightcouch.Response;
 
 import java.io.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+
 /**
  * @author chenyanxu
  */
 public class ExcelServiceImpl implements IExcelService {
     private ICouchdbService couchdbService;
+    //private IDictBeanService dictBeanService;
+    //正则表达式 用于匹配属性的第一个字母
+    private static final String REGEX = "[a-zA-Z]";
 
     @Override
     public Object OpenExcel(String excelPath) {
@@ -74,51 +91,26 @@ public class ExcelServiceImpl implements IExcelService {
     }
 
     @Override
-    public List<String> GetColumnNames(Object sheet, int columnRowIndex) {
-        List<String> rtnList = new ArrayList<String>();
+    public List<Object> GetColumnNames(Object sheet, int columnRowIndex, Class<?> clazz,String serviceDictInterface) {
+        List<Row> rtnList = new ArrayList<Row>();
         Sheet theSheet = (Sheet) sheet;
-        Row row = theSheet.getRow(columnRowIndex);
-
-        for (int colIndex = 0; colIndex < row.getLastCellNum(); ++colIndex) {
-            rtnList.add(row.getCell(colIndex).getStringCellValue().trim());
+        int rows= GetRowCount(theSheet);
+        List<Object[]> annotationList= getAnnotationList(clazz);
+        for(int i=columnRowIndex;i<rows;i++)
+        {
+            Row row = theSheet.getRow(i);
+            rtnList.add(row);
         }
 
-        return rtnList;
+
+        return returnObjectList(rtnList,clazz,annotationList,serviceDictInterface);
     }
 
     @Override
-    public Map<String, Integer> GetColumnDic(Object sheet, int columnRowIndex, Dictionary<String, Object> dic) {
+    public List<Object> GetColumnDic(Object sheet, int columnRowIndex, Class<?> clazz,String serviceDictInterface) {
 
-        List<String> colNameList = GetColumnNames(sheet, columnRowIndex);
-        List<String> configKeys = new ArrayList<String>();
-        List<String> configValues = new ArrayList<String>();
-        Enumeration<String> keys = dic.keys();
-        Enumeration<Object> elements = dic.elements();
-        String temp = null;
-        Map<String, Integer> columnMap = new HashMap<>();
+      return GetColumnNames(sheet, columnRowIndex,clazz,serviceDictInterface);
 
-        while (keys.hasMoreElements()) {
-            temp = keys.nextElement();
-            configKeys.add(temp.trim());
-        }
-
-        while (elements.hasMoreElements()) {
-            temp = (String) elements.nextElement();
-            configValues.add(temp.trim());
-        }
-
-        for (int idx = 0; idx < colNameList.size(); ++idx) {
-            for (int configIndex = 0; configIndex < configKeys.size(); ++configIndex) {
-                if (colNameList.get(idx).equals(configValues.get(configIndex))) {
-                    columnMap.put(configKeys.get(configIndex), idx);
-
-
-                }
-            }
-        }
-
-
-        return columnMap;
     }
 
     @Override
@@ -359,6 +351,10 @@ public class ExcelServiceImpl implements IExcelService {
         return couchdbService;
     }
 
+//    public void setDictBeanService(IDictBeanService dictBeanService) {
+//        this.dictBeanService = dictBeanService;
+//    }
+
     public void setCouchdbService(ICouchdbService couchdbService) {
         this.couchdbService = couchdbService;
     }
@@ -418,5 +414,291 @@ public class ExcelServiceImpl implements IExcelService {
             default:
                 return "";
         }
+    }
+
+
+    /**
+     * 功能:获取单元格的值
+     */
+    private static String getCellValue(Cell cell) {
+        Object result = "";
+        if (cell != null) {
+            switch (cell.getCellType()) {
+                case Cell.CELL_TYPE_STRING:
+                    result = cell.getStringCellValue();
+                    break;
+                case Cell.CELL_TYPE_NUMERIC:
+                    result = cell.getNumericCellValue();
+                    break;
+                case Cell.CELL_TYPE_BOOLEAN:
+                    result = cell.getBooleanCellValue();
+                    break;
+                case Cell.CELL_TYPE_FORMULA:
+                    result = cell.getCellFormula();
+                    break;
+                case Cell.CELL_TYPE_ERROR:
+                    result = cell.getErrorCellValue();
+                    break;
+                case Cell.CELL_TYPE_BLANK:
+                    break;
+                default:
+                    break;
+            }
+        }
+        return result.toString();
+    }
+
+    /**
+     * 功能:返回指定的对象集合
+     */
+    private  List<Object> returnObjectList(List<Row> rowList,Class<?> clazz,List<Object[]> annotationList,String serviceDictInterface) {
+        List<Object> objectList=null;
+        Object obj=null;
+        int j=0;
+        try {
+            objectList=new ArrayList<Object>();
+            for (Row row : rowList) {
+                obj = clazz.newInstance();
+                setAttrributeValue(obj,annotationList,row,objectList,serviceDictInterface);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return objectList;
+    }
+
+
+    private List<Object[]>  getAnnotationList(Class cls, int... groups){
+        List<Object[]> annotationList = Lists.newArrayList();
+        // Get annotation field
+        Field[] fs = cls.getDeclaredFields();
+        for (Field f : fs){
+            ExcelField ef = f.getAnnotation(ExcelField.class);
+            if (ef != null && (ef.type()==0 || ef.type()==2)){
+                if (groups!=null && groups.length>0){
+                    boolean inGroup = false;
+                    for (int g : groups){
+                        if (inGroup){
+                            break;
+                        }
+                        for (int efg : ef.groups()){
+                            if (g == efg){
+                                inGroup = true;
+                                annotationList.add(new Object[]{ef, f});
+                                break;
+                            }
+                        }
+                    }
+                }else{
+                    annotationList.add(new Object[]{ef, f});
+                }
+            }
+        }
+        // Get annotation method
+        Method[] ms = cls.getDeclaredMethods();
+        for (Method m : ms){
+            ExcelField ef = m.getAnnotation(ExcelField.class);
+            if (ef != null && (ef.type()==0 || ef.type()==2)){
+                if (groups!=null && groups.length>0){
+                    boolean inGroup = false;
+                    for (int g : groups){
+                        if (inGroup){
+                            break;
+                        }
+                        for (int efg : ef.groups()){
+                            if (g == efg){
+                                inGroup = true;
+                                annotationList.add(new Object[]{ef, m});
+                                break;
+                            }
+                        }
+                    }
+                }else{
+                    annotationList.add(new Object[]{ef, m});
+                }
+            }
+        }
+        // Field sorting
+        Collections.sort(annotationList, new Comparator<Object[]>() {
+            public int compare(Object[] o1, Object[] o2) {
+                return new Integer(((ExcelField)o1[0]).sort()).compareTo(
+                        new Integer(((ExcelField)o2[0]).sort()));
+            };
+        });
+        return annotationList;
+    }
+
+
+    /**
+     * 功能:给指定对象的指定属性赋值
+     */
+    private static void setAttrributeValue(Object obj, List<Object[]> annotationList,Row row,List<Object> objectList,String serviceDictInterface) throws IOException {
+        //得到该属性的set方法名
+       // String method_name = convertToMethodName(attribute,obj.getClass(),true);
+       // Method[] methods = obj.getClass().getMethods();
+        Object val=null;
+        int column = 0;
+        for (Object[] os : annotationList) {
+            val = getCellValue(row.getCell(column++));
+            /**
+             * 因为这里只是调用bean中属性的set方法，属性名称不能重复
+             * 所以set方法也不会重复，所以就直接用方法名称去锁定一个方法
+             * （注：在java中，锁定一个方法的条件是方法名及参数）
+             */
+            if (val != null) {
+                ExcelField ef = (ExcelField)os[0];
+                // If is dict type, get dict value
+                if (ef.dictType()!=null&& !"".equals(ef.dictType())){
+                   // String serviceDictInterface="com.kalix.enrolment.system.dict.api.biz.IEnrolmentDictBeanService";
+                    IDictBeanService dictBeanService = JNDIHelper.getJNDIServiceForName(serviceDictInterface);
+                    //val= dictBeanService.getByTypeAndLabel(ef.dictType(),val.toString());
+                    val=0;
+                }
+                // Get param type and type cast
+                Class<?> valType = obj.getClass();
+                if (os[1] instanceof Field){
+                    valType = ((Field)os[1]).getType();
+                }else if (os[1] instanceof Method){
+                    Method method = ((Method)os[1]);
+                    if ("get".equals(method.getName().substring(0, 3))){
+                        valType = method.getReturnType();
+                    }else if("set".equals(method.getName().substring(0, 3))){
+                        valType = ((Method)os[1]).getParameterTypes()[0];
+                    }
+                }
+                //log.debug("Import value type: ["+i+","+column+"] " + valType);
+                try {
+                    if (valType == String.class){
+                        String s = String.valueOf(val.toString());
+                        if(StringUtils.endsWith(s, ".0")){
+                            val = StringUtils.substringBefore(s, ".0");
+                        }else{
+                            val = String.valueOf(val.toString());
+                        }
+                    }
+                    else if (valType == Integer.class){
+                        val = Double.valueOf(val.toString()).intValue();
+                    }else if (valType == Long.class){
+                        val = Double.valueOf(val.toString()).longValue();
+                    }else if (valType == Double.class){
+                        val = Double.valueOf(val.toString());
+                    }else if (valType == Float.class){
+                        val = Float.valueOf(val.toString());
+                    }else if (valType == Date.class){
+                        val = DateUtil.getJavaDate((Double)val);
+                    }else{
+                        if (ef.fieldType() != Class.class){
+                            val = ef.fieldType().getMethod("getValue", String.class).invoke(null, val.toString());
+                        }else{
+//                            val = Class.forName(this.getClass().getName().replaceAll(this.getClass().getSimpleName(),
+//                                    "fieldtype."+valType.getSimpleName()+"Type")).getMethod("getValue", String.class).invoke(null, val.toString());
+                        }
+                    }
+                } catch (Exception ex) {
+                   // log.info("Get cell value ["+i+","+column+"] error: " + ex.toString());
+                    val = null;
+                }
+                // set entity value
+                if (os[1] instanceof Field){
+                    Reflections.invokeSetter(obj, ((Field)os[1]).getName(), val);
+                }else if (os[1] instanceof Method){
+                    String mthodName = ((Method)os[1]).getName();
+                    if ("get".equals(mthodName.substring(0, 3))){
+                        mthodName = "set"+ StringUtils.substringAfter(mthodName, "get");
+                    }
+                    Reflections.invokeMethod(obj, mthodName, new Class[] {valType}, new Object[] {val});
+                }
+
+//                if (method.getName().equals(method_name)) {
+//                    Class<?>[] parameterC = method.getParameterTypes();
+//                    try {
+//                        /**如果是(整型,浮点型,布尔型,字节型,时间类型),
+//                         * 按照各自的规则把value值转换成各自的类型
+//                         * 否则一律按类型强制转换(比如:String类型)
+//                         */
+//                        if (parameterC[0] == int.class || parameterC[0] == java.lang.Integer.class) {
+//                            value = value.substring(0, value.lastIndexOf("."));
+//                            method.invoke(obj, Integer.valueOf(value));
+//                            break;
+//                        } else if (parameterC[0] == float.class || parameterC[0] == java.lang.Float.class) {
+//                            method.invoke(obj, Float.valueOf(value));
+//                            break;
+//                        } else if (parameterC[0] == double.class || parameterC[0] == java.lang.Double.class) {
+//                            method.invoke(obj, Double.valueOf(value));
+//                            break;
+//                        } else if (parameterC[0] == byte.class || parameterC[0] == java.lang.Byte.class) {
+//                            method.invoke(obj, Byte.valueOf(value));
+//                            break;
+//                        } else if (parameterC[0] == boolean.class || parameterC[0] == java.lang.Boolean.class) {
+//                            method.invoke(obj, Boolean.valueOf(value));
+//                            break;
+//                        } else if (parameterC[0] == java.util.Date.class) {
+//                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//                            Date date = null;
+//                            try {
+//                                date = sdf.parse(value);
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                            method.invoke(obj, date);
+//                            break;
+//                        } else {
+//                            method.invoke(obj, parameterC[0].cast(value));
+//                            break;
+//                        }
+//                    } catch (IllegalArgumentException e) {
+//                        e.printStackTrace();
+//                    } catch (IllegalAccessException e) {
+//                        e.printStackTrace();
+//                    } catch (InvocationTargetException e) {
+//                        e.printStackTrace();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+
+                }
+            }
+            objectList.add(obj);
+    //    }
+    }
+
+    /**
+     * 功能:根据属性生成对应的set/get方法
+     */
+    private static String convertToMethodName(String attribute,Class<?> objClass,boolean isSet) {
+        /** 通过正则表达式来匹配第一个字符 **/
+        Pattern p = Pattern.compile(REGEX);
+        Matcher m = p.matcher(attribute);
+        StringBuilder sb = new StringBuilder();
+        /** 如果是set方法名称 **/
+        if(isSet)
+        {
+            sb.append("set");
+        }else{
+            /** get方法名称 **/
+            try {
+                Field attributeField = objClass.getDeclaredField(attribute);
+                /** 如果类型为boolean **/
+                if(attributeField.getType() == boolean.class||attributeField.getType() == Boolean.class)
+                {
+                    sb.append("is");
+                }else
+                {
+                    sb.append("get");
+                }
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+        }
+        /** 针对以下划线开头的属性 **/
+        if(attribute.charAt(0)!='_' && m.find())
+        {
+            sb.append(m.replaceFirst(m.group().toUpperCase()));
+        }else{
+            sb.append(attribute);
+        }
+        return sb.toString();
     }
 }

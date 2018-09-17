@@ -4,10 +4,13 @@
 Bundle-Activator: ${bundle.namespace}.internal.InitActivator
 Include-Resource: target/classes
 Bundle-Category: Kalix Middleware Excel
-Embed-Dependency:*; artifactId=!middleware-excel-api|framework-core-util|middleware-couchdb-api|framework-core-api|framework-poms-dm
+Embed-Dependency:*; artifactId=!middleware-excel-api|framework-core-util|middleware-couchdb-api|framework-poms-dm
 Import-Package: com.kalix.framework.core.util,\
+                com.kalix.framework.core.api.system,\
                 com.kalix.middleware.couchdb.api.biz,\
                 com.kalix.middleware.excel.api.biz,\
+                com.kalix.middleware.excel.api.annotation,\
+                com.kalix.enrolment.system.dict.api.biz,\
                 org.lightcouch,\
                 org.osgi.framework,\
                 org.osgi.service.blueprint,\
@@ -15,4 +18,5 @@ Import-Package: com.kalix.framework.core.util,\
                 com.kalix.framework.core.api.osgi,\
                 com.kalix.framework.core.api.persistence,\
                 org.osgi.service.http, javax.imageio.*,\
+                org.apache.commons.lang,\
                 org.w3c.dom.*

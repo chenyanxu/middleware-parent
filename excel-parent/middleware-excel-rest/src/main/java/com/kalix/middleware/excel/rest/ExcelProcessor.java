@@ -14,6 +14,8 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
+import org.apache.shiro.util.ClassUtils;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,66 +42,119 @@ public class ExcelProcessor implements Processor {
     public void process(Exchange exchange) throws Exception {
         this.rtnMap.clear();
         int recIndex = 0;
-
+        //List<FileItem> items=null;
         try {
             HttpServletRequest request = ObjectHelper.cast(HttpServletRequest.class, exchange.getIn().getHeader(Exchange.HTTP_SERVLET_REQUEST));
-            String configId = request.getParameter("ConfigId");
-            String entityName = request.getParameter("EntityName");
-            String serviceInterface = request.getParameter("ServiceInterface");
-            IBizService bizService = JNDIHelper.getJNDIServiceForName(serviceInterface);
-            Class entityClass = new DelegatedClassLoadingHelper(bundleContext).loadClass(entityName);
-
+            String serviceInterface = "";
+            Class entityClass= null;
             if (!ServletFileUpload.isMultipartContent(request)) {
                 throw new RuntimeException("Invalid Multipart Content request!");
             }
-
             uploader.setHeaderEncoding("utf-8");
-
             ServletRequestContextWrapper wrapper = new ServletRequestContextWrapper(request);
             wrapper.setInputStream(exchange.getIn().getBody(InputStream.class));
             List<FileItem> items = uploader.parseRequest(wrapper);
+           // items = uploader.parseRequest(request);
+            exchange.getIn().setHeader("Content-Type", "text/html;charset=utf-8");
             if (items.isEmpty()) {
                 throw new RuntimeException("Invalid Multipart/form-data Content, file item is empty!");
             }
+            else {
+                IBizService bizService=null;
+                String serviceDictInterface="";
+                for (FileItem item : items) {
+                    if (item.isFormField()) {
+                        if("EntityName".equals(item.getFieldName()))
+                        {
+                            entityClass=ClassUtils.forName(item.getString("utf-8"));
+                        }
+                        if("ServiceInterface".equals(item.getFieldName()))
+                        {
+                            serviceInterface=item.getString("utf-8");
+                            bizService = JNDIHelper.getJNDIServiceForName(serviceInterface);
+                        }
+                        if("serviceDictInterface".equals(item.getFieldName()))
+                        {
+                            serviceDictInterface=item.getString("utf-8");
+                           // bizService = JNDIHelper.getJNDIServiceForName(serviceDictInterface);
+                        }
 
-            FileItem fileItem = null;
+                        // 非上传组件
+                       // System.out.println("组件名称:" + item.getFieldName());
+                       // System.out.println("内容:" + item.getString("utf-8")); // 解决乱码问题
+                    } else {
+                        // 上传组件
+                       // System.out.println("组件名称:" + item.getFieldName());
+                      //  System.out.println("上传文件名称:" + item.getName());
 
-            if (items.size() == 1) {
-                fileItem = items.get(0);
-            }
+                        String name = item.getName(); // 上传文件名称
+                        System.out.println(name);
+                        name = name.substring(name.lastIndexOf("\\") + 1);
+                        Object wb = excelService.OpenExcel(item.getInputStream(), item.getName());
+                        Object sheet = excelService.OpenSheet(wb, "Sheet1");
+                        int startRow = new Integer(2) - 1;
+                        int rowCount = excelService.GetRowCount(sheet);
+                        List<Object> bookList = (List<Object>)  excelService.GetColumnDic(sheet, startRow, entityClass,serviceDictInterface);
+                        for(Object obj:bookList){
+                            PersistentEntity objEntity= (PersistentEntity)obj;
+                            bizService.saveEntity(objEntity);
 
-            exchange.getIn().setHeader("Content-Type", "text/html;charset=utf-8");
+                        }
 
-            if (fileItem != null) {
-                if (fileItem.getSize() > (10 * 1024 * 1024)) {
-                    this.rtnMap.put("success", false);
-                    this.rtnMap.put("msg", "文件过大（上限10MB）！");
-                } else {
-                    Dictionary dictionary = ConfigUtil.getAllConfig(configId);
-                    Object wb = excelService.OpenExcel(fileItem.getInputStream(), fileItem.getName());
-                    Object sheet = excelService.OpenSheet(wb, dictionary.get("sheet").toString());
-                    Map columnMap = excelService.GetColumnDic(sheet, 0, dictionary);
-                    int startRow = new Integer(dictionary.get("start_row").toString()) - 1;
-                    int rowCount = excelService.GetRowCount(sheet);
-
-                    for (int idx = startRow; idx < rowCount; ++idx) {
-                        Map rowMap = excelService.GetRowMap(sheet, idx, columnMap);
-                        recIndex = idx;
-                        PersistentEntity obj = SerializeUtil.unserializeJson(SerializeUtil.serializeJson(rowMap), entityClass);
-
-                        bizService.saveEntity(obj);
+                        // 删除临时文件
+                        item.delete();
                     }
+
                 }
             }
+
+ //           FileItem fileItem = null;
+//
+//            if (items.size() == 1) {
+//                fileItem = items.get(0);
+//            }
+
+
+
+//            if (fileItem != null) {
+//
+//                if (fileItem.getSize() > (10 * 1024 * 1024)) {
+//                    this.rtnMap.put("success", false);
+//                    this.rtnMap.put("msg", "文件过大（上限10MB）！");
+//                } else {
+//                   // Dictionary dictionary = ConfigUtil.getAllConfig(configId);
+//                    Object wb = excelService.OpenExcel(fileItem.getInputStream(), fileItem.getName());
+//                    Object sheet = excelService.OpenSheet(wb, "Sheet1");
+//                    //Object   className  = entityName.getClass().getInterfaces();
+//                    List<Object> bookList = (List<Object>)  excelService.GetColumnDic(sheet, 0, entityName.getClass());
+//                    int startRow = new Integer(dictionary.get("start_row").toString()) - 1;
+//                    int rowCount = excelService.GetRowCount(sheet);
+//
+//                    for (int idx = startRow; idx < rowCount; ++idx) {
+//                        Map rowMap = excelService.GetRowMap(sheet, idx, columnMap);
+//                        recIndex = idx;
+//                        PersistentEntity obj = SerializeUtil.unserializeJson(SerializeUtil.serializeJson(rowMap), entityClass);
+//
+//                        bizService.saveEntity(obj);
+//                    }
+//                }
+//            }
 
             this.rtnMap.put("success", true);
             this.rtnMap.put("msg", "文件导入成功");
 
             exchange.getIn().setBody(rtnMap);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(String.format("请检查表格第 %s 行", recIndex + 1));
+        } catch (Exception e) {
+            e.printStackTrace();
+          //  throw new RuntimeException(String.format("请检查表格第 %s 行", recIndex + 1));
+        }
+        finally {
+            //items.clear();
         }
     }
+
+
+
 
     public IExcelService getExcelService() {
         return excelService;
