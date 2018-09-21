@@ -100,7 +100,6 @@ public class ExcelProcessor implements Processor {
                             bizService.saveEntity(objEntity);
 
                         }
-
                         // 删除临时文件
                         item.delete();
                     }
@@ -113,8 +112,6 @@ public class ExcelProcessor implements Processor {
 //            if (items.size() == 1) {
 //                fileItem = items.get(0);
 //            }
-
-
 
 //            if (fileItem != null) {
 //
@@ -143,18 +140,17 @@ public class ExcelProcessor implements Processor {
             this.rtnMap.put("success", true);
             this.rtnMap.put("msg", "文件导入成功");
 
-            exchange.getIn().setBody(rtnMap);
         } catch (Exception e) {
             e.printStackTrace();
           //  throw new RuntimeException(String.format("请检查表格第 %s 行", recIndex + 1));
+            this.rtnMap.put("success", false);
+            this.rtnMap.put("msg", "文件导入失败！异常为{" + e.toString() + "}");
         }
         finally {
             //items.clear();
+            exchange.getIn().setBody(rtnMap);
         }
     }
-
-
-
 
     public IExcelService getExcelService() {
         return excelService;
