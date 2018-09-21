@@ -551,8 +551,9 @@ public class ExcelServiceImpl implements IExcelService {
                 if (ef.dictType()!=null&& !"".equals(ef.dictType())){
                    // String serviceDictInterface="com.kalix.enrolment.system.dict.api.biz.IEnrolmentDictBeanService";
                     IDictBeanService dictBeanService = JNDIHelper.getJNDIServiceForName(serviceDictInterface);
+                    val= dictBeanService.getValueByTypeAndLabel(ef.dictType(),val.toString());
                     //val= dictBeanService.getByTypeAndLabel(ef.dictType(),val.toString());
-                    val=0;
+                    //val=0;
                 }
                 // Get param type and type cast
                 Class<?> valType = obj.getClass();
