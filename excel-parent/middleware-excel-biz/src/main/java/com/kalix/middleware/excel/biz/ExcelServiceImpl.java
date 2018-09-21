@@ -99,9 +99,12 @@ public class ExcelServiceImpl implements IExcelService {
         for(int i=columnRowIndex;i<rows;i++)
         {
             Row row = theSheet.getRow(i);
-            rtnList.add(row);
+            String col1 = getCellValue(row.getCell(0));
+            String col2 = getCellValue(row.getCell(1));
+            if (StringUtils.isNotEmpty(col1) && StringUtils.isNotEmpty(col2)) {
+                rtnList.add(row);
+            }
         }
-
 
         return returnObjectList(rtnList,clazz,annotationList,serviceDictInterface);
     }
