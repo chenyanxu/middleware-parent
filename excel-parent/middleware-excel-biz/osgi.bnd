@@ -6,17 +6,26 @@ Include-Resource: target/classes
 Bundle-Category: Kalix Middleware Excel
 Embed-Dependency:*; artifactId=!middleware-excel-api|framework-core-util|middleware-couchdb-api|framework-poms-dm
 Import-Package: com.kalix.framework.core.util,\
+                com.kalix.framework.core.api.biz,\
                 com.kalix.framework.core.api.system,\
-                com.kalix.middleware.couchdb.api.biz,\
-                com.kalix.middleware.excel.api.biz,\
-                com.kalix.middleware.excel.api.annotation,\
-                com.kalix.enrolment.system.dict.api.biz,\
-                org.lightcouch,\
-                org.osgi.framework,\
-                org.osgi.service.blueprint,\
-                org.apache.commons.codec.binary,\
                 com.kalix.framework.core.api.osgi,\
                 com.kalix.framework.core.api.persistence,\
-                org.osgi.service.http, javax.imageio.*,\
+                com.kalix.framework.extend.api.biz,\
+                com.kalix.framework.extend.api.entities,\
+                com.kalix.middleware.excel.api.biz,\
+                com.kalix.middleware.excel.api.annotation,\
+                com.kalix.middleware.couchdb.api.biz,\
+                com.kalix.enrolment.question.api.biz,\
+                com.kalix.enrolment.question.biz,\
+                com.kalix.enrolment.question.entities,\
+                com.kalix.enrolment.system.dict.api.biz,\
+                javax.servlet.*, javax.xml.*, javax.imageio.*,\
+                javax.persistence, com.fasterxml.jackson.annotation,\
+                java.util, java.io, org.dozer,\
+                com.fasterxml.jackson.annotation,\
+                org.lightcouch, org.xml.sax.*, org.osgi.service.http,\
+                org.osgi.framework, org.osgi.service.blueprint,\
+                org.apache.commons.codec.*,\
                 org.apache.commons.lang,\
+                org.apache.shiro.util.*,\
                 org.w3c.dom.*

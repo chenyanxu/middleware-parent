@@ -613,53 +613,6 @@ public class ExcelServiceImpl implements IExcelService {
                     Reflections.invokeMethod(obj, mthodName, new Class[] {valType}, new Object[] {val});
                 }
 
-//                if (method.getName().equals(method_name)) {
-//                    Class<?>[] parameterC = method.getParameterTypes();
-//                    try {
-//                        /**如果是(整型,浮点型,布尔型,字节型,时间类型),
-//                         * 按照各自的规则把value值转换成各自的类型
-//                         * 否则一律按类型强制转换(比如:String类型)
-//                         */
-//                        if (parameterC[0] == int.class || parameterC[0] == java.lang.Integer.class) {
-//                            value = value.substring(0, value.lastIndexOf("."));
-//                            method.invoke(obj, Integer.valueOf(value));
-//                            break;
-//                        } else if (parameterC[0] == float.class || parameterC[0] == java.lang.Float.class) {
-//                            method.invoke(obj, Float.valueOf(value));
-//                            break;
-//                        } else if (parameterC[0] == double.class || parameterC[0] == java.lang.Double.class) {
-//                            method.invoke(obj, Double.valueOf(value));
-//                            break;
-//                        } else if (parameterC[0] == byte.class || parameterC[0] == java.lang.Byte.class) {
-//                            method.invoke(obj, Byte.valueOf(value));
-//                            break;
-//                        } else if (parameterC[0] == boolean.class || parameterC[0] == java.lang.Boolean.class) {
-//                            method.invoke(obj, Boolean.valueOf(value));
-//                            break;
-//                        } else if (parameterC[0] == java.util.Date.class) {
-//                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//                            Date date = null;
-//                            try {
-//                                date = sdf.parse(value);
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
-//                            method.invoke(obj, date);
-//                            break;
-//                        } else {
-//                            method.invoke(obj, parameterC[0].cast(value));
-//                            break;
-//                        }
-//                    } catch (IllegalArgumentException e) {
-//                        e.printStackTrace();
-//                    } catch (IllegalAccessException e) {
-//                        e.printStackTrace();
-//                    } catch (InvocationTargetException e) {
-//                        e.printStackTrace();
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-
                 }
             }
             objectList.add(obj);

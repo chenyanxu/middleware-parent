@@ -12,9 +12,16 @@
     <service id="excelService" interface="com.kalix.middleware.excel.api.biz.IExcelService"
              ref="excelServiceImpl"/>
 
+
+    <bean id="exportExcelServiceImpl" class="com.kalix.middleware.excel.biz.ExportExcelServiceImpl">
+    </bean>
+    <service id="exportExcelService" interface="com.kalix.middleware.excel.api.biz.IExportExcelService"
+             ref="exportExcelServiceImpl"/>
+
     <bean id="wordServiceImpl" class="com.kalix.middleware.excel.biz.WordServiceImpl">
         <!--<property name="bundleContext" ref="blueprintBundleContext"/>-->
     </bean>
     <service id="wordService" interface="com.kalix.middleware.excel.api.biz.IWordService"
              ref="wordServiceImpl"/>
+
 </blueprint>

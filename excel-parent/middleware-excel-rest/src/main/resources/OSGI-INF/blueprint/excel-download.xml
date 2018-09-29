@@ -1,0 +1,18 @@
+<blueprint xmlns:jpa="http://aries.apache.org/xmlns/jpa/v2.0.0"
+           xmlns:tx="http://aries.apache.org/xmlns/transactions/v1.2.0"
+           default-activation="eager"
+           xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <jpa:enable/>
+    <tx:enable-annotations/>
+
+    <bean id="exportExcelServlet" class="com.kalix.middleware.excel.biz.ExportExcelServlet">
+    </bean>
+    <service interface="javax.servlet.Servlet" ref="exportExcelServlet">
+        <service-properties>
+            <entry key="alias" value="/camel/rest/servlet/exportExcle" />
+            <entry key="matchOnUriPrefix" value="true" />
+            <entry key="servlet-name" value="ExportExcelServlet"/>
+        </service-properties>
+    </service>
+</blueprint>
+

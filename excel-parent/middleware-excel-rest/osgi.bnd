@@ -4,4 +4,5 @@
 Bundle-Activator: ${bundle.namespace}.internal.InitActivator
 Include-Resource: target/classes
 Bundle-Category: Kalix Middleware Excel
-Import-Package: com.kalix.enrolment.question.entities,*
+DynamicImport-Package: *
+
