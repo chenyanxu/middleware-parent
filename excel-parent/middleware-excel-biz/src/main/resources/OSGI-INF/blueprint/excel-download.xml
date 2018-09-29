@@ -9,7 +9,7 @@
     </bean>
     <service interface="javax.servlet.Servlet" ref="exportExcelServlet">
         <service-properties>
-            <entry key="alias" value="/camel/rest/servlet/exportExcle" />
+            <entry key="alias" value="/camel/servlet/exportExcel" />
             <entry key="matchOnUriPrefix" value="true" />
             <entry key="servlet-name" value="ExportExcelServlet"/>
         </service-properties>

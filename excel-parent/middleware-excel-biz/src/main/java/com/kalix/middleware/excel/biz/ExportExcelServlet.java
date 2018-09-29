@@ -1,10 +1,7 @@
 package com.kalix.middleware.excel.biz;
 
-import com.kalix.framework.core.api.biz.IDownloadService;
 import com.kalix.framework.core.util.JNDIHelper;
-import com.kalix.framework.core.util.StringUtils;
 import com.kalix.middleware.excel.api.biz.IExportExcelService;
-import org.apache.shiro.util.ClassUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,9 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by hqj on 2018/02/02.
@@ -36,7 +30,7 @@ public class ExportExcelServlet extends HttpServlet {
             // 实体id
             String id = req.getParameter("id") == null ? "" : req.getParameter("id");
             exportExcelService = JNDIHelper.getJNDIServiceForName(IExportExcelService.class.getName());
-            exportExcelService.doExport("测试模板",resp);
+            exportExcelService.doExport("测试模板", resp);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,9 +43,5 @@ public class ExportExcelServlet extends HttpServlet {
                 outHtml.close();
             }
         }
-    }
-
-    public void setExportExcelService(IExportExcelService exportExcelService) {
-        this.exportExcelService = exportExcelService;
     }
 }
