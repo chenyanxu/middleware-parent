@@ -82,6 +82,9 @@ public class AuthorizeServlet extends HttpServlet {
         //构建OAuth 授权请求
         try {
             OAuthAuthzRequest oauthRequest = new OAuthAuthzRequest(req);
+            if (oAuthService == null) {
+                this.oAuthService = OsgiUtil.waitForServices(IOauthService.class, null);
+            }
             if (!oAuthService.checkClientId(oauthRequest.getClientId())) {
                 OAuthResponse response =
                         OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
@@ -96,6 +99,9 @@ public class AuthorizeServlet extends HttpServlet {
 
             //如果用户没有登录，跳转到登陆页面
             if (!login(req)) {//登录失败时跳转到登陆页面
+                if (clientService == null) {
+                    this.clientService = OsgiUtil.waitForServices(IClientBeanService.class, null);
+                }
                 req.setAttribute("client", clientService.findByClientId(oauthRequest.getClientId()));
                 RequestDispatcher requestDispatcher = req.getRequestDispatcher("/oauth2login.jsp");
                 requestDispatcher.forward(req, resp);
@@ -153,6 +159,9 @@ public class AuthorizeServlet extends HttpServlet {
             return false;
         }
         try {
+            if (userService == null) {
+                this.userService = OsgiUtil.waitForServices(IUserBeanService.class, null);
+            }
             // 写登录逻辑
             UserBean user = userService.findByUsername(username);
             if (user != null) {
