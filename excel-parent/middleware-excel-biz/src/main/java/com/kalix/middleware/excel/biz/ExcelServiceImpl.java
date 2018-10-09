@@ -2,6 +2,7 @@ package com.kalix.middleware.excel.biz;
 
 import com.google.common.collect.Lists;
 import com.kalix.framework.core.api.system.IDictBeanService;
+import com.kalix.framework.core.util.HttpClientUtil;
 import com.kalix.framework.core.util.JNDIHelper;
 import com.kalix.framework.core.util.SerializeUtil;
 import com.kalix.middleware.couchdb.api.biz.ICouchdbService;
@@ -16,6 +17,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.JSONObject;
 import org.lightcouch.Response;
 
 import java.io.*;
@@ -91,7 +93,7 @@ public class ExcelServiceImpl implements IExcelService {
     }
 
     @Override
-    public List<Object> GetColumnNames(Object sheet, int columnRowIndex, Class<?> clazz,String serviceDictInterface) {
+    public List<Object> GetColumnNames(Object sheet, int columnRowIndex, Class<?> clazz,String serviceDictInterface,String access_token, String sessionId) {
         List<Row> rtnList = new ArrayList<Row>();
         Sheet theSheet = (Sheet) sheet;
         int rows= GetRowCount(theSheet);
@@ -106,13 +108,13 @@ public class ExcelServiceImpl implements IExcelService {
             }
         }
 
-        return returnObjectList(rtnList,clazz,annotationList,serviceDictInterface);
+        return returnObjectList(rtnList,clazz,annotationList,serviceDictInterface, access_token,  sessionId);
     }
 
     @Override
-    public List<Object> GetColumnDic(Object sheet, int columnRowIndex, Class<?> clazz,String serviceDictInterface) {
+    public List<Object> GetColumnDic(Object sheet, int columnRowIndex, Class<?> clazz,String serviceDictInterface,String access_token, String sessionId) {
 
-      return GetColumnNames(sheet, columnRowIndex,clazz,serviceDictInterface);
+        return GetColumnNames(sheet, columnRowIndex,clazz, serviceDictInterface,access_token,  sessionId);
 
     }
 
@@ -454,7 +456,7 @@ public class ExcelServiceImpl implements IExcelService {
     /**
      * 功能:返回指定的对象集合
      */
-    private  List<Object> returnObjectList(List<Row> rowList,Class<?> clazz,List<Object[]> annotationList,String serviceDictInterface) {
+    private  List<Object> returnObjectList(List<Row> rowList,Class<?> clazz,List<Object[]> annotationList,String serviceDictInterface,String access_token, String sessionId) {
         List<Object> objectList=null;
         Object obj=null;
         int j=0;
@@ -462,7 +464,7 @@ public class ExcelServiceImpl implements IExcelService {
             objectList=new ArrayList<Object>();
             for (Row row : rowList) {
                 obj = clazz.newInstance();
-                setAttrributeValue(obj,annotationList,row,objectList,serviceDictInterface);
+                setAttrributeValue(obj,annotationList,row,objectList,serviceDictInterface, access_token,  sessionId);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -535,10 +537,10 @@ public class ExcelServiceImpl implements IExcelService {
     /**
      * 功能:给指定对象的指定属性赋值
      */
-    private static void setAttrributeValue(Object obj, List<Object[]> annotationList,Row row,List<Object> objectList,String serviceDictInterface) throws IOException {
+    private static void setAttrributeValue(Object obj, List<Object[]> annotationList,Row row,List<Object> objectList,String serviceDictInterface,String access_token, String sessionId) throws IOException {
         //得到该属性的set方法名
-       // String method_name = convertToMethodName(attribute,obj.getClass(),true);
-       // Method[] methods = obj.getClass().getMethods();
+        // String method_name = convertToMethodName(attribute,obj.getClass(),true);
+        // Method[] methods = obj.getClass().getMethods();
         Object val=null;
         int column = 0;
         for (Object[] os : annotationList) {
@@ -552,9 +554,15 @@ public class ExcelServiceImpl implements IExcelService {
                 ExcelField ef = (ExcelField)os[0];
                 // If is dict type, get dict value
                 if (ef.dictType()!=null&& !"".equals(ef.dictType())){
-                   // String serviceDictInterface="com.kalix.enrolment.system.dict.api.biz.IEnrolmentDictBeanService";
-                    IDictBeanService dictBeanService = JNDIHelper.getJNDIServiceForName(serviceDictInterface);
-                    val= dictBeanService.getValueByTypeAndLabel(ef.dictType(),val.toString());
+                    // String serviceDictInterface="com.kalix.enrolment.system.dict.api.biz.IEnrolmentDictBeanService";
+                    //IDictBeanService dictBeanService = JNDIHelper.getJNDIServiceForName(serviceDictInterface);
+                    val=HttpClientUtil.shiroGet(serviceDictInterface+"?type=" + ef.dictType()+"&label="+val.toString(), sessionId, access_token);
+                    //JSONObject jsonObject = new JSONObject(val);
+                     val= val.toString().replace("\"{","{").replace("}\"","}").replaceAll("\\n","").replaceAll("\\\\\"", "\"");
+                    //val="{\"value\":\"1\"}";
+                    Map json2Map=SerializeUtil.json2Map((String)val);
+                    val=json2Map.get("value");
+                    //val= dictBeanService.getValueByTypeAndLabel(ef.dictType(),val.toString());
                     //val= dictBeanService.getByTypeAndLabel(ef.dictType(),val.toString());
                     //val=0;
                 }
@@ -599,7 +607,7 @@ public class ExcelServiceImpl implements IExcelService {
                         }
                     }
                 } catch (Exception ex) {
-                   // log.info("Get cell value ["+i+","+column+"] error: " + ex.toString());
+                    // log.info("Get cell value ["+i+","+column+"] error: " + ex.toString());
                     val = null;
                 }
                 // set entity value
@@ -613,10 +621,10 @@ public class ExcelServiceImpl implements IExcelService {
                     Reflections.invokeMethod(obj, mthodName, new Class[] {valType}, new Object[] {val});
                 }
 
-                }
             }
-            objectList.add(obj);
-    //    }
+        }
+        objectList.add(obj);
+        //    }
     }
 
     /**

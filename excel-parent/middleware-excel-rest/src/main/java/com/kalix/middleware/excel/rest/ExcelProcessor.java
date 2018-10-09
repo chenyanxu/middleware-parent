@@ -2,7 +2,10 @@ package com.kalix.middleware.excel.rest;
 
 import com.kalix.framework.core.api.biz.IBizService;
 import com.kalix.framework.core.api.persistence.PersistentEntity;
+import com.kalix.framework.core.api.security.IShiroService;
+import com.kalix.framework.core.util.HttpClientUtil;
 import com.kalix.framework.core.util.JNDIHelper;
+import com.kalix.framework.core.util.SerializeUtil;
 import com.kalix.middleware.excel.api.biz.IExcelService;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -65,7 +68,8 @@ public class ExcelProcessor implements Processor {
                         }
                         if ("ServiceInterface".equals(item.getFieldName())) {
                             serviceInterface = item.getString("utf-8");
-                            bizService = JNDIHelper.getJNDIServiceForName(serviceInterface);
+                            //bizService = JNDIHelper.getJNDIServiceForName(serviceInterface);
+
                         }
                         if ("serviceDictInterface".equals(item.getFieldName())) {
                             serviceDictInterface = item.getString("utf-8");
@@ -80,6 +84,10 @@ public class ExcelProcessor implements Processor {
                         // System.out.println("组件名称:" + item.getFieldName());
                         //  System.out.println("上传文件名称:" + item.getName());
 
+                        IShiroService shiroService= JNDIHelper.getJNDIServiceForName(IShiroService.class.getName());
+                        String access_token = shiroService.getSession().getAttribute("access_token").toString();
+                        String sessionId = shiroService.getSession().getId().toString();
+
                         String name = item.getName(); // 上传文件名称
                         System.out.println(name);
                         name = name.substring(name.lastIndexOf("\\") + 1);
@@ -87,11 +95,15 @@ public class ExcelProcessor implements Processor {
                         Object sheet = excelService.OpenSheet(wb, "Sheet1");
                         int startRow = new Integer(2) - 1;
                         rowCount = excelService.GetRowCount(sheet);
-                        List<Object> bookList = (List<Object>) excelService.GetColumnDic(sheet, startRow, entityClass, serviceDictInterface);
+                        List<Object> bookList = (List<Object>) excelService.GetColumnDic(sheet, startRow, entityClass,serviceDictInterface,access_token,sessionId);
                         importCount = bookList.size();
                         for (Object obj : bookList) {
-                            PersistentEntity objEntity = (PersistentEntity) obj;
-                            bizService.saveEntity(objEntity);
+                            //PersistentEntity objEntity = (PersistentEntity) obj;
+                            Map<String ,String> map=SerializeUtil.json2Map(SerializeUtil.serializeJson(obj));
+                            map.remove("id");
+                            map.remove("version");
+                            //bizService.saveEntity(objEntity);
+                            HttpClientUtil.shiroPost(serviceInterface,map,sessionId,access_token);
                         }
                         // 删除临时文件
                         item.delete();

@@ -21,9 +21,9 @@ public interface IExcelService {
 
     // Map<String, Integer> GetColumnDic(Object sheet, int columnRowIndex, Dictionary<String, Object> dic);
 
-    List<Object> GetColumnNames(Object sheet, int columnRowIndex, Class<?> clazz,String serviceDictInterface);
+    List<Object> GetColumnNames(Object sheet, int columnRowIndex, Class<?> clazz,String serviceDictInterface,String access_token, String sessionId);
 
-    List<Object> GetColumnDic(Object sheet, int columnRowIndex, Class<?> clazz,String serviceDictInterface);
+    List<Object> GetColumnDic(Object sheet, int columnRowIndex, Class<?> clazz,String serviceDictInterface,String access_token,String sessionId);
 
     Map<String, Object> GetRowMap(Object sheet, int rowIndex, Map<String, Integer> columnMap);
 

@@ -19,4 +19,6 @@ Import-Package: com.kalix.framework.core.util,\
                 org.osgi.service.blueprint,\
                 org.osgi.service.http,\
                 org.apache.commons.codec.binary,\
+                org.apache.commons.lang.*,\
+                org.json.*,\
                 org.w3c.dom.*
