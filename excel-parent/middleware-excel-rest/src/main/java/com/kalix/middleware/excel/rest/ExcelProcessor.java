@@ -94,9 +94,6 @@ public class ExcelProcessor implements Processor {
                         // System.out.println("组件名称:" + item.getFieldName());
                         // System.out.println("内容:" + item.getString("utf-8")); // 解决乱码问题
                     } else {
-                        // 上传组件
-                        // System.out.println("组件名称:" + item.getFieldName());
-                        //  System.out.println("上传文件名称:" + item.getName());
                         Map map_parm = new HashMap();
                         IShiroService shiroService= JNDIHelper.getJNDIServiceForName(IShiroService.class.getName());
                         String access_token = shiroService.getSession().getAttribute("access_token").toString();
@@ -104,20 +101,17 @@ public class ExcelProcessor implements Processor {
                         map_parm.put("access_token",access_token);
                         map_parm.put("sessionId",sessionId);
                         map_parm.put("serviceDictUrl",serviceDictUrl);
-                        String name = item.getName(); // 上传文件名称
-                        name = name.substring(name.lastIndexOf("\\") + 1);
+//                        String name = item.getName(); // 上传文件名称
+//                        name = name.substring(name.lastIndexOf("\\") + 1);
                         Object wb = excelService.OpenExcel(item.getInputStream(), item.getName());
                         Object sheet = excelService.OpenSheet(wb, sheetName);
-                        // startRow = new Integer(2) - 1;
                         rowCount = excelService.GetRowCount(sheet);
                         List<Object> bookList = (List<Object>) excelService.GetColumnDic(sheet, startRow, entityClass,map_parm);
                         importCount = bookList.size();
                         for (Object obj : bookList) {
-                            //PersistentEntity objEntity = (PersistentEntity) obj;
                             Map<String ,String> map=SerializeUtil.json2Map(SerializeUtil.serializeJson(obj));
                             map.remove("id");
                             map.remove("version");
-                            //bizService.saveEntity(objEntity);
                             HttpClientUtil.shiroPost(ServiceUrl,map,sessionId,access_token);
                         }
                         // 删除临时文件
@@ -128,35 +122,6 @@ public class ExcelProcessor implements Processor {
                 this.rtnMap.put("msg", "文件导入成功，共" + (rowCount - 1) + "条记录，导入" + importCount + "条记录");
             }
 
-            //           FileItem fileItem = null;
-//
-//            if (items.size() == 1) {
-//                fileItem = items.get(0);
-//            }
-
-//            if (fileItem != null) {
-//
-//                if (fileItem.getSize() > (10 * 1024 * 1024)) {
-//                    this.rtnMap.put("success", false);
-//                    this.rtnMap.put("msg", "文件过大（上限10MB）！");
-//                } else {
-//                   // Dictionary dictionary = ConfigUtil.getAllConfig(configId);
-//                    Object wb = excelService.OpenExcel(fileItem.getInputStream(), fileItem.getName());
-//                    Object sheet = excelService.OpenSheet(wb, "Sheet1");
-//                    //Object   className  = entityName.getClass().getInterfaces();
-//                    List<Object> bookList = (List<Object>)  excelService.GetColumnDic(sheet, 0, entityName.getClass());
-//                    int startRow = new Integer(dictionary.get("start_row").toString()) - 1;
-//                    int rowCount = excelService.GetRowCount(sheet);
-//
-//                    for (int idx = startRow; idx < rowCount; ++idx) {
-//                        Map rowMap = excelService.GetRowMap(sheet, idx, columnMap);
-//                        recIndex = idx;
-//                        PersistentEntity obj = SerializeUtil.unserializeJson(SerializeUtil.serializeJson(rowMap), entityClass);
-//
-//                        bizService.saveEntity(obj);
-//                    }
-//                }
-//            }
         } catch (Exception e) {
             e.printStackTrace();
             //  throw new RuntimeException(String.format("请检查表格第 %s 行", recIndex + 1));
