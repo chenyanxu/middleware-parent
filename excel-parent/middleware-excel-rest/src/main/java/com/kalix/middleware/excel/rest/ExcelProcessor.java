@@ -61,7 +61,7 @@ public class ExcelProcessor implements Processor {
             } else {
                 int rowCount = 0;
                 int importCount = 0;
-                IBizService bizService = null;
+                String sheetName="";
                 String serviceDictUrl = "";
                 for (FileItem item : items) {
                     if (item.isFormField()) {
@@ -82,7 +82,12 @@ public class ExcelProcessor implements Processor {
                             {
                                 startRow = Integer.valueOf(item.getString("utf-8"));
                             }
-                            // bizService = JNDIHelper.getJNDIServiceForName(serviceDictInterface);
+                        }
+                        if ("sheetName".equals(item.getFieldName())) {
+                            if(StringUtils.isNotEmpty(item.getString("utf-8")))
+                            {
+                                sheetName = item.getString("utf-8");
+                            }
                         }
 
                         // 非上传组件
@@ -102,7 +107,7 @@ public class ExcelProcessor implements Processor {
                         String name = item.getName(); // 上传文件名称
                         name = name.substring(name.lastIndexOf("\\") + 1);
                         Object wb = excelService.OpenExcel(item.getInputStream(), item.getName());
-                        Object sheet = excelService.OpenSheet(wb, "Sheet1");
+                        Object sheet = excelService.OpenSheet(wb, sheetName);
                         // startRow = new Integer(2) - 1;
                         rowCount = excelService.GetRowCount(sheet);
                         List<Object> bookList = (List<Object>) excelService.GetColumnDic(sheet, startRow, entityClass,map_parm);
