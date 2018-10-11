@@ -1,5 +1,6 @@
 package com.kalix.middleware.excel.biz;
 
+import com.kalix.framework.core.api.security.IShiroService;
 import com.kalix.framework.core.util.JNDIHelper;
 import com.kalix.middleware.excel.api.biz.IExportExcelService;
 
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by hqj on 2018/02/02.
@@ -20,17 +23,24 @@ import java.io.PrintWriter;
 public class ExportExcelServlet extends HttpServlet {
     private IExportExcelService exportExcelService;
 
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         OutputStream out = null;
         PrintWriter outHtml = null;
         try {
             // 实体名称
-            String beanName = req.getParameter("beanname") == null ? "" : req.getParameter("beanname");
-            // 实体id
-            String id = req.getParameter("id") == null ? "" : req.getParameter("id");
+            String jsonStr = req.getParameter("jsonStr") == null ? "" : req.getParameter("jsonStr");
+            String EntityName = req.getParameter("EntityName") == null ? "" : req.getParameter("EntityName");
+            String ServiceUrl = req.getParameter("ServiceUrl") == null ? "" : req.getParameter("ServiceUrl");
+            String serviceDictUrl = req.getParameter("serviceDictUrl") == null ? "" : req.getParameter("serviceDictUrl");
+            Map map = new HashMap();
+            map.put("jsonStr",jsonStr);
+            map.put("EntityName",EntityName);
+            map.put("ServiceUrl",ServiceUrl);
+            map.put("serviceDictUrl",serviceDictUrl);
             exportExcelService = JNDIHelper.getJNDIServiceForName(IExportExcelService.class.getName());
-            exportExcelService.doExport("测试模板", resp);
+            exportExcelService.doExport(map, resp);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -44,4 +54,6 @@ public class ExportExcelServlet extends HttpServlet {
             }
         }
     }
+
+
 }

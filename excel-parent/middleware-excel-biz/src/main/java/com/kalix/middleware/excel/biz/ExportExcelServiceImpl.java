@@ -3,7 +3,9 @@ package com.kalix.middleware.excel.biz;
 import com.google.common.collect.Lists;
 import com.kalix.framework.core.api.biz.IBizService;
 import com.kalix.framework.core.api.persistence.JsonData;
+import com.kalix.framework.core.api.security.IShiroService;
 import com.kalix.framework.core.api.system.IDictBeanService;
+import com.kalix.framework.core.util.HttpClientUtil;
 import com.kalix.framework.core.util.JNDIHelper;
 import com.kalix.framework.core.util.SerializeUtil;
 import com.kalix.middleware.excel.api.annotation.ExcelField;
@@ -23,6 +25,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -30,6 +33,7 @@ import java.util.*;
  */
 public class ExportExcelServiceImpl extends ExcelServiceImpl implements IExportExcelService {
 
+    private IShiroService shiroService;
     /**
      * 工作薄对象
      */
@@ -48,7 +52,7 @@ public class ExportExcelServiceImpl extends ExcelServiceImpl implements IExportE
     /**
      * 当前行号
      */
-    private int rownum;
+    private int rownum=0;
 
     /**
      * 注解列表（Object[]{ ExcelField, Field/Method }）
@@ -61,6 +65,7 @@ public class ExportExcelServiceImpl extends ExcelServiceImpl implements IExportE
      */
 
     public void initialize(String title, List<String> headerList) {
+        rownum=0;
         this.wb = new SXSSFWorkbook(500);
         this.sheet = wb.createSheet("Export");
         this.styles = createStyles(wb);
@@ -97,9 +102,18 @@ public class ExportExcelServiceImpl extends ExcelServiceImpl implements IExportE
         }
         for (int i = 0; i < headerList.size(); i++) {
             int colWidth = sheet.getColumnWidth(i)*2;
-            sheet.setColumnWidth(i, colWidth < 3000 ? 3000 : colWidth);
+            if(i==1)
+            {
+                sheet.setColumnWidth(i,15000);
+            }else
+            {
+                sheet.setColumnWidth(i, colWidth < 3000 ? 3000 : colWidth);
+            }
+
         }
     }
+
+
 
 
     /**
@@ -243,6 +257,7 @@ public class ExportExcelServiceImpl extends ExcelServiceImpl implements IExportE
      * @param groups 导入分组
      */
     public void  init(String title, Class<?> cls, int type, int... groups){
+        annotationList.clear();
         // Get annotation field
         Field[] fs = cls.getDeclaredFields();
         for (Field f : fs){
@@ -317,7 +332,7 @@ public class ExportExcelServiceImpl extends ExcelServiceImpl implements IExportE
      * 添加数据（通过annotation.ExportField添加数据）
      * @return list 数据列表
      */
-    public <E> void setDataList(List<E> list){
+    public <E> void setDataList(List<E> list,Map map){
         for (E e : list){
             int colunm = 0;
             Row row = this.addRow();
@@ -338,11 +353,16 @@ public class ExportExcelServiceImpl extends ExcelServiceImpl implements IExportE
                     }
                     // If is dict, get dict label
                     if (StringUtils.isNotBlank(ef.dictType())){
-                        //val = DictUtils.getDictLabel(val==null?"":val.toString(), ef.dictType(), "");
+                        String serviceDictUrl=(String)map.get("serviceDictUrl");
+                        String sessionId=(String)map.get("sessionId");
+                        String access_token=(String)map.get("access_token");
+                        val=HttpClientUtil.shiroGet(serviceDictUrl+"?type=" + ef.dictType()+"&value="+val.toString(), sessionId, access_token);
+                        Map json2Map=SerializeUtil.json2Map((String)val);
+                        val=json2Map.get("label");
                     }
                 }catch(Exception ex) {
                     // Failure to ignore
-
+                    ex.printStackTrace();
                     val = "";
                 }
                 this.addCell(row, colunm++, val, ef.align(), ef.fieldType());
@@ -374,6 +394,7 @@ public class ExportExcelServiceImpl extends ExcelServiceImpl implements IExportE
      */
     public void write(OutputStream os) throws IOException{
         wb.write(os);
+        dispose();
     }
 
 
@@ -385,16 +406,29 @@ public class ExportExcelServiceImpl extends ExcelServiceImpl implements IExportE
     }
 
 
-    public void doExport(String jsonStr,HttpServletResponse response) throws IOException {
-       // Map  conditions = SerializeUtil.json2Map(jsonStr);
-        jsonStr = "{\"delFlag\":\"0\"}";
-        Class entityClass = ClassUtils.forName("com.kalix.enrolment.question.entities.CompletionBean");
-        IBizService bizService = JNDIHelper.getJNDIServiceForName("com.kalix.enrolment.question.api.biz.ICompletionBeanService");
-        JsonData jsondata=bizService.getAllEntityforReport(jsonStr);
+    public void doExport(Map map,HttpServletResponse response) throws IOException {
 
-        this.init("测试模板",entityClass,1);
-        this.setDataList(jsondata.getData());
+        List list_obj = new ArrayList();
+        String jsonStr=(String)map.get("jsonStr");
+        String EntityName=(String)map.get("EntityName");
+        String ServiceUrl=(String)map.get("ServiceUrl");
 
+        Class entityClass = ClassUtils.forName(EntityName);
+        String access_token = shiroService.getSession().getAttribute("access_token").toString();
+        String sessionId = shiroService.getSession().getId().toString();
+        map.put("access_token",access_token);
+        map.put("sessionId",sessionId);
+        jsonStr = URLEncoder.encode(jsonStr, "UTF-8").replace("+","%20");//编码
+        String str=HttpClientUtil.shiroGet(ServiceUrl+"?jsonStr=" + jsonStr, sessionId, access_token);
+        JsonData jsonData=SerializeUtil.unserializeJson(str,JsonData.class);
+        List list=jsonData.getData();
+        for(int i=0;i<list.size();i++)
+        {
+            String class_str=SerializeUtil.serializeJson(list.get(i));
+            list_obj.add(SerializeUtil.unserializeJson(class_str,entityClass));
+        }
+        this.init("",entityClass,1);
+        this.setDataList(list_obj,map);
         writeFile(response, "ceshi.xlsx");
        // new ExportExcel("用户数据", User.class).setDataList(page.getList()).write(response, fileName).dispose();
     }
@@ -433,4 +467,8 @@ public class ExportExcelServiceImpl extends ExcelServiceImpl implements IExportE
 //		this.dispose();
 //
 //	}
+
+    public void setShiroService(IShiroService shiroService) {
+        this.shiroService = shiroService;
+    }
 }

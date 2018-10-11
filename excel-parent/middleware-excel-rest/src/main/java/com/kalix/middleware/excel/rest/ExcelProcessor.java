@@ -14,6 +14,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.util.ClassUtils;
 import org.osgi.framework.BundleContext;
 
@@ -40,10 +41,11 @@ public class ExcelProcessor implements Processor {
     public void process(Exchange exchange) throws Exception {
         this.rtnMap.clear();
         int recIndex = 0;
+        int startRow=0;
         //List<FileItem> items=null;
         try {
             HttpServletRequest request = ObjectHelper.cast(HttpServletRequest.class, exchange.getIn().getHeader(Exchange.HTTP_SERVLET_REQUEST));
-            String serviceInterface = "";
+            String ServiceUrl = "";
             Class entityClass = null;
             if (!ServletFileUpload.isMultipartContent(request)) {
                 throw new RuntimeException("Invalid Multipart Content request!");
@@ -60,19 +62,26 @@ public class ExcelProcessor implements Processor {
                 int rowCount = 0;
                 int importCount = 0;
                 IBizService bizService = null;
-                String serviceDictInterface = "";
+                String serviceDictUrl = "";
                 for (FileItem item : items) {
                     if (item.isFormField()) {
                         if ("EntityName".equals(item.getFieldName())) {
                             entityClass = ClassUtils.forName(item.getString("utf-8"));
                         }
-                        if ("ServiceInterface".equals(item.getFieldName())) {
-                            serviceInterface = item.getString("utf-8");
+                        if ("ServiceUrl".equals(item.getFieldName())) {
+                            ServiceUrl = item.getString("utf-8");
                             //bizService = JNDIHelper.getJNDIServiceForName(serviceInterface);
 
                         }
-                        if ("serviceDictInterface".equals(item.getFieldName())) {
-                            serviceDictInterface = item.getString("utf-8");
+                        if ("serviceDictUrl".equals(item.getFieldName())) {
+                            serviceDictUrl = item.getString("utf-8");
+                            // bizService = JNDIHelper.getJNDIServiceForName(serviceDictInterface);
+                        }
+                        if ("startRow".equals(item.getFieldName())) {
+                            if(StringUtils.isNotEmpty(item.getString("utf-8")))
+                            {
+                                startRow = Integer.valueOf(item.getString("utf-8"));
+                            }
                             // bizService = JNDIHelper.getJNDIServiceForName(serviceDictInterface);
                         }
 
@@ -83,19 +92,20 @@ public class ExcelProcessor implements Processor {
                         // 上传组件
                         // System.out.println("组件名称:" + item.getFieldName());
                         //  System.out.println("上传文件名称:" + item.getName());
-
+                        Map map_parm = new HashMap();
                         IShiroService shiroService= JNDIHelper.getJNDIServiceForName(IShiroService.class.getName());
                         String access_token = shiroService.getSession().getAttribute("access_token").toString();
                         String sessionId = shiroService.getSession().getId().toString();
-
+                        map_parm.put("access_token",access_token);
+                        map_parm.put("sessionId",sessionId);
+                        map_parm.put("serviceDictUrl",serviceDictUrl);
                         String name = item.getName(); // 上传文件名称
-                        System.out.println(name);
                         name = name.substring(name.lastIndexOf("\\") + 1);
                         Object wb = excelService.OpenExcel(item.getInputStream(), item.getName());
                         Object sheet = excelService.OpenSheet(wb, "Sheet1");
-                        int startRow = new Integer(2) - 1;
+                        // startRow = new Integer(2) - 1;
                         rowCount = excelService.GetRowCount(sheet);
-                        List<Object> bookList = (List<Object>) excelService.GetColumnDic(sheet, startRow, entityClass,serviceDictInterface,access_token,sessionId);
+                        List<Object> bookList = (List<Object>) excelService.GetColumnDic(sheet, startRow, entityClass,map_parm);
                         importCount = bookList.size();
                         for (Object obj : bookList) {
                             //PersistentEntity objEntity = (PersistentEntity) obj;
@@ -103,7 +113,7 @@ public class ExcelProcessor implements Processor {
                             map.remove("id");
                             map.remove("version");
                             //bizService.saveEntity(objEntity);
-                            HttpClientUtil.shiroPost(serviceInterface,map,sessionId,access_token);
+                            HttpClientUtil.shiroPost(ServiceUrl,map,sessionId,access_token);
                         }
                         // 删除临时文件
                         item.delete();

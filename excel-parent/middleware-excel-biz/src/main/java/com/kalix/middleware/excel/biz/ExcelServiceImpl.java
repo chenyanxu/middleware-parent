@@ -93,7 +93,7 @@ public class ExcelServiceImpl implements IExcelService {
     }
 
     @Override
-    public List<Object> GetColumnNames(Object sheet, int columnRowIndex, Class<?> clazz,String serviceDictInterface,String access_token, String sessionId) {
+    public List<Object> GetColumnNames(Object sheet, int columnRowIndex, Class<?> clazz,Map map_parm) {
         List<Row> rtnList = new ArrayList<Row>();
         Sheet theSheet = (Sheet) sheet;
         int rows= GetRowCount(theSheet);
@@ -108,13 +108,13 @@ public class ExcelServiceImpl implements IExcelService {
             }
         }
 
-        return returnObjectList(rtnList,clazz,annotationList,serviceDictInterface, access_token,  sessionId);
+        return returnObjectList(rtnList,clazz,annotationList,map_parm);
     }
 
     @Override
-    public List<Object> GetColumnDic(Object sheet, int columnRowIndex, Class<?> clazz,String serviceDictInterface,String access_token, String sessionId) {
+    public List<Object> GetColumnDic(Object sheet, int columnRowIndex, Class<?> clazz,Map map_parm) {
 
-        return GetColumnNames(sheet, columnRowIndex,clazz, serviceDictInterface,access_token,  sessionId);
+        return GetColumnNames(sheet, columnRowIndex,clazz, map_parm);
 
     }
 
@@ -456,7 +456,7 @@ public class ExcelServiceImpl implements IExcelService {
     /**
      * 功能:返回指定的对象集合
      */
-    private  List<Object> returnObjectList(List<Row> rowList,Class<?> clazz,List<Object[]> annotationList,String serviceDictInterface,String access_token, String sessionId) {
+    private  List<Object> returnObjectList(List<Row> rowList,Class<?> clazz,List<Object[]> annotationList,Map map_parm) {
         List<Object> objectList=null;
         Object obj=null;
         int j=0;
@@ -464,7 +464,7 @@ public class ExcelServiceImpl implements IExcelService {
             objectList=new ArrayList<Object>();
             for (Row row : rowList) {
                 obj = clazz.newInstance();
-                setAttrributeValue(obj,annotationList,row,objectList,serviceDictInterface, access_token,  sessionId);
+                setAttrributeValue(obj,annotationList,row,objectList,map_parm);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -537,7 +537,7 @@ public class ExcelServiceImpl implements IExcelService {
     /**
      * 功能:给指定对象的指定属性赋值
      */
-    private static void setAttrributeValue(Object obj, List<Object[]> annotationList,Row row,List<Object> objectList,String serviceDictInterface,String access_token, String sessionId) throws IOException {
+    private static void setAttrributeValue(Object obj, List<Object[]> annotationList,Row row,List<Object> objectList,Map map_parm) throws IOException {
         //得到该属性的set方法名
         // String method_name = convertToMethodName(attribute,obj.getClass(),true);
         // Method[] methods = obj.getClass().getMethods();
@@ -554,17 +554,13 @@ public class ExcelServiceImpl implements IExcelService {
                 ExcelField ef = (ExcelField)os[0];
                 // If is dict type, get dict value
                 if (ef.dictType()!=null&& !"".equals(ef.dictType())){
-                    // String serviceDictInterface="com.kalix.enrolment.system.dict.api.biz.IEnrolmentDictBeanService";
-                    //IDictBeanService dictBeanService = JNDIHelper.getJNDIServiceForName(serviceDictInterface);
-                    val=HttpClientUtil.shiroGet(serviceDictInterface+"?type=" + ef.dictType()+"&label="+val.toString(), sessionId, access_token);
-                    //JSONObject jsonObject = new JSONObject(val);
-                     val= val.toString().replace("\"{","{").replace("}\"","}").replaceAll("\\n","").replaceAll("\\\\\"", "\"");
-                    //val="{\"value\":\"1\"}";
+                    String serviceDictUrl=(String)map_parm.get("serviceDictUrl");
+                    String sessionId=(String)map_parm.get("sessionId");
+                    String access_token=(String)map_parm.get("access_token");
+                    val=HttpClientUtil.shiroGet(serviceDictUrl+"?type=" + ef.dictType()+"&label="+val.toString(), sessionId, access_token);
+                    //val= val.toString().replace("\"{","{").replace("}\"","}").replaceAll("\\n","").replaceAll("\\\\\"", "\"");
                     Map json2Map=SerializeUtil.json2Map((String)val);
                     val=json2Map.get("value");
-                    //val= dictBeanService.getValueByTypeAndLabel(ef.dictType(),val.toString());
-                    //val= dictBeanService.getByTypeAndLabel(ef.dictType(),val.toString());
-                    //val=0;
                 }
                 // Get param type and type cast
                 Class<?> valType = obj.getClass();

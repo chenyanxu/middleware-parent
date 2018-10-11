@@ -2,6 +2,7 @@ package com.kalix.middleware.excel.api.biz;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author fengweibin
@@ -26,5 +27,5 @@ public interface IExportExcelService extends IExcelService {
 //
 //    public void dispose();
 
-      public void doExport(String jsonStr,HttpServletResponse response) throws IOException;
+      public void doExport(Map map, HttpServletResponse response) throws IOException;
 }

@@ -8,9 +8,11 @@ Embed-Dependency:*; artifactId=!middleware-excel-api|framework-core-util|middlew
 Import-Package: com.kalix.framework.core.util,\
                 com.kalix.framework.core.api.osgi,\
                 com.kalix.framework.core.api.persistence,\
+                com.kalix.framework.core.api.security.*,\
                 com.kalix.middleware.couchdb.api.biz,\
                 com.kalix.middleware.excel.api.biz,\
                 com.kalix.middleware.excel.api.annotation,\
+                com.kalix.middleware.excel.api.model,\
                 javax.servlet,\
                 javax.servlet.*,\
                 javax.imageio.*,\
@@ -18,7 +20,11 @@ Import-Package: com.kalix.framework.core.util,\
                 org.osgi.framework,\
                 org.osgi.service.blueprint,\
                 org.osgi.service.http,\
-                org.apache.commons.codec.binary,\
+                org.apache.commons.codec.*,\
                 org.apache.commons.lang.*,\
+                org.apache.shiro.*,\
                 org.json.*,\
+                org.xml.sax.*,\
+                javax.xml.*,\
+                org.apache.xmlbeans.*,\
                 org.w3c.dom.*
