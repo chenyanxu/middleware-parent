@@ -4,7 +4,6 @@
            xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
     <jpa:enable/>
     <tx:enable-annotations/>
-    <reference id="shiroService" interface="com.kalix.framework.core.api.security.IShiroService"/>
 
     <bean id="exportExcelServlet" class="com.kalix.middleware.excel.biz.ExportExcelServlet">
     </bean>

@@ -5,13 +5,13 @@
            http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
 
     <reference id="couchdbService" interface="com.kalix.middleware.couchdb.api.biz.ICouchdbService"/>
+    <reference id="shiroService" interface="com.kalix.framework.core.api.security.IShiroService"/>
 
     <bean id="excelServiceImpl" class="com.kalix.middleware.excel.biz.ExcelServiceImpl">
         <property name="couchdbService" ref="couchdbService"/>
     </bean>
     <service id="excelService" interface="com.kalix.middleware.excel.api.biz.IExcelService"
              ref="excelServiceImpl"/>
-
 
     <bean id="exportExcelServiceImpl" class="com.kalix.middleware.excel.biz.ExportExcelServiceImpl">
         <property name="shiroService" ref="shiroService"/>
