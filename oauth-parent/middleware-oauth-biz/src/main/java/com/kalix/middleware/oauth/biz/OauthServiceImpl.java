@@ -1,6 +1,7 @@
 package com.kalix.middleware.oauth.biz;
 
 import com.kalix.framework.core.api.cache.ICacheManager;
+import com.kalix.framework.core.util.ConfigUtil;
 import com.kalix.middleware.oauth.api.biz.IOauthService;
 import com.kalix.middleware.oauth.api.dao.IClientBeanDao;
 
@@ -11,6 +12,7 @@ public class OauthServiceImpl implements IOauthService {
     private ICacheManager cacheManager;
     private IClientBeanDao clientBeanDao;
     private Long expireIn;
+    private final String configName = "ConfigSystem";
 
     public OauthServiceImpl(){
         //this.expireIn=3600L;
@@ -66,6 +68,9 @@ public class OauthServiceImpl implements IOauthService {
 
     @Override
     public Long getExpireIn() {
+        String auth2Timeout = (String)ConfigUtil.getConfigProp("auth2TimeOut", configName);
+        Long timeout = Long.valueOf(auth2Timeout);
+        this.expireIn = timeout;
         return this.expireIn;
     }
 
