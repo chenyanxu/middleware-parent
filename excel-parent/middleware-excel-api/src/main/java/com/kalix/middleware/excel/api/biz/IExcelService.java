@@ -30,4 +30,6 @@ public interface IExcelService {
     String GetJsonRowString(Object sheet, int rowIndex, Map<String, Integer> columnMap);
 
     Map<String, Object> GetExcelFromJson(String jsonStr);
+
+    String GetImportInfo();
 }

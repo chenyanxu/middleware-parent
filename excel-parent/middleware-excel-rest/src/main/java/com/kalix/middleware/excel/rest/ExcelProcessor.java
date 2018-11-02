@@ -1,7 +1,5 @@
 package com.kalix.middleware.excel.rest;
 
-import com.kalix.framework.core.api.biz.IBizService;
-import com.kalix.framework.core.api.persistence.PersistentEntity;
 import com.kalix.framework.core.api.security.IShiroService;
 import com.kalix.framework.core.util.HttpClientUtil;
 import com.kalix.framework.core.util.JNDIHelper;
@@ -24,7 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class ExcelProcessor implements Processor {
     private BundleContext bundleContext;
     private IExcelService excelService = null;
@@ -41,7 +38,7 @@ public class ExcelProcessor implements Processor {
     public void process(Exchange exchange) throws Exception {
         this.rtnMap.clear();
         int recIndex = 0;
-        int startRow=0;
+        int startRow = 0;
         //List<FileItem> items=null;
         try {
             HttpServletRequest request = ObjectHelper.cast(HttpServletRequest.class, exchange.getIn().getHeader(Exchange.HTTP_SERVLET_REQUEST));
@@ -61,8 +58,9 @@ public class ExcelProcessor implements Processor {
             } else {
                 int rowCount = 0;
                 int importCount = 0;
-                String sheetName="";
+                String sheetName = "";
                 String serviceDictUrl = "";
+                String importInfo = "";
                 for (FileItem item : items) {
                     if (item.isFormField()) {
                         if ("EntityName".equals(item.getFieldName())) {
@@ -78,14 +76,12 @@ public class ExcelProcessor implements Processor {
                             // bizService = JNDIHelper.getJNDIServiceForName(serviceDictInterface);
                         }
                         if ("startRow".equals(item.getFieldName())) {
-                            if(StringUtils.isNotEmpty(item.getString("utf-8")))
-                            {
+                            if (StringUtils.isNotEmpty(item.getString("utf-8"))) {
                                 startRow = Integer.valueOf(item.getString("utf-8"));
                             }
                         }
                         if ("sheetName".equals(item.getFieldName())) {
-                            if(StringUtils.isNotEmpty(item.getString("utf-8")))
-                            {
+                            if (StringUtils.isNotEmpty(item.getString("utf-8"))) {
                                 sheetName = item.getString("utf-8");
                             }
                         }
@@ -95,33 +91,33 @@ public class ExcelProcessor implements Processor {
                         // System.out.println("内容:" + item.getString("utf-8")); // 解决乱码问题
                     } else {
                         Map map_parm = new HashMap();
-                        IShiroService shiroService= JNDIHelper.getJNDIServiceForName(IShiroService.class.getName());
+                        IShiroService shiroService = JNDIHelper.getJNDIServiceForName(IShiroService.class.getName());
                         String access_token = shiroService.getSession().getAttribute("access_token").toString();
                         String sessionId = shiroService.getSession().getId().toString();
-                        map_parm.put("access_token",access_token);
-                        map_parm.put("sessionId",sessionId);
-                        map_parm.put("serviceDictUrl",serviceDictUrl);
+                        map_parm.put("access_token", access_token);
+                        map_parm.put("sessionId", sessionId);
+                        map_parm.put("serviceDictUrl", serviceDictUrl);
 //                        String name = item.getName(); // 上传文件名称
 //                        name = name.substring(name.lastIndexOf("\\") + 1);
                         Object wb = excelService.OpenExcel(item.getInputStream(), item.getName());
                         Object sheet = excelService.OpenSheet(wb, sheetName);
                         rowCount = excelService.GetRowCount(sheet);
-                        List<Object> bookList = (List<Object>) excelService.GetColumnDic(sheet, startRow, entityClass,map_parm);
+                        List<Object> bookList = (List<Object>) excelService.GetColumnDic(sheet, startRow, entityClass, map_parm);
                         importCount = bookList.size();
+                        importInfo = excelService.GetImportInfo();
                         for (Object obj : bookList) {
-                            Map<String ,String> map=SerializeUtil.json2Map(SerializeUtil.serializeJson(obj));
+                            Map<String, String> map = SerializeUtil.json2Map(SerializeUtil.serializeJson(obj));
                             map.remove("id");
                             map.remove("version");
-                            HttpClientUtil.shiroPost(ServiceUrl,map,sessionId,access_token);
+                            HttpClientUtil.shiroPost(ServiceUrl, map, sessionId, access_token);
                         }
                         // 删除临时文件
                         item.delete();
                     }
                 }
                 this.rtnMap.put("success", true);
-                this.rtnMap.put("msg", "文件导入成功，共" + (rowCount - 1) + "条记录，导入" + importCount + "条记录");
+                this.rtnMap.put("msg", "文件导入成功，共" + (rowCount - 1) + "条记录，导入" + importCount + "条记录" + importInfo);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             //  throw new RuntimeException(String.format("请检查表格第 %s 行", recIndex + 1));
@@ -131,10 +127,6 @@ public class ExcelProcessor implements Processor {
             //items.clear();
             exchange.getIn().setBody(rtnMap);
         }
-    }
-
-    public IExcelService getExcelService() {
-        return excelService;
     }
 
     public void setExcelService(IExcelService excelService) {
