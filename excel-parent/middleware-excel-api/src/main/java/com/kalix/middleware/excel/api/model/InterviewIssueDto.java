@@ -16,7 +16,7 @@ import java.util.Date;
 
 public class InterviewIssueDto extends BaseDTO {
     @Column(nullable = false)
-    private String subjectType;               // 面试题类型,字典（面试题类型）
+    private String subType;               // 面试题类型,字典（面试题类型）
     @Lob
     @Column(nullable = false)
     private String stem;               // 题干
@@ -33,12 +33,12 @@ public class InterviewIssueDto extends BaseDTO {
     private String repeatedFlag = "0"; // 题库排重标识
 
     @ExcelField(title = "面试题类型",type=0, align = 1, dictType = "面试题类型", sort = 10)
-    public String getSubjectType() {
-        return subjectType;
+    public String getSubType() {
+        return subType;
     }
 
-    public void setSubjectType(String subjectType) {
-        this.subjectType = subjectType;
+    public void setSubType(String subType) {
+        this.subType = subType;
     }
 
     @ExcelField(title = "题干",type=0, align = 1, sort = 20)
@@ -50,7 +50,7 @@ public class InterviewIssueDto extends BaseDTO {
         this.stem = stem;
     }
 
-    @ExcelField(title = "年份",type=0, align = 1, sort = 30)
+    @ExcelField(title = "年份",type=0, align = 1, sort = 30, pattern = "yyyy")
     public Date getYear() {
         return year;
     }

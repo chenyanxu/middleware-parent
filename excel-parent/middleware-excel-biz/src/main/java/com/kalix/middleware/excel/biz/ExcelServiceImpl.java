@@ -20,6 +20,7 @@ import org.lightcouch.Response;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -95,7 +96,7 @@ public class ExcelServiceImpl implements IExcelService {
         Sheet theSheet = (Sheet) sheet;
         int rows = GetRowCount(theSheet);
         List<Object[]> annotationList = getAnnotationList(clazz);
-        for (int i = columnRowIndex; i < rows; i++) {
+        for (int i = columnRowIndex - 1; i < rows; i++) {
             Row row = theSheet.getRow(i);
             if (row != null) {
                 String col1 = getCellValue(row.getCell(0));
@@ -104,12 +105,12 @@ public class ExcelServiceImpl implements IExcelService {
                     rtnList.add(row);
                 } else {
                     //String info = "<\br>第" + i + "行第1列或第2列为空，已经跳过！";
-                    String info = "\n第" + i + "行第1列或第2列为空，已经跳过！";
+                    String info = "\n第" + (i + 1) + "行第1列或第2列为空，已经跳过！";
                     importInfo.append(info);
                 }
             } else {
                 //String info = "<\br>第" + i + "行整行为空，已经跳过！";
-                String info = "\n第" + i + "行整行为空，已经跳过！";
+                String info = "\n第" + (i + 1) + "行整行为空，已经跳过！";
                 importInfo.append(info);
             }
         }
@@ -600,7 +601,12 @@ public class ExcelServiceImpl implements IExcelService {
                     } else if (valType == Float.class) {
                         val = Float.valueOf(val.toString());
                     } else if (valType == Date.class) {
-                        val = DateUtil.getJavaDate((Double) val);
+                        if (ef.pattern() != null && ef.pattern().trim().length() > 0) {
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(ef.pattern());
+                            val = simpleDateFormat.parse((String) val);
+                        } else {
+                            val = DateUtil.getJavaDate((Double) val);
+                        }
                     } else {
                         if (ef.fieldType() != Class.class) {
                             val = ef.fieldType().getMethod("getValue", String.class).invoke(null, val.toString());

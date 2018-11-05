@@ -1,6 +1,5 @@
 package com.kalix.middleware.excel.biz;
 
-import com.kalix.framework.core.api.security.IShiroService;
 import com.kalix.framework.core.util.JNDIHelper;
 import com.kalix.middleware.excel.api.biz.IExportExcelService;
 
@@ -17,12 +16,11 @@ import java.util.Map;
 /**
  * Created by hqj on 2018/02/02.
  * servlet基类服务，根据模板下载文件
- * 请求地址rest/blueprint.xml配置: "/camel/servlet/download"
- * 请求参数: "?beanname=&id=xxx&filetype=word"
+ * 请求地址rest/blueprint.xml配置: "/camel/servlet/exportExcel"
+ * 请求参数: "?jsonStr=xxx&EntityName=xxx&ServiceUrl=xxx&serviceDictUrl=xxx"
  */
 public class ExportExcelServlet extends HttpServlet {
     private IExportExcelService exportExcelService;
-
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -35,13 +33,12 @@ public class ExportExcelServlet extends HttpServlet {
             String ServiceUrl = req.getParameter("ServiceUrl") == null ? "" : req.getParameter("ServiceUrl");
             String serviceDictUrl = req.getParameter("serviceDictUrl") == null ? "" : req.getParameter("serviceDictUrl");
             Map map = new HashMap();
-            map.put("jsonStr",jsonStr);
-            map.put("EntityName",EntityName);
-            map.put("ServiceUrl",ServiceUrl);
-            map.put("serviceDictUrl",serviceDictUrl);
+            map.put("jsonStr", jsonStr);
+            map.put("EntityName", EntityName);
+            map.put("ServiceUrl", ServiceUrl);
+            map.put("serviceDictUrl", serviceDictUrl);
             exportExcelService = JNDIHelper.getJNDIServiceForName(IExportExcelService.class.getName());
             exportExcelService.doExport(map, resp);
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -54,6 +51,4 @@ public class ExportExcelServlet extends HttpServlet {
             }
         }
     }
-
-
 }

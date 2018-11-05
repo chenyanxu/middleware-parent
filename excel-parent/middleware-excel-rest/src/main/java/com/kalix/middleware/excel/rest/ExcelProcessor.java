@@ -1,5 +1,6 @@
 package com.kalix.middleware.excel.rest;
 
+import com.google.gson.GsonBuilder;
 import com.kalix.framework.core.api.security.IShiroService;
 import com.kalix.framework.core.util.HttpClientUtil;
 import com.kalix.framework.core.util.JNDIHelper;
@@ -37,9 +38,8 @@ public class ExcelProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         this.rtnMap.clear();
-        int recIndex = 0;
+        //int recIndex = 0;
         int startRow = 0;
-        //List<FileItem> items=null;
         try {
             HttpServletRequest request = ObjectHelper.cast(HttpServletRequest.class, exchange.getIn().getHeader(Exchange.HTTP_SERVLET_REQUEST));
             String ServiceUrl = "";
@@ -106,7 +106,7 @@ public class ExcelProcessor implements Processor {
                         importCount = bookList.size();
                         importInfo = excelService.GetImportInfo();
                         for (Object obj : bookList) {
-                            Map<String, String> map = SerializeUtil.json2Map(SerializeUtil.serializeJson(obj));
+                            Map<String, String> map = SerializeUtil.json2Map(SerializeUtil.serializeJson(obj, "yyyy-MM-dd HH:mm:ss"));
                             map.remove("id");
                             map.remove("version");
                             HttpClientUtil.shiroPost(ServiceUrl, map, sessionId, access_token);
@@ -116,7 +116,7 @@ public class ExcelProcessor implements Processor {
                     }
                 }
                 this.rtnMap.put("success", true);
-                this.rtnMap.put("msg", "文件导入成功，共" + (rowCount - 1) + "条记录，导入" + importCount + "条记录" + importInfo);
+                this.rtnMap.put("msg", "文件导入成功，共" + (rowCount - startRow + 1) + "条记录，导入" + importCount + "条记录" + importInfo);
             }
         } catch (Exception e) {
             e.printStackTrace();

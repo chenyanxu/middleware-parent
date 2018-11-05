@@ -27,5 +27,5 @@ public interface IExportExcelService extends IExcelService {
 //
 //    public void dispose();
 
-      public void doExport(Map map, HttpServletResponse response) throws IOException;
+    public void doExport(Map map, HttpServletResponse response) throws IOException;
 }

@@ -1,12 +1,9 @@
 package com.kalix.middleware.excel.biz;
 
 import com.google.common.collect.Lists;
-import com.kalix.framework.core.api.biz.IBizService;
 import com.kalix.framework.core.api.persistence.JsonData;
 import com.kalix.framework.core.api.security.IShiroService;
-import com.kalix.framework.core.api.system.IDictBeanService;
 import com.kalix.framework.core.util.HttpClientUtil;
-import com.kalix.framework.core.util.JNDIHelper;
 import com.kalix.framework.core.util.SerializeUtil;
 import com.kalix.middleware.excel.api.annotation.ExcelField;
 import com.kalix.middleware.excel.api.biz.IExportExcelService;
@@ -26,6 +23,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -52,35 +50,37 @@ public class ExportExcelServiceImpl extends ExcelServiceImpl implements IExportE
     /**
      * 当前行号
      */
-    private int rownum=0;
+    private int rownum = 0;
 
     /**
      * 注解列表（Object[]{ ExcelField, Field/Method }）
      */
     List<Object[]> annotationList = Lists.newArrayList();
+
     /**
      * 初始化函数
-     * @param title 表格标题，传“空值”，表示无标题
+     *
+     * @param title      表格标题，传“空值”，表示无标题
      * @param headerList 表头列表
      */
 
     public void initialize(String title, List<String> headerList) {
-        rownum=0;
+        rownum = 0;
         this.wb = new SXSSFWorkbook(500);
         this.sheet = wb.createSheet("Export");
         this.styles = createStyles(wb);
         // Create title
-        if (StringUtils.isNotBlank(title)){
+        if (StringUtils.isNotBlank(title)) {
             Row titleRow = sheet.createRow(rownum++);
             titleRow.setHeightInPoints(30);
             Cell titleCell = titleRow.createCell(0);
             titleCell.setCellStyle(styles.get("title"));
             titleCell.setCellValue(title);
             sheet.addMergedRegion(new CellRangeAddress(titleRow.getRowNum(),
-                    titleRow.getRowNum(), titleRow.getRowNum(), headerList.size()-1));
+                    titleRow.getRowNum(), titleRow.getRowNum(), headerList.size() - 1));
         }
         // Create header
-        if (headerList == null){
+        if (headerList == null) {
             throw new RuntimeException("headerList not null!");
         }
         Row headerRow = sheet.createRow(rownum++);
@@ -89,24 +89,22 @@ public class ExportExcelServiceImpl extends ExcelServiceImpl implements IExportE
             Cell cell = headerRow.createCell(i);
             cell.setCellStyle(styles.get("header"));
             String[] ss = StringUtils.split(headerList.get(i), "**", 2);
-            if (ss.length==2){
+            if (ss.length == 2) {
                 cell.setCellValue(ss[0]);
                 Comment comment = this.sheet.createDrawingPatriarch().createCellComment(
                         new XSSFClientAnchor(0, 0, 0, 0, (short) 3, 3, (short) 5, 6));
                 comment.setString(new XSSFRichTextString(ss[1]));
                 cell.setCellComment(comment);
-            }else{
+            } else {
                 cell.setCellValue(headerList.get(i));
             }
             sheet.autoSizeColumn(i);
         }
         for (int i = 0; i < headerList.size(); i++) {
-            int colWidth = sheet.getColumnWidth(i)*2;
-            if(i==1)
-            {
-                sheet.setColumnWidth(i,15000);
-            }else
-            {
+            int colWidth = sheet.getColumnWidth(i) * 2;
+            if (i == 1) {
+                sheet.setColumnWidth(i, 15000);
+            } else {
                 sheet.setColumnWidth(i, colWidth < 3000 ? 3000 : colWidth);
             }
 
@@ -114,10 +112,9 @@ public class ExportExcelServiceImpl extends ExcelServiceImpl implements IExportE
     }
 
 
-
-
     /**
      * 创建表格样式
+     *
      * @param wb 工作薄对象
      * @return 样式列表
      */
@@ -184,58 +181,60 @@ public class ExportExcelServiceImpl extends ExcelServiceImpl implements IExportE
 
     /**
      * 添加一行
+     *
      * @return 行对象
      */
 
-    public Row addRow(){
+    public Row addRow() {
         return sheet.createRow(rownum++);
     }
 
 
     /**
      * 添加一个单元格
-     * @param row 添加的行
+     *
+     * @param row    添加的行
      * @param column 添加列号
-     * @param val 添加值
-     * @param align 对齐方式（1：靠左；2：居中；3：靠右）
+     * @param val    添加值
+     * @param align  对齐方式（1：靠左；2：居中；3：靠右）
      * @return 单元格对象
      */
-    public Cell addCell(Row row, int column, Object val, int align, Class<?> fieldType){
+    public Cell addCell(Row row, int column, Object val, int align, Class<?> fieldType) {
         Cell cell = row.createCell(column);
         String cellFormatString = "@";
         try {
-            if(val == null){
+            if (val == null) {
                 cell.setCellValue("");
-            }else if(fieldType != Class.class){
-                cell.setCellValue((String)fieldType.getMethod("setValue", Object.class).invoke(null, val));
-            }else{
-                if(val instanceof String) {
+            } else if (fieldType != Class.class) {
+                cell.setCellValue((String) fieldType.getMethod("setValue", Object.class).invoke(null, val));
+            } else {
+                if (val instanceof String) {
                     cell.setCellValue((String) val);
-                }else if(val instanceof Integer) {
+                } else if (val instanceof Integer) {
                     cell.setCellValue((Integer) val);
                     cellFormatString = "0";
-                }else if(val instanceof Long) {
+                } else if (val instanceof Long) {
                     cell.setCellValue((Long) val);
                     cellFormatString = "0";
-                }else if(val instanceof Double) {
+                } else if (val instanceof Double) {
                     cell.setCellValue((Double) val);
                     cellFormatString = "0.00";
-                }else if(val instanceof Float) {
+                } else if (val instanceof Float) {
                     cell.setCellValue((Float) val);
                     cellFormatString = "0.00";
-                }else if(val instanceof Date) {
+                } else if (val instanceof Date) {
                     cell.setCellValue((Date) val);
                     cellFormatString = "yyyy-MM-dd HH:mm";
-                }else {
-                    cell.setCellValue((String)Class.forName(this.getClass().getName().replaceAll(this.getClass().getSimpleName(),
-                            "fieldtype."+val.getClass().getSimpleName()+"Type")).getMethod("setValue", Object.class).invoke(null, val));
+                } else {
+                    cell.setCellValue((String) Class.forName(this.getClass().getName().replaceAll(this.getClass().getSimpleName(),
+                            "fieldtype." + val.getClass().getSimpleName() + "Type")).getMethod("setValue", Object.class).invoke(null, val));
                 }
             }
-            if (val != null){
-                CellStyle style = styles.get("data_column_"+column);
-                if (style == null){
+            if (val != null) {
+                CellStyle style = styles.get("data_column_" + column);
+                if (style == null) {
                     style = wb.createCellStyle();
-                    style.cloneStyleFrom(styles.get("data"+(align>=1&&align<=3?align:"")));
+                    style.cloneStyleFrom(styles.get("data" + (align >= 1 && align <= 3 ? align : "")));
                     style.setDataFormat(wb.createDataFormat().getFormat(cellFormatString));
                     styles.put("data_column_" + column, style);
                 }
@@ -248,60 +247,60 @@ public class ExportExcelServiceImpl extends ExcelServiceImpl implements IExportE
     }
 
 
-
     /**
      * 构造函数
-     * @param title 表格标题，传“空值”，表示无标题
-     * @param cls 实体对象，通过annotation.ExportField获取标题
-     * @param type 导出类型（1:导出数据；2：导出模板）
+     *
+     * @param title  表格标题，传“空值”，表示无标题
+     * @param cls    实体对象，通过annotation.ExportField获取标题
+     * @param type   导出类型（1:导出数据；2：导出模板）
      * @param groups 导入分组
      */
-    public void  init(String title, Class<?> cls, int type, int... groups){
+    public void init(String title, Class<?> cls, int type, int... groups) {
         annotationList.clear();
         // Get annotation field
         Field[] fs = cls.getDeclaredFields();
-        for (Field f : fs){
+        for (Field f : fs) {
             ExcelField ef = f.getAnnotation(ExcelField.class);
-            if (ef != null && (ef.type()==0 || ef.type()==type)){
-                if (groups!=null && groups.length>0){
+            if (ef != null && (ef.type() == 0 || ef.type() == type)) {
+                if (groups != null && groups.length > 0) {
                     boolean inGroup = false;
-                    for (int g : groups){
-                        if (inGroup){
+                    for (int g : groups) {
+                        if (inGroup) {
                             break;
                         }
-                        for (int efg : ef.groups()){
-                            if (g == efg){
+                        for (int efg : ef.groups()) {
+                            if (g == efg) {
                                 inGroup = true;
                                 annotationList.add(new Object[]{ef, f});
                                 break;
                             }
                         }
                     }
-                }else{
+                } else {
                     annotationList.add(new Object[]{ef, f});
                 }
             }
         }
         // Get annotation method
         Method[] ms = cls.getDeclaredMethods();
-        for (Method m : ms){
+        for (Method m : ms) {
             ExcelField ef = m.getAnnotation(ExcelField.class);
-            if (ef != null && (ef.type()==0 || ef.type()==type)){
-                if (groups!=null && groups.length>0){
+            if (ef != null && (ef.type() == 0 || ef.type() == type)) {
+                if (groups != null && groups.length > 0) {
                     boolean inGroup = false;
-                    for (int g : groups){
-                        if (inGroup){
+                    for (int g : groups) {
+                        if (inGroup) {
                             break;
                         }
-                        for (int efg : ef.groups()){
-                            if (g == efg){
+                        for (int efg : ef.groups()) {
+                            if (g == efg) {
                                 inGroup = true;
                                 annotationList.add(new Object[]{ef, m});
                                 break;
                             }
                         }
                     }
-                }else{
+                } else {
                     annotationList.add(new Object[]{ef, m});
                 }
             }
@@ -309,18 +308,20 @@ public class ExportExcelServiceImpl extends ExcelServiceImpl implements IExportE
         // Field sorting
         Collections.sort(annotationList, new Comparator<Object[]>() {
             public int compare(Object[] o1, Object[] o2) {
-                return new Integer(((ExcelField)o1[0]).sort()).compareTo(
-                        new Integer(((ExcelField)o2[0]).sort()));
-            };
+                return new Integer(((ExcelField) o1[0]).sort()).compareTo(
+                        new Integer(((ExcelField) o2[0]).sort()));
+            }
+
+            ;
         });
         // Initialize
         List<String> headerList = Lists.newArrayList();
-        for (Object[] os : annotationList){
-            String t = ((ExcelField)os[0]).title();
+        for (Object[] os : annotationList) {
+            String t = ((ExcelField) os[0]).title();
             // 如果是导出，则去掉注释
-            if (type==1){
+            if (type == 1) {
                 String[] ss = StringUtils.split(t, "**", 2);
-                if (ss.length==2){
+                if (ss.length == 2) {
                     t = ss[0];
                 }
             }
@@ -328,39 +329,45 @@ public class ExportExcelServiceImpl extends ExcelServiceImpl implements IExportE
         }
         initialize(title, headerList);
     }
+
     /**
      * 添加数据（通过annotation.ExportField添加数据）
+     *
      * @return list 数据列表
      */
-    public <E> void setDataList(List<E> list,Map map){
-        for (E e : list){
+    public <E> void setDataList(List<E> list, Map map) {
+        for (E e : list) {
             int colunm = 0;
             Row row = this.addRow();
             StringBuilder sb = new StringBuilder();
-            for (Object[] os : annotationList){
-                ExcelField ef = (ExcelField)os[0];
+            for (Object[] os : annotationList) {
+                ExcelField ef = (ExcelField) os[0];
                 Object val = null;
                 // Get entity value
-                try{
-                    if (StringUtils.isNotBlank(ef.value())){
+                try {
+                    if (StringUtils.isNotBlank(ef.value())) {
                         val = Reflections.invokeGetter(e, ef.value());
-                    }else{
-                        if (os[1] instanceof Field){
-                            val = Reflections.invokeGetter(e, ((Field)os[1]).getName());
-                        }else if (os[1] instanceof Method){
-                            val = Reflections.invokeMethod(e, ((Method)os[1]).getName(), new Class[] {}, new Object[] {});
+                    } else {
+                        if (os[1] instanceof Field) {
+                            val = Reflections.invokeGetter(e, ((Field) os[1]).getName());
+                        } else if (os[1] instanceof Method) {
+                            val = Reflections.invokeMethod(e, ((Method) os[1]).getName(), new Class[]{}, new Object[]{});
                         }
                     }
                     // If is dict, get dict label
-                    if (StringUtils.isNotBlank(ef.dictType())){
-                        String serviceDictUrl=(String)map.get("serviceDictUrl");
-                        String sessionId=(String)map.get("sessionId");
-                        String access_token=(String)map.get("access_token");
-                        val=HttpClientUtil.shiroGet(serviceDictUrl+"?type=" + ef.dictType()+"&value="+val.toString(), sessionId, access_token);
-                        Map json2Map=SerializeUtil.json2Map((String)val);
-                        val=json2Map.get("label");
+                    if (StringUtils.isNotBlank(ef.dictType())) {
+                        String serviceDictUrl = (String) map.get("serviceDictUrl");
+                        String sessionId = (String) map.get("sessionId");
+                        String access_token = (String) map.get("access_token");
+                        val = HttpClientUtil.shiroGet(serviceDictUrl + "?type=" + ef.dictType() + "&value=" + val.toString(), sessionId, access_token);
+                        Map json2Map = SerializeUtil.json2Map((String) val);
+                        val = json2Map.get("label");
                     }
-                }catch(Exception ex) {
+                    if (StringUtils.isNotBlank(ef.pattern())) {
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(ef.pattern());
+                        val = simpleDateFormat.format(val);
+                    }
+                } catch (Exception ex) {
                     // Failure to ignore
                     ex.printStackTrace();
                     val = "";
@@ -375,62 +382,61 @@ public class ExportExcelServiceImpl extends ExcelServiceImpl implements IExportE
 
     /**
      * 输出到客户端
+     *
      * @param fileName 输出文件名
      */
     public void writeFile(HttpServletResponse response, String fileName) throws IOException {
         response.reset();
         response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Credentials","true");
-        response.setHeader("Access-Control-Allow-Headers","x-requested-with,content-type");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Headers", "x-requested-with,content-type");
         response.setContentType("application/octet-stream; charset=utf-8");
-        response.setHeader("Content-Disposition", "attachment; filename="+ Encodes.urlEncode(fileName));
+        response.setHeader("Content-Disposition", "attachment; filename=" + Encodes.urlEncode(fileName));
         write(response.getOutputStream());
         //return this;
     }
 
     /**
      * 输出数据流
+     *
      * @param os 输出数据流
      */
-    public void write(OutputStream os) throws IOException{
+    public void write(OutputStream os) throws IOException {
         wb.write(os);
         dispose();
     }
 
-
     /**
      * 清理临时文件
      */
-    public void dispose(){
+    public void dispose() {
         wb.dispose();
     }
 
-
-    public void doExport(Map map,HttpServletResponse response) throws IOException {
+    public void doExport(Map map, HttpServletResponse response) throws IOException {
 
         List list_obj = new ArrayList();
-        String jsonStr=(String)map.get("jsonStr");
-        String EntityName=(String)map.get("EntityName");
-        String ServiceUrl=(String)map.get("ServiceUrl");
+        String jsonStr = (String) map.get("jsonStr");
+        String EntityName = (String) map.get("EntityName");
+        String ServiceUrl = (String) map.get("ServiceUrl");
 
         Class entityClass = ClassUtils.forName(EntityName);
         String access_token = shiroService.getSession().getAttribute("access_token").toString();
         String sessionId = shiroService.getSession().getId().toString();
-        map.put("access_token",access_token);
-        map.put("sessionId",sessionId);
-        jsonStr = URLEncoder.encode(jsonStr, "UTF-8").replace("+","%20");//编码
-        String str=HttpClientUtil.shiroGet(ServiceUrl+"?jsonStr=" + jsonStr, sessionId, access_token);
-        JsonData jsonData=SerializeUtil.unserializeJson(str,JsonData.class);
-        List list=jsonData.getData();
-        for(int i=0;i<list.size();i++)
-        {
-            String class_str=SerializeUtil.serializeJson(list.get(i));
-            list_obj.add(SerializeUtil.unserializeJson(class_str,entityClass));
+        map.put("access_token", access_token);
+        map.put("sessionId", sessionId);
+        jsonStr = URLEncoder.encode(jsonStr, "UTF-8").replace("+", "%20");//编码
+        String str = HttpClientUtil.shiroGet(ServiceUrl + "?jsonStr=" + jsonStr, sessionId, access_token);
+        JsonData jsonData = SerializeUtil.unserializeJson(str, JsonData.class);
+        List list = jsonData.getData();
+        for (int i = 0; i < list.size(); i++) {
+            String class_str = SerializeUtil.serializeJson(list.get(i));
+            list_obj.add(SerializeUtil.unserializeJson(class_str, entityClass, "yyyy"));
         }
-        this.init("",entityClass,1);
-        this.setDataList(list_obj,map);
+        this.init("", entityClass, 1);
+        this.setDataList(list_obj, map);
         writeFile(response, "ceshi.xlsx");
-       // new ExportExcel("用户数据", User.class).setDataList(page.getList()).write(response, fileName).dispose();
+        // new ExportExcel("用户数据", User.class).setDataList(page.getList()).write(response, fileName).dispose();
     }
 
     //	/**

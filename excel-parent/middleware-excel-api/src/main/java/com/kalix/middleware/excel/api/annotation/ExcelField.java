@@ -56,4 +56,10 @@ public @interface ExcelField {
 	 * 字段归属组（根据分组导出导入）
 	 */
 	int[] groups() default {};
+
+	/**
+	 * 日期类型特殊处理
+	 * @return
+     */
+	String pattern() default "";
 }
