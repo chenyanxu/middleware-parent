@@ -25,7 +25,7 @@ public class InterviewIssueDto extends BaseDTO {
     private String analysis;           // 试题解析
     private String scoreStandard;      // 评分标准
     private String checkFlag = "0";    // 审核状态，字典[审核状态]
-    private Long checkerId;            // 审核员id
+    private String checkerId;            // 审核员id
     private String checker;            // 审核员
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date checkDate;            // 审核时间
@@ -85,11 +85,11 @@ public class InterviewIssueDto extends BaseDTO {
         this.checkFlag = checkFlag;
     }
 
-    public Long getCheckerId() {
+    public String getCheckerId() {
         return checkerId;
     }
 
-    public void setCheckerId(Long checkerId) {
+    public void setCheckerId(String checkerId) {
         this.checkerId = checkerId;
     }
 

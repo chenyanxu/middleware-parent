@@ -60,7 +60,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             String userName = this.getShiroService().getSubject().getPrincipal().toString();
             //设置流程启动人
             identityService.setAuthenticatedUserId(userName);
-            TP bean = this.getEntity(new Long(id));
+            TP bean = this.getEntity(id);
             //检查流程启动人和申请人是同一个人
             if (!bean.getCreateBy().equals(this.getShiroService().getCurrentUserRealName()))
                 throw new NotSameStarterException();
@@ -184,7 +184,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             //拆分业务键，拆分成“业务对象名称”和“业务对象ID”的数组
             String beanId = WorkflowUtil.getBizId(businessKey);
 
-            TP bean = this.getEntity(new Long(beanId));
+            TP bean = this.getEntity(beanId);
 
             String userName = this.getShiroService().getCurrentUserRealName();
             //判断是否有人委托
@@ -326,7 +326,7 @@ public abstract class WorkflowGenericBizServiceImpl<T extends IGenericDao, TP ex
             //拆分业务键，拆分成“业务对象名称”和“业务对象ID”的数组
             String beanId = WorkflowUtil.getBizId(businessKey);
 
-            TP bean = this.getEntity(new Long(beanId));
+            TP bean = this.getEntity(beanId);
             bean.setStatus(WorkflowStatus.DELETE);
             bean.setAuditResult("业务中止");
             afterDeleteProcess(bean);

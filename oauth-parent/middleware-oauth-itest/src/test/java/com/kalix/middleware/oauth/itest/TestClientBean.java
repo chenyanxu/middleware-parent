@@ -26,7 +26,7 @@ public class TestClientBean extends APITest {
     private String base_url = getValue("base.uri");
     ;
     //insert entity id return by tag
-    private static long id;
+    private static String id;
     //insert delete update status
     private boolean succeed;
 
@@ -44,8 +44,8 @@ public class TestClientBean extends APITest {
         String returnString = response.getBody(String.class);
         JSONObject jsonObject = new JSONObject(returnString);
         Assert.assertNotNull(jsonObject);
-        id = jsonObject.getLong("tag");
-        Assert.assertTrue(id > 0);
+        id = jsonObject.getString("tag");
+        Assert.assertTrue(id != null);
         succeed = jsonObject.getBoolean("success");
         Assert.assertTrue(succeed);
     }

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2017-04-13.
  */
-public class ClientBeanDaoImpl extends GenericDao<ClientBean, Long> implements IClientBeanDao {
+public class ClientBeanDaoImpl extends GenericDao<ClientBean, String> implements IClientBeanDao {
     @Override
     @PersistenceContext(unitName = "oauth-cm")
     public void setEntityManager(EntityManager em) {

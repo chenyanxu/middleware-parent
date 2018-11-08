@@ -6,6 +6,6 @@ import com.kalix.middleware.oauth.entities.UserBean;
 /**
  * Created by sunlf on 2017-04-13.
  */
-public interface IUserBeanDao extends IGenericDao<UserBean, Long> {
+public interface IUserBeanDao extends IGenericDao<UserBean, String> {
     //在此添加新的DAO方法
 }

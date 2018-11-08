@@ -7,5 +7,5 @@ import com.kalix.middleware.attachment.entities.AttachmentBean;
 /**
  * @author chenyanxu
  */
-public interface IAttachmentBeanDao extends IGenericDao<AttachmentBean, Long> {
+public interface IAttachmentBeanDao extends IGenericDao<AttachmentBean, String> {
 }

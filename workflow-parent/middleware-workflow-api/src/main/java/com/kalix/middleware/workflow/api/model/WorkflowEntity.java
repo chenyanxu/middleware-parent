@@ -23,7 +23,7 @@ import java.util.Date;
 public abstract class WorkflowEntity extends PersistentEntity {
     private String title; //流程名称
     private Boolean reject; //是否驳回
-    private Long orgId; //组织结构id
+    private String orgId; //组织结构id
     private String orgName; //组织结构名称
     private String processInstanceId;//流程实例id
     private String currentNode;//当前环节
@@ -65,11 +65,11 @@ public abstract class WorkflowEntity extends PersistentEntity {
         this.auditResult = auditResult;
     }
 
-    public Long getOrgId() {
+    public String getOrgId() {
         return orgId;
     }
 
-    public void setOrgId(Long orgId) {
+    public void setOrgId(String orgId) {
         this.orgId = orgId;
     }
 

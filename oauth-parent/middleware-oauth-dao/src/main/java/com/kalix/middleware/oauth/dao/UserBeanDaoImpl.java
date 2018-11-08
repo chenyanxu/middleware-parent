@@ -10,7 +10,7 @@ import javax.persistence.PersistenceContext;
 /**
  * Created by Administrator on 2017-04-13.
  */
-public class UserBeanDaoImpl extends GenericDao<UserBean, Long> implements IUserBeanDao {
+public class UserBeanDaoImpl extends GenericDao<UserBean, String> implements IUserBeanDao {
     @Override
     @PersistenceContext(unitName = "oauth-cm")
     public void setEntityManager(EntityManager em) {

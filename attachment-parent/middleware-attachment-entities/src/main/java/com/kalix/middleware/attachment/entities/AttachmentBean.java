@@ -13,7 +13,7 @@ import java.util.Date;
 @Entity
 @Table(name = "middleware_attachment")
 public class AttachmentBean extends PersistentEntity {
-    private long mainId;                    //主表id
+    private String mainId;                    //主表id
     private String attachmentId;            //couchdb中的附件id
     private String attachmentRev;           //couchdb中的附件版本号
     private String attachmentName;          //附件名称
@@ -23,11 +23,11 @@ public class AttachmentBean extends PersistentEntity {
     @JsonFormat(shape= JsonFormat.Shape.STRING ,pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date uploadDate=new Date();                //上传日期
 
-    public long getMainId() {
+    public String getMainId() {
         return mainId;
     }
 
-    public void setMainId(long mainId) {
+    public void setMainId(String mainId) {
         this.mainId = mainId;
     }
 

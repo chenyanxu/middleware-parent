@@ -41,7 +41,7 @@ public class CategoryBeanServiceImpl extends GenericBizServiceImpl<ICategoryBean
             long i=1; //自己构造id
             for (ProcessDefinition processDefinition : list) {
                 ProcessDef processDef=new ProcessDef();
-                processDef.setId(i);
+                processDef.setId(i+"");
                 processDef.setProcessId(processDefinition.getId());//用于查看工作流定义图片
                 processDef.setKey(processDefinition.getKey());
                 processDef.setName(processDefinition.getName());
@@ -53,7 +53,7 @@ public class CategoryBeanServiceImpl extends GenericBizServiceImpl<ICategoryBean
         else
         {
             ProcessDef processDef=new ProcessDef();
-            processDef.setId(0);//没有工作流的id为0
+            processDef.setId("0");//没有工作流的id为0
             processDef.setName("暂无数据");
             processDef.setKey("empty");
             processDef.setDescription("还没有定义工作流。");

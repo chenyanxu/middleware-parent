@@ -10,7 +10,7 @@ import javax.persistence.PersistenceContext;
 /**
  * Created by dell on 14-1-16.
  */
-public class AttachmentBeanDaoImpl extends GenericDao<AttachmentBean, Long> implements IAttachmentBeanDao {
+public class AttachmentBeanDaoImpl extends GenericDao<AttachmentBean, String> implements IAttachmentBeanDao {
     @Override
     @PersistenceContext(unitName = "middleware-attachment-unit")
     public void setEntityManager(EntityManager em) {

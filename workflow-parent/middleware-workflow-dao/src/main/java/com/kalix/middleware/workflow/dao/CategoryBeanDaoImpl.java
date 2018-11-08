@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
  * 修改时间:
  * 修改备注:  [说明本次修改内容]
  */
-public class CategoryBeanDaoImpl extends GenericDao<CategoryBean, Long> implements ICategoryBeanDao {
+public class CategoryBeanDaoImpl extends GenericDao<CategoryBean, String> implements ICategoryBeanDao {
     @Override
     @PersistenceContext(unitName = "workflow-cm")
     public void setEntityManager(EntityManager em) {
