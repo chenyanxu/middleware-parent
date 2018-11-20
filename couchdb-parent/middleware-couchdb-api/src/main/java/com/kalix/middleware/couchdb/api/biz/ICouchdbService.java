@@ -2,14 +2,13 @@ package com.kalix.middleware.couchdb.api.biz;
 
 import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.api.system.IAttachmentService;
-import org.apache.tools.ant.taskdefs.Input;
 import org.lightcouch.Response;
 
 import java.io.InputStream;
 import java.util.Map;
 
 /**
- ** @author chenyanxu
+ * * @author chenyanxu
  */
 public interface ICouchdbService extends IAttachmentService {
     /**
@@ -22,7 +21,7 @@ public interface ICouchdbService extends IAttachmentService {
      */
     Response addAttachment(String value, String key, String type);
 
-    Response addAttachment(InputStream stream,String key,String type);
+    Response addAttachment(InputStream stream, String key, String type);
 
     /**
      * 移除附件
@@ -56,10 +55,9 @@ public interface ICouchdbService extends IAttachmentService {
     //Attachment getAttachmentByIdAndRev(CouchdbAttachBean couchdbAttachBean);
 
     /**
-     *
      * @return
      */
     String getDBUrl();
 
-    String addAttachment(Map<String,String> params);
+    String addAttachment(Map<String, String> params);
 }
