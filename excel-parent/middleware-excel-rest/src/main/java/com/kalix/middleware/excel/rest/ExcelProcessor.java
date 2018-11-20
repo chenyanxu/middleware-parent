@@ -121,6 +121,10 @@ public class ExcelProcessor implements Processor {
                                 String stem = map.get("stem").toString();
                                 int num = getSpaceNum(stem);
                                 map.put("spaceNum", String.valueOf(num));
+                            if(ServiceUrl.toLowerCase().indexOf("completion")>-1){
+                               String stem= map.get("stem").toString();
+                                int num=getSpaceNum(stem,"[#");
+                                map.put("spaceNum",String.valueOf(num));
                             }
                             HttpClientUtil.shiroPost(ServiceUrl, map, sessionId, access_token);
                         }
@@ -142,6 +146,12 @@ public class ExcelProcessor implements Processor {
         }
     }
 
+
+    public int getSpaceNum(String stem,String findText) {
+        int count=0;
+        int index = 0;
+        while ((index = stem.indexOf(findText, index)) != -1) {
+            index = index + findText.length();
     public int getSpaceNum(String stem) {
         String pattern = "(\\[#).*?(\\])";
         // 编译正则
