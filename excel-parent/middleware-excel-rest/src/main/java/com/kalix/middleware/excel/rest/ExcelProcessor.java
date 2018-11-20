@@ -1,6 +1,5 @@
 package com.kalix.middleware.excel.rest;
 
-import com.google.gson.GsonBuilder;
 import com.kalix.framework.core.api.security.IShiroService;
 import com.kalix.framework.core.util.HttpClientUtil;
 import com.kalix.framework.core.util.JNDIHelper;
@@ -105,7 +104,14 @@ public class ExcelProcessor implements Processor {
                         List<Object> bookList = (List<Object>) excelService.GetColumnDic(sheet, startRow, entityClass, map_parm);
                         importCount = bookList.size();
                         importInfo = excelService.GetImportInfo();
-                        for (Object obj : bookList) {
+                        /*for (Object obj : bookList) {
+                            Map<String, String> map = SerializeUtil.json2Map(SerializeUtil.serializeJson(obj, "yyyy-MM-dd HH:mm:ss"));
+                            map.remove("id");
+                            map.remove("version");
+                            HttpClientUtil.shiroPost(ServiceUrl, map, sessionId, access_token);
+                        }*/
+                        for (int i = importCount - 1; i > -1; i--) {
+                            Object obj = bookList.get(i);
                             Map<String, String> map = SerializeUtil.json2Map(SerializeUtil.serializeJson(obj, "yyyy-MM-dd HH:mm:ss"));
                             map.remove("id");
                             map.remove("version");
