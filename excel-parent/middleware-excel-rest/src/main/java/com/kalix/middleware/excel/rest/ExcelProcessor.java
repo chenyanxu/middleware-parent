@@ -1,7 +1,5 @@
 package com.kalix.middleware.excel.rest;
 
-import com.google.gson.GsonBuilder;
-import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.api.security.IShiroService;
 import com.kalix.framework.core.util.HttpClientUtil;
 import com.kalix.framework.core.util.JNDIHelper;
@@ -119,10 +117,10 @@ public class ExcelProcessor implements Processor {
                             Map<String, String> map = SerializeUtil.json2Map(SerializeUtil.serializeJson(obj, "yyyy-MM-dd HH:mm:ss"));
                             map.remove("id");
                             map.remove("version");
-                            if(ServiceUrl.toLowerCase().indexOf("completion")>-1){
-                               String stem= map.get("stem").toString();
-                                int num=getSpaceNum(stem);
-                                map.put("spaceNum",String.valueOf(num));
+                            if (ServiceUrl.toLowerCase().indexOf("completion") > -1) {
+                                String stem = map.get("stem").toString();
+                                int num = getSpaceNum(stem);
+                                map.put("spaceNum", String.valueOf(num));
                             }
                             HttpClientUtil.shiroPost(ServiceUrl, map, sessionId, access_token);
                         }
@@ -144,7 +142,6 @@ public class ExcelProcessor implements Processor {
         }
     }
 
-
     public int getSpaceNum(String stem) {
         String pattern = "(\\[#).*?(\\])";
         // 编译正则
@@ -157,7 +154,7 @@ public class ExcelProcessor implements Processor {
         while (m.find()) {
             count++;
         }
-       return  count;
+        return count;
     }
 
     public void setExcelService(IExcelService excelService) {
