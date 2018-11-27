@@ -3,6 +3,8 @@ package com.kalix.middleware.attachment.api.biz;
 import com.kalix.framework.core.api.biz.IBizService;
 import com.kalix.middleware.attachment.entities.AttachmentBean;
 
+import java.util.List;
+
 /**
  * @类描述：主表和附件关联couchdb业务服务接口类
  * @创建人：xukexin
@@ -12,4 +14,5 @@ import com.kalix.middleware.attachment.entities.AttachmentBean;
  * @修改备注：
  */
 public interface IAttachmentBeanService extends IBizService<AttachmentBean> {
+    List findByMainId(Long mainId);
 }
