@@ -1,7 +1,6 @@
 package com.kalix.middleware.oauth.biz;
 
 import com.kalix.framework.core.api.cache.ICacheManager;
-import com.kalix.framework.core.util.ConfigUtil;
 import com.kalix.middleware.oauth.api.biz.IOauthService;
 import com.kalix.middleware.oauth.api.dao.IClientBeanDao;
 
@@ -28,17 +27,18 @@ public class OauthServiceImpl implements IOauthService {
 
     @Override
     public void addAuthCode(String authCode, String username) {
-        cacheManager.save(authCode, username,getExpireIn().intValue());
+        cacheManager.save(authCode, username, getExpireIn().intValue());
     }
 
     @Override
     public void addAccessToken(String accessToken, String username) {
-        cacheManager.save(accessToken, username,getExpireIn().intValue());
+        cacheManager.save(accessToken, username, getExpireIn().intValue());
     }
 
     @Override
     public void addRefreshToken(String refreshToken, String username) {
-        cacheManager.save(refreshToken, username);
+        // 刷新token 5天清空一次
+        cacheManager.save(refreshToken, username, 432000);
     }
 
     @Override
@@ -68,9 +68,9 @@ public class OauthServiceImpl implements IOauthService {
 
     @Override
     public Long getExpireIn() {
-        String auth2Timeout = (String)ConfigUtil.getConfigProp("auth2TimeOut", configName);
-        Long timeout = Long.valueOf(auth2Timeout);
-        this.expireIn = timeout;
+//        String auth2Timeout = (String)ConfigUtil.getConfigProp("auth2TimeOut", configName);
+//        Long timeout = Long.valueOf(auth2Timeout);
+//        this.expireIn = timeout;
         return this.expireIn;
     }
 

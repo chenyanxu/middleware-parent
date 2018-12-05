@@ -72,13 +72,13 @@ public class AccessTokenServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse resp) {
 
         try {
-            if(jwtService==null) {
-               if(JNDIHelper.getJNDIServiceForNameNoCatch(IJwtService.class.getName()))
-               {
-                   jwtService = JNDIHelper.getJNDIServiceForName(IJwtService.class.getName());
-               }
-
-            }
+//            if(jwtService==null) {
+//               if(JNDIHelper.getJNDIServiceForNameNoCatch(IJwtService.class.getName()))
+//               {
+//                   jwtService = JNDIHelper.getJNDIServiceForName(IJwtService.class.getName());
+//               }
+//
+//            }
             //构建OAuth请求
             OAuthTokenRequest oauthRequest = new OAuthTokenRequest(request);
 
