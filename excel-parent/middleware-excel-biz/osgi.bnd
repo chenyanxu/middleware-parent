@@ -12,7 +12,6 @@ Import-Package: com.kalix.framework.core.util,\
                 com.kalix.middleware.couchdb.api.biz,\
                 com.kalix.middleware.excel.api.biz,\
                 com.kalix.middleware.excel.api.annotation,\
-                com.kalix.middleware.excel.api.model,\
                 javax.servlet,\
                 javax.servlet.*,\
                 javax.imageio.*,\
@@ -28,3 +27,4 @@ Import-Package: com.kalix.framework.core.util,\
                 javax.xml.*,\
                 org.apache.xmlbeans.*,\
                 org.w3c.dom.*
+DynamicImport-Package: com.kalix.middleware.excel.api.model.*
