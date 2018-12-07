@@ -586,7 +586,7 @@ public class ExcelServiceImpl implements IExcelService {
                 //log.debug("Import value type: ["+i+","+column+"] " + valType);
                 try {
                     if (valType == String.class) {
-                        String s = String.valueOf(val.toString());
+                        String s = String.valueOf(val.toString().trim());
                         if (StringUtils.endsWith(s, ".0")) {
                             val = StringUtils.substringBefore(s, ".0");
                         } else {
