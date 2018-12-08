@@ -33,7 +33,8 @@
         <module>jwt-parent</module>
         <module>websocket-parent</module>
         <!--<module>spring-parent</module>-->
-        <module>microservice-parent</module>
+        <!--<module>microservice-parent</module>-->
+        <!--<module>xml-parent</module>-->
     </modules>
     <build>
         <plugins>
