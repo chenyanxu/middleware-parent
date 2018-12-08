@@ -35,6 +35,7 @@
         <!--<module>spring-parent</module>-->
         <!--<module>microservice-parent</module>-->
         <!--<module>xml-parent</module>-->
+        <module>mqtt-parent</module>
     </modules>
     <build>
         <plugins>
