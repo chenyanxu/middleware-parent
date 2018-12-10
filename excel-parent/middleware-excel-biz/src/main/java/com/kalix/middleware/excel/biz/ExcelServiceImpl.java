@@ -96,22 +96,56 @@ public class ExcelServiceImpl implements IExcelService {
         Sheet theSheet = (Sheet) sheet;
         int rows = GetRowCount(theSheet);
         List<Object[]> annotationList = getAnnotationList(clazz);
+        // 验证excel文件每条记录是否正确
         for (int i = columnRowIndex - 1; i < rows; i++) {
+            boolean isOk = true;
             Row row = theSheet.getRow(i);
-            if (row != null) {
-                String col1 = getCellValue(row.getCell(0));
-                String col2 = getCellValue(row.getCell(1));
-                if (StringUtils.isNotEmpty(col1) && StringUtils.isNotEmpty(col2)) {
-                    rtnList.add(row);
-                } else {
-                    //String info = "<\br>第" + i + "行第1列或第2列为空，已经跳过！";
-                    String info = "\n第" + (i + 1) + "行第1列或第2列为空，已经跳过！";
-                    importInfo.append(info);
-                }
-            } else {
+            // 整行为空
+            if (row == null) {
                 //String info = "<\br>第" + i + "行整行为空，已经跳过！";
                 String info = "\n第" + (i + 1) + "行整行为空，已经跳过！";
                 importInfo.append(info);
+                continue;
+            }
+            // 第一列或第二列为空
+            String col1 = getCellValue(row.getCell(0));
+            String col2 = getCellValue(row.getCell(1));
+            if (StringUtils.isEmpty(col1) || StringUtils.isEmpty(col2)) {
+                //String info = "<\br>第" + i + "行第1列或第2列为空，已经跳过！";
+                String info = "\n第" + (i + 1) + "行第1列或第2列为空，已经跳过！";
+                importInfo.append(info);
+                continue;
+            }
+            // 字典翻译(校验字典)
+            Object val = null;
+            int column = 0;
+            for (Object[] os : annotationList) {
+                val = getCellValue(row.getCell(column++));
+                ExcelField ef = (ExcelField) os[0];
+                if (ef.dictType() != null && !"".equals(ef.dictType())) {
+                    if (val != null) {
+                        String serviceDictUrl = (String) map_parm.get("serviceDictUrl");
+                        String sessionId = (String) map_parm.get("sessionId");
+                        String access_token = (String) map_parm.get("access_token");
+                        try {
+                            val = HttpClientUtil.shiroGet(serviceDictUrl + "?type=" + ef.dictType() + "&label=" + val.toString(), sessionId, access_token);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            val = null;
+                        }
+                        Map json2Map = SerializeUtil.json2Map((String) val);
+                        val = json2Map.get("value");
+                    }
+                    if (val == null || val.equals("")) {
+                        String info = "\n第" + (i + 1) + "行第" + column + "列字典翻译为空，已经跳过！";
+                        importInfo.append(info);
+                        isOk = false;
+                        break;
+                    }
+                }
+            }
+            if (isOk) {
+                rtnList.add(row);
             }
         }
 

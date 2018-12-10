@@ -44,7 +44,10 @@ public class ExcelProcessor implements Processor {
             String ServiceUrl = "";
             Class entityClass = null;
             if (!ServletFileUpload.isMultipartContent(request)) {
-                throw new RuntimeException("Invalid Multipart Content request!");
+                this.rtnMap.put("success", false);
+                this.rtnMap.put("msg", "文件导入失败！无效的请求！");
+                //throw new RuntimeException("Invalid Multipart Content request!");
+                return;
             }
             uploader.setHeaderEncoding("utf-8");
             ServletRequestContextWrapper wrapper = new ServletRequestContextWrapper(request);
@@ -53,7 +56,10 @@ public class ExcelProcessor implements Processor {
             // items = uploader.parseRequest(request);
             exchange.getIn().setHeader("Content-Type", "text/html;charset=utf-8");
             if (items.isEmpty()) {
-                throw new RuntimeException("Invalid Multipart/form-data Content, file item is empty!");
+                this.rtnMap.put("success", false);
+                this.rtnMap.put("msg", "文件导入失败！文件为空！");
+                //throw new RuntimeException("Invalid Multipart/form-data Content, file item is empty!");
+                return;
             } else {
                 int rowCount = 0;
                 int importCount = 0;
@@ -110,6 +116,11 @@ public class ExcelProcessor implements Processor {
                             map.remove("version");
                             HttpClientUtil.shiroPost(ServiceUrl, map, sessionId, access_token);
                         }*/
+                        if (StringUtils.isNotEmpty(importInfo)) {
+                            this.rtnMap.put("success", false);
+                            this.rtnMap.put("msg", "文件导入失败！文件存在错误数据，具体原因" + importInfo);
+                            return;
+                        }
                         for (int i = importCount - 1; i > -1; i--) {
                             Object obj = bookList.get(i);
                             Map<String, String> map = SerializeUtil.json2Map(SerializeUtil.serializeJson(obj, "yyyy-MM-dd HH:mm:ss"));
@@ -134,6 +145,7 @@ public class ExcelProcessor implements Processor {
             //  throw new RuntimeException(String.format("请检查表格第 %s 行", recIndex + 1));
             this.rtnMap.put("success", false);
             this.rtnMap.put("msg", "文件导入失败！异常为{" + e.toString() + "}");
+            return;
         } finally {
             //items.clear();
             exchange.getIn().setBody(rtnMap);
