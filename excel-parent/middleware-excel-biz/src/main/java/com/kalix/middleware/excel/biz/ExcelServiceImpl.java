@@ -620,20 +620,20 @@ public class ExcelServiceImpl implements IExcelService {
                 //log.debug("Import value type: ["+i+","+column+"] " + valType);
                 try {
                     if (valType == String.class) {
-                        String s = String.valueOf(val.toString());
+                        String s = String.valueOf(val.toString().trim());
                         if (StringUtils.endsWith(s, ".0")) {
                             val = StringUtils.substringBefore(s, ".0");
                         } else {
-                            val = String.valueOf(val.toString());
+                            val = String.valueOf(val.toString().trim());
                         }
                     } else if (valType == Integer.class) {
-                        val = Double.valueOf(val.toString()).intValue();
+                        val = Double.valueOf(val.toString().trim()).intValue();
                     } else if (valType == Long.class) {
-                        val = Double.valueOf(val.toString()).longValue();
+                        val = Double.valueOf(val.toString().trim()).longValue();
                     } else if (valType == Double.class) {
-                        val = Double.valueOf(val.toString());
+                        val = Double.valueOf(val.toString().trim());
                     } else if (valType == Float.class) {
-                        val = Float.valueOf(val.toString());
+                        val = Float.valueOf(val.toString().trim());
                     } else if (valType == Date.class) {
                         if (ef.pattern() != null && ef.pattern().trim().length() > 0) {
                             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(ef.pattern());
