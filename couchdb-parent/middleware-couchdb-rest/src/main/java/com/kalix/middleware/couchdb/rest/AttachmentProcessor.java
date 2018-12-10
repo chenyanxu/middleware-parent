@@ -113,9 +113,11 @@ public class AttachmentProcessor implements Processor {
             e.printStackTrace();
             this.rtnMap.put("success", false);
             this.rtnMap.put("msg", "上传文件失败！异常为{" + e.toString() + "}");
+        }finally {
+            exchange.getIn().setBody(rtnMap);
         }
 
-        exchange.getIn().setBody(rtnMap);
+
     }
 
     public ICouchdbService getCouchdbService() {
