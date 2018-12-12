@@ -130,8 +130,14 @@ public class ExcelProcessor implements Processor {
                                 String stem = map.get("stem").toString();
                                 int num = getSpaceNum(stem, "[#");
                                 map.put("spaceNum", String.valueOf(num));
+                                if(num!=0){
+                                    HttpClientUtil.shiroPost(ServiceUrl, map, sessionId, access_token);
+                                }
+
+                            }else {
+                                HttpClientUtil.shiroPost(ServiceUrl, map, sessionId, access_token);
                             }
-                            HttpClientUtil.shiroPost(ServiceUrl, map, sessionId, access_token);
+
                         }
                         // 删除临时文件
                         item.delete();
