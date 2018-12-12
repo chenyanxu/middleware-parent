@@ -4,18 +4,14 @@ import com.kalix.middleware.couchdb.api.biz.ICouchdbService;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.util.ObjectHelper;
-import org.apache.commons.codec.binary.Base64OutputStream;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.lightcouch.Response;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +38,10 @@ public class AttachmentProcessor implements Processor {
             HttpServletRequest request = ObjectHelper.cast(HttpServletRequest.class, exchange.getIn().getHeader(Exchange.HTTP_SERVLET_REQUEST));
 
             if (!ServletFileUpload.isMultipartContent(request)) {
-                throw new RuntimeException("Invalid Multipart Content request!");
+                this.rtnMap.put("success", false);
+                this.rtnMap.put("msg", "文件导入失败！无效的请求！");
+                //throw new RuntimeException("Invalid Multipart Content request!");
+                return;
             }
 
             uploader.setHeaderEncoding("utf-8");
@@ -51,7 +50,10 @@ public class AttachmentProcessor implements Processor {
             wrapper.setInputStream(exchange.getIn().getBody(InputStream.class));
             List<FileItem> items = uploader.parseRequest(wrapper);
             if (items.isEmpty()) {
-                throw new RuntimeException("Invalid Multipart/form-data Content, file item is empty!");
+                this.rtnMap.put("success", false);
+                this.rtnMap.put("msg", "文件导入失败！文件为空！");
+                //throw new RuntimeException("Invalid Multipart/form-data Content, file item is empty!");
+                return;
             }
 
             FileItem fileItem = null;
@@ -73,8 +75,8 @@ public class AttachmentProcessor implements Processor {
 //                    //exchange.getIn().setBody(jsonStatus);
 //                    //return;
 //                } else {
-                    try {
-                        String fileName = fileItem.getName();
+                try {
+                    String fileName = fileItem.getName();
 //                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
 //                        OutputStream out = new Base64OutputStream(stream);
 //                        IOUtils.copy(fileItem.getInputStream(), out);
@@ -82,30 +84,31 @@ public class AttachmentProcessor implements Processor {
 //                        fileItem.getInputStream().close();
 //                        out.close();
 
-                        response = couchdbService.addAttachment(fileItem.getInputStream(),
-                                fileName, fileItem.getContentType());
-                        //jsonStatus = CouchdbJsonStatus.successResult("上传文件成功!", response.getId(), response.getRev(), fileName, fileItem.getContentType(), fileItem.getSize());
-                        //jsonStatus.setAttachmentPath(couchdbService.getDBUrl() + response.getId() + "/" + fileName);
-                        //Map<String,Object> rtnMap=new HashMap<String,Object>();
+                    response = couchdbService.addAttachment(fileItem.getInputStream(),
+                            fileName, fileItem.getContentType());
+                    //jsonStatus = CouchdbJsonStatus.successResult("上传文件成功!", response.getId(), response.getRev(), fileName, fileItem.getContentType(), fileItem.getSize());
+                    //jsonStatus.setAttachmentPath(couchdbService.getDBUrl() + response.getId() + "/" + fileName);
+                    //Map<String,Object> rtnMap=new HashMap<String,Object>();
 
-                        rtnMap.put("success", true);
-                        rtnMap.put("attachmentId", response.getId());
-                        rtnMap.put("attachmentRev", response.getRev());
-                        rtnMap.put("attachmentName", fileName);
-                        rtnMap.put("attachmentType", fileItem.getContentType());
-                        rtnMap.put("attachmentSize", fileItem.getSize());
-                        rtnMap.put("attachmentPath", couchdbService.getDBUrl() + response.getId() + "/" + fileName);
-                        rtnMap.put("msg", "上传文件成功!");
+                    rtnMap.put("success", true);
+                    rtnMap.put("attachmentId", response.getId());
+                    rtnMap.put("attachmentRev", response.getRev());
+                    rtnMap.put("attachmentName", fileName);
+                    rtnMap.put("attachmentType", fileItem.getContentType());
+                    rtnMap.put("attachmentSize", fileItem.getSize());
+                    rtnMap.put("attachmentPath", couchdbService.getDBUrl() + response.getId() + "/" + fileName);
+                    rtnMap.put("msg", "上传文件成功!");
 
-                        //exchange.getIn().setBody(jsonStatus);
-                        //exchange.getIn().setBody(rtnMap);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        //jsonStatus = CouchdbJsonStatus.failureResult("上传文件失败！异常为{" + e.toString() + "}");
-                        this.rtnMap.put("success", false);
-                        this.rtnMap.put("msg", "上传文件失败！异常为{" + e.toString() + "}");
-                    }
+                    //exchange.getIn().setBody(jsonStatus);
+                    //exchange.getIn().setBody(rtnMap);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    //jsonStatus = CouchdbJsonStatus.failureResult("上传文件失败！异常为{" + e.toString() + "}");
+                    this.rtnMap.put("success", false);
+                    this.rtnMap.put("msg", "上传文件失败！异常为{" + e.toString() + "}");
+                    return;
                 }
+            }
             //}
         } catch (Exception e) {
             //jsonStatus = CouchdbJsonStatus.failureResult("上传文件失败！异常为{" + e.toString() + "}");
@@ -113,11 +116,10 @@ public class AttachmentProcessor implements Processor {
             e.printStackTrace();
             this.rtnMap.put("success", false);
             this.rtnMap.put("msg", "上传文件失败！异常为{" + e.toString() + "}");
-        }finally {
+            return;
+        } finally {
             exchange.getIn().setBody(rtnMap);
         }
-
-
     }
 
     public ICouchdbService getCouchdbService() {
