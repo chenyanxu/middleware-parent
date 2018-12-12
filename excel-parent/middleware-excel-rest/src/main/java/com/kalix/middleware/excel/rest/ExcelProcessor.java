@@ -117,9 +117,11 @@ public class ExcelProcessor implements Processor {
                             HttpClientUtil.shiroPost(ServiceUrl, map, sessionId, access_token);
                         }*/
                         if (StringUtils.isNotEmpty(importInfo)) {
-                            this.rtnMap.put("success", false);
-                            this.rtnMap.put("msg", "文件导入失败！文件存在错误数据，具体原因" + importInfo);
-                            return;
+                            if (importInfo.contains("列")) {
+                                this.rtnMap.put("success", false);
+                                this.rtnMap.put("msg", "文件导入失败！文件存在错误数据，具体原因" + importInfo);
+                                return;
+                            }
                         }
                         for (int i = importCount - 1; i > -1; i--) {
                             Object obj = bookList.get(i);
