@@ -117,7 +117,7 @@ public class ExcelProcessor implements Processor {
                             HttpClientUtil.shiroPost(ServiceUrl, map, sessionId, access_token);
                         }*/
                         if (StringUtils.isNotEmpty(importInfo)) {
-                            if (importInfo.contains("列")) {
+                            if (importInfo.contains("字典")) {
                                 this.rtnMap.put("success", false);
                                 this.rtnMap.put("msg", "文件导入失败！文件存在错误数据，具体原因" + importInfo);
                                 return;
@@ -132,14 +132,12 @@ public class ExcelProcessor implements Processor {
                                 String stem = map.get("stem").toString();
                                 int num = getSpaceNum(stem, "[#");
                                 map.put("spaceNum", String.valueOf(num));
-                                if(num!=0){
+                                if (num != 0) {
                                     HttpClientUtil.shiroPost(ServiceUrl, map, sessionId, access_token);
                                 }
-
-                            }else {
+                            } else {
                                 HttpClientUtil.shiroPost(ServiceUrl, map, sessionId, access_token);
                             }
-
                         }
                         // 删除临时文件
                         item.delete();
