@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.Date;
 
 /**
@@ -24,6 +25,8 @@ public class AttachmentBean extends PersistentEntity {
     private Date uploadDate=new Date();     //上传日期
 
     private String downloadStatus = "0";    //下载状态，0未下载过，1已下载过
+    @Transient
+    private String downloadStatusName;      //下载状态名称
 
     public long getMainId() {
         return mainId;
@@ -95,5 +98,13 @@ public class AttachmentBean extends PersistentEntity {
 
     public void setDownloadStatus(String downloadStatus) {
         this.downloadStatus = downloadStatus;
+    }
+
+    public String getDownloadStatusName() {
+        return downloadStatusName;
+    }
+
+    public void setDownloadStatusName(String downloadStatusName) {
+        this.downloadStatusName = downloadStatusName;
     }
 }
