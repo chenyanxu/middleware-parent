@@ -96,14 +96,14 @@ public class CouchdbServiceImpl implements ICouchdbService, ManagedService {
     }
 
     @Override
-    public void updated(Dictionary<String, ?> dictionary) throws ConfigurationException {
-        db_name = (String) ConfigUtil.getConfigProp("DB_NAME", CONFIG_COUCH_DB);
-        protocol = (String) ConfigUtil.getConfigProp("PROTOCOL", CONFIG_COUCH_DB);
-        ip = (String) ConfigUtil.getConfigProp("IP", CONFIG_COUCH_DB);
-        port = Integer.parseInt((String) ConfigUtil.getConfigProp("PORT", CONFIG_COUCH_DB));
-        user = (String) ConfigUtil.getConfigProp("USER", CONFIG_COUCH_DB);
-        password = (String) ConfigUtil.getConfigProp("PASSWORD", CONFIG_COUCH_DB);
-        url = (String) ConfigUtil.getConfigProp("COUCHDB_URL", CONFIG_COUCH_DB);
+    public void updated(Dictionary<String, ?> dictionary)  {
+        db_name = (String) dictionary.get("DB_NAME");
+        protocol = (String) dictionary.get("PROTOCOL");
+        ip = (String) dictionary.get("IP");
+        port = Integer.parseInt((String) dictionary.get("PORT"));
+        user = (String) dictionary.get("USER");
+        password = (String) dictionary.get("PASSWORD");
+        url = (String) dictionary.get("COUCHDB_URL");
         try {
             dbClient = new CouchDbClient(db_name, true, protocol, ip, port, user, password);
             SystemUtil.succeedPrintln("succeed connect to couchdb! IP address is " + ip);
