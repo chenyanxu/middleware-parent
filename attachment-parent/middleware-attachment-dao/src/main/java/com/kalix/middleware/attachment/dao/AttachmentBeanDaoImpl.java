@@ -20,7 +20,7 @@ public class AttachmentBeanDaoImpl extends GenericDao<AttachmentBean, Long> impl
 
     @Override
     public List findByMainId(Long mainId)  {
-        String sql = "select *  from " + super.getTableName() + " where mainId =?1 " ;
+        String sql = "select *  from " + super.getTableName() + " where mainId =?1 order by downloadstatus, uploaddate desc";
         return this.findByNativeSql(sql, AttachmentBean.class, mainId);
     }
 }
