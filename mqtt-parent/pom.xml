@@ -20,6 +20,7 @@
     <modules>
         <module>middleware-mqtt-api</module>
         <module>middleware-mqtt-biz</module>
+        <module>middleware-mqtt-etc</module>
     </modules>
 
     <dependencyManagement>
