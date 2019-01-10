@@ -1,5 +1,7 @@
 package com.kalix.middleware.workflow.biz;
 
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import com.kalix.middleware.workflow.api.biz.IFormHandler;
 import com.kalix.middleware.workflow.api.biz.IWorkflowCommon;
 import com.kalix.middleware.workflow.api.exception.FormProcessException;
@@ -11,8 +13,7 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.form.TaskFormData;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
-import org.dozer.DozerBeanMapper;
-import org.dozer.Mapper;
+
 
 /**
  * Created by sunlf on 2015/7/30.
@@ -45,7 +46,7 @@ public class WorkflowCommonImpl implements IWorkflowCommon {
         IFormHandler formHandler = FormManager.getInstall().findFormByKey(processDefinition.getKey(), taskFormData.getFormKey());
 
         if (formHandler != null) {
-            Mapper mapper = new DozerBeanMapper();
+            Mapper mapper = DozerBeanMapperBuilder.buildDefault();
             FormDTO formDTO = mapper.map(formHandler, FormDTO.class);
             return formDTO;
         } else
@@ -61,7 +62,7 @@ public class WorkflowCommonImpl implements IWorkflowCommon {
                 IFormHandler formHandler = FormManager.getInstall().findFormByKey(splits[0], "bizData.form");
 
                 if (formHandler != null) {
-                    Mapper mapper = new DozerBeanMapper();
+                    Mapper mapper = DozerBeanMapperBuilder.buildDefault();
                     FormDTO formDTO = mapper.map(formHandler, FormDTO.class);
 
                     return formDTO;

@@ -1,5 +1,7 @@
 package com.kalix.middleware.workflow.biz;
 
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import com.kalix.framework.core.api.persistence.JsonData;
 import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.api.security.IShiroService;
@@ -21,8 +23,8 @@ import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.IdentityLink;
-import org.dozer.DozerBeanMapper;
-import org.dozer.Mapper;
+
+
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -72,7 +74,7 @@ public class ProcessServiceImpl implements IProcessService {
         }
 
         if (processDefinitionList != null) {
-            Mapper mapper = new DozerBeanMapper();
+            Mapper mapper = DozerBeanMapperBuilder.buildDefault();
             processDefinitionDTOList = DozerHelper.map(mapper, processDefinitionList, ProcessDefinitionDTO.class);
             jsonData.setTotalCount((long) processDefinitionList.size());
             jsonData.setData(processDefinitionDTOList);
@@ -261,7 +263,7 @@ public class ProcessServiceImpl implements IProcessService {
         }
 
         if (list != null) {
-            Mapper mapper = new DozerBeanMapper();
+            Mapper mapper = DozerBeanMapperBuilder.buildDefault();
             historicActivityDTOList = DozerHelper.map(mapper, list, HistoricActivityInstanceDTO.class);
             for (HistoricActivityInstanceDTO historicActivityInstance : historicActivityDTOList) {
                 String str = "";
@@ -336,7 +338,7 @@ public class ProcessServiceImpl implements IProcessService {
 
     private void generateJsonData(List<HistoricProcessInstance> processHistoryList, long count) {
         List<HistoricProcessInstanceDTO> historicProcessDTOList;
-        Mapper mapper = new DozerBeanMapper();
+        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
         historicProcessDTOList = DozerHelper.map(mapper, processHistoryList, HistoricProcessInstanceDTO.class);
         //设置流程状态
         for (HistoricProcessInstanceDTO dto : historicProcessDTOList) {

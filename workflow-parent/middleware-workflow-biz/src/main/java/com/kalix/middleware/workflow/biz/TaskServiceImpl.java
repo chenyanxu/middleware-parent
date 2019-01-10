@@ -1,5 +1,7 @@
 package com.kalix.middleware.workflow.biz;
 
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import com.kalix.framework.core.api.persistence.JsonData;
 import com.kalix.framework.core.api.persistence.JsonStatus;
 import com.kalix.framework.core.api.security.IShiroService;
@@ -16,8 +18,6 @@ import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.impl.persistence.entity.HistoricVariableInstanceEntity;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
-import org.dozer.DozerBeanMapper;
-import org.dozer.Mapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -96,7 +96,7 @@ public class TaskServiceImpl implements ITaskService {
         taskGroupList.addAll(taskUserList);
 
         if (taskGroupList != null) {
-            Mapper mapper = new DozerBeanMapper();
+            Mapper mapper = DozerBeanMapperBuilder.buildDefault();
             taskDTOList = DozerHelper.map(mapper, taskGroupList, TaskDTO.class);
             jsonData.setTotalCount((long) taskGroupList.size());
             //获得业务实体id
