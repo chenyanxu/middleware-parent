@@ -34,6 +34,8 @@
         <module>websocket-parent</module>
         <!--<module>spring-parent</module>-->
         <module>microservice-parent</module>
+        <module>wechat-parent</module>
+        <module>wechatpay-parent</module>
     </modules>
     <build>
         <plugins>
