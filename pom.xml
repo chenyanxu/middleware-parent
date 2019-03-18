@@ -30,10 +30,12 @@
         <!--<module>xmpp-parent</module>-->
         <module>mail-parent</module>
         <module>oauth-parent</module>
-        <module>jwt-parent</module>
+        <!--<module>jwt-parent</module>-->
         <module>websocket-parent</module>
         <!--<module>spring-parent</module>-->
-        <module>microservice-parent</module>
+        <!--<module>microservice-parent</module>-->
+        <!--<module>wechat-parent</module>-->
+        <!--<module>wechatpay-parent</module>-->
     </modules>
     <build>
         <plugins>
