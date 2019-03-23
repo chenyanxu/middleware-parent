@@ -15,6 +15,7 @@
     <modules>
         <module>middleware-websocket-api</module>
         <module>middleware-websocket-biz</module>
+        <module>middleware-websocket-chat</module>
     </modules>
     <packaging>pom</packaging>
 

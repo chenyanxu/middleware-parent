@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.kalix.middleware</groupId>
+        <artifactId>middleware-parent</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.kalix.middleware.xml</groupId>
+    <artifactId>xml-parent</artifactId>
+    <name>Kalix Middleware XML Parent</name>
+    <packaging>pom</packaging>
+
+    <properties>
+
+    </properties>
+    <modules>
+        <module>middleware-xml-api</module>
+        <module>middleware-xml-biz</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.kalix.middleware.xml</groupId>
+                <artifactId>middleware-xml-api</artifactId>
+                <version>${project.middleware.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
