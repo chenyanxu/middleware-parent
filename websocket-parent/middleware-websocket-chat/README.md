@@ -15,6 +15,10 @@ Include-Resource: src/main/webapp,target/classes
 Web-ContextPath: kalix-websocket
 ```
 
+## 注意
+需要安装 javax.json
+install -s mvn:org.glassfish/javax.json/1.0.4
+
 ## 参考资料
 
 https://github.com/ops4j/org.ops4j.pax.web/tree/master/samples/websocket-jsr356
