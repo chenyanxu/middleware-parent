@@ -1,0 +1,25 @@
+<blueprint xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0
+           http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <service id="wechatCoreService" interface="com.kalix.middleware.weixin.api.biz.IWeixinService"
+             ref="weixinServiceImpl"/>
+
+    <bean id="weixinServiceImpl" class="com.kalix.middleware.weixin.biz.WeixinServiceImpl" init-method="sendmessage">
+        <property name="config" ref="config"/>
+    </bean>
+    <bean id="config" class="me.chanjar.weixin.cp.config.impl.WxCpDefaultConfigImpl">
+        <!--设置微信企业号的appid-->
+        <property name="corpId" value="wwcf863b047cd7d972"/>
+        <!--设置微信企业号的app corpSecret-->
+        <property name="corpSecret" value="45mGD2dj_SOLgzBOxaqHSBd2kEynkhTo_gSKcrwZ8lk"/>
+        <!--设置微信企业号应用ID-->
+        <property name="agentId" value="1000021"/>
+        <!--设置微信企业号应用的token-->
+        <property name="token" value="gFToTqjSTGhDR8UTjm"/>
+        <!--设置微信企业号应用的EncodingAESKey-->
+        <property name="aesKey" value="m2HcKfu8zbftz5qYt1biTWsvV8bikti1UxFuiyIhwgt"/>
+    </bean>
+</blueprint>
+

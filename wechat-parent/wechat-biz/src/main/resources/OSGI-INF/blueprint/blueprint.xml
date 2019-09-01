@@ -8,7 +8,7 @@
     <service id="wechatCoreService" interface="com.kalix.middleware.wechat.api.biz.IWechatCoreService"
              ref="wechatCoreServiceImpl"/>
 
-    <bean id="wechatCoreServiceImpl" class="com.kalix.middleware.wechat.biz.WechatCoreServiceImpl">
+    <bean id="wechatCoreServiceImpl" class="com.kalix.middleware.wechat.biz.WeixinServiceImpl">
         <property name="cacheManager" ref="cacheManager"></property>
     </bean>
 
