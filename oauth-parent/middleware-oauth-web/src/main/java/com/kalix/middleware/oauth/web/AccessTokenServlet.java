@@ -36,11 +36,7 @@ public class AccessTokenServlet extends HttpServlet {
     private static final String SERVLET_URL = "/accessToken";
 
     public AccessTokenServlet() {
-        try {
-            this.oAuthService = OsgiUtil.waitForServices(IOauthService.class, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 
     public void postConstruct() {
@@ -64,6 +60,7 @@ public class AccessTokenServlet extends HttpServlet {
     public void setoAuthService(IOauthService oAuthService) {
         this.oAuthService = oAuthService;
     }
+
     public void setJwtService(IJwtService jwtService) {
         this.jwtService = jwtService;
     }
@@ -73,14 +70,22 @@ public class AccessTokenServlet extends HttpServlet {
 
         try {
             /**
-            if(jwtService==null) {
-               if(JNDIHelper.getJNDIServiceForNameNoCatch(IJwtService.class.getName()))
-               {
-                   jwtService = JNDIHelper.getJNDIServiceForName(IJwtService.class.getName());
-               }
+             if(jwtService==null) {
+             if(JNDIHelper.getJNDIServiceForNameNoCatch(IJwtService.class.getName()))
+             {
+             jwtService = JNDIHelper.getJNDIServiceForName(IJwtService.class.getName());
+             }
 
-            }
+             }
              **/
+            if (oAuthService == null) {
+                try {
+                    this.oAuthService = OsgiUtil.waitForServices(IOauthService.class, null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
             //构建OAuth请求
             OAuthTokenRequest oauthRequest = new OAuthTokenRequest(request);
 
@@ -134,10 +139,10 @@ public class AccessTokenServlet extends HttpServlet {
 //                        "", audienceEntity.getClientId(), audienceEntity.getName(),
 //                        audienceEntity.getRefresh_expiresSecond()* 1000, audienceEntity.getBase64Secret());
 //            }else {
-                //生成Access Token
-                OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
-                accessToken = oauthIssuerImpl.accessToken();
-                refreshToken = oauthIssuerImpl.refreshToken();
+            //生成Access Token
+            OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
+            accessToken = oauthIssuerImpl.accessToken();
+            refreshToken = oauthIssuerImpl.refreshToken();
 
 //            }
 
