@@ -1,0 +1,18 @@
+#-----------------------------------------------------------------
+# Use this file to add customized Bnd instructions for the bundle
+#-----------------------------------------------------------------
+
+#Bundle-Activator: ${bundle.namespace}.internal.InitActivator
+Bundle-Category: Kalix Middleware Weixin
+Embed-Dependency:*;
+Import-Package: com.kalix.middleware.weixin.api.biz, \
+                me.chanjar.weixin.cp.api.*, \
+                me.chanjar.weixin.common.util.*, \
+                me.chanjar.weixin.cp.config.*, \
+                org.apache.http.*, \
+                javax.net.ssl, \
+                org.apache.commons.logging, \
+                javax.naming, \
+                javax.net, \
+                org.apache.http.*
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"

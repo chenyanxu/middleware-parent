@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.kalix.middleware</groupId>
+        <artifactId>weixin-parent</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.kalix.middleware</groupId>
+    <artifactId>weixin-biz</artifactId>
+    <name>Kalix Middleware Weixin Biz</name>
+    <description>Weixin Biz</description>
+    <packaging>bundle</packaging>
+
+    <properties>
+        <bundle.symbolicName>com.kalix.middleware.weixin.biz</bundle.symbolicName>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.kalix.middleware.weixin</groupId>
+            <artifactId>weixin-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-cp</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-logging</artifactId>
+                    <groupId>commons-logging</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jodd</groupId>
+            <artifactId>jodd-http</artifactId>
+            <!--<scope>provided</scope>-->
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <!--<scope>provided</scope>-->
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.8</version>
+            <!--<scope>provided</scope>-->
+        </dependency>
+
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.10</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>20.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+    </dependencies>
+    
+</project>

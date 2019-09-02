@@ -36,6 +36,8 @@
         <!--<module>microservice-parent</module>-->
         <!--<module>xml-parent</module>-->
         <module>mqtt-parent</module>
+        <module>weixin-parent</module>
+        <!--<module>wechat-parent</module>-->
     </modules>
     <build>
         <plugins>
