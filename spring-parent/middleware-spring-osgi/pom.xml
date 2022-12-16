@@ -31,7 +31,7 @@
     <properties>
         <bundle.symbolicName>org.ops4j.pax.web.samples.spring</bundle.symbolicName>
         <bundle.namespace>org.ops4j.pax.web.samples</bundle.namespace>
-        <spring.version>3.1.4.RELEASE</spring.version>
+        <spring.version>5.2.20.RELEASE</spring.version>
     </properties>
 
     <dependencies>
